@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>الكمارك العراقية - سجل التعريفة الجمركية</title>
   <link href="https://fonts.googleapis.com/css2?family=Cairo&display=swap" rel="stylesheet" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <link rel="manifest" href="manifest.json" />
   <style>
@@ -61,17 +60,10 @@
       padding: 0 10px;
     }
     .controls input[type="file"],
-    .controls input[type="text"],
-    .controls button {
+    .controls input[type="text"] {
       padding: 12px;
       font-size: 16px;
       border-radius: 6px;
-    }
-    .controls button {
-      background-color: #002147;
-      color: #fff;
-      border: none;
-      cursor: pointer;
     }
     .styled-table {
       width: 100%;
@@ -201,20 +193,6 @@
         reader.readAsArrayBuffer(file);
       });
     });
-    function downloadPDF() {
-      const element = document.getElementById("tariffTable").cloneNode(true);
-      element.style.fontFamily = 'Cairo';
-      element.style.direction = 'rtl';
-      element.style.width = '100%';
-      const opt = {
-        margin: 0.3,
-        filename: 'سجل_التعريفة_الجمركية.pdf',
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true },
-        jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
-      };
-      html2pdf().set(opt).from(element).save();
-    }
   </script>
 </head>
 <body>
@@ -235,7 +213,6 @@
   <div class="controls">
     <input type="file" id="excelInput" accept=".xlsx,.xls" />
     <input type="text" id="searchInput" placeholder="🔍 ابحث عن أي شيء..." onkeyup="searchTable()" />
-    <button onclick="downloadPDF()">📥 تحميل PDF</button>
   </div>
   <div class="styled-table">
     <table id="tariffTable">
