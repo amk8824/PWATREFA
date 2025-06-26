@@ -57,6 +57,7 @@
       justify-content: center;
       gap: 10px;
       margin-bottom: 20px;
+      padding: 0 10px;
     }
     .controls input[type="file"],
     .controls input[type="text"],
@@ -109,6 +110,33 @@
     }
     .designer-info a:hover {
       text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+      .header-container {
+        flex-direction: column;
+        text-align: center;
+        padding: 15px;
+      }
+      .right-header img,
+      .left-header img {
+        width: 2.5cm;
+      }
+      .program-name {
+        font-size: 22px;
+      }
+      .program-name .small {
+        font-size: 14px;
+      }
+      h1 {
+        font-size: 20px;
+        margin: 15px 0;
+      }
+      .styled-table th,
+      .styled-table td {
+        font-size: 12px;
+        padding: 8px;
+      }
     }
   </style>
   <script>
