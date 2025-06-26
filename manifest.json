@@ -1,0 +1,21 @@
+{
+  "name": "سجل التعريفة الجمركية",
+  "short_name": "التعريفة",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#002147",
+  "theme_color": "#002147",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "icon.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "icon512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ]
+}

@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>الكمارك العراقية - سجل التعريفة الجمركية</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <link rel="manifest" href="manifest.json" />
+  <style>
+    body {
+      background-color: #f4f4f4;
+      font-family: 'Cairo', sans-serif;
+      margin: 0;
+      padding: 0;
+      color: #333;
+      box-sizing: border-box;
+    }
+    .header-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 50px;
+      background-color: #002147;
+      color: yellow;
+    }
+    .left-header img, .right-header img {
+      width: 3.1cm;
+      height: auto;
+    }
+    .program-name {
+      text-align: center;
+      flex-grow: 1;
+      font-size: 28px;
+      font-weight: bold;
+      color: yellow;
+      line-height: 1.4;
+    }
+    .program-name .small {
+      font-size: 18px;
+      font-weight: normal;
+      display: block;
+      margin-top: 10px;
+    }
+    h1 {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 32px;
+      color: #002147;
+    }
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .controls input[type="file"],
+    .controls input[type="text"],
+    .controls button {
+      padding: 12px;
+      font-size: 16px;
+      border-radius: 6px;
+    }
+    .controls button {
+      background-color: #002147;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+    }
+    .styled-table {
+      width: 95%;
+      margin: 0 auto 40px;
+      border-collapse: collapse;
+      background-color: #fff;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+    }
+    .styled-table th,
+    .styled-table td {
+      padding: 14px;
+      text-align: center;
+      border: 1px solid #ddd;
+    }
+    .styled-table th {
+      background: linear-gradient(to right, #002147, #001a33);
+      color: white;
+    }
+    .styled-table tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+    .styled-table tr:hover {
+      background-color: #e6f7ff;
+    }
+    .designer-info {
+      text-align: center;
+      padding: 20px;
+      background: linear-gradient(to right, #001a33, #002147);
+      color: #fff;
+      font-size: 14px;
+    }
+    .designer-info a {
+      color: #ffea00;
+      text-decoration: none;
+    }
+    .designer-info a:hover {
+      text-decoration: underline;
+    }
+    @media (max-width: 768px) {
+      .header-container {
+        flex-direction: column;
+        text-align: center;
+        padding: 10px;
+      }
+      .program-name {
+        font-size: 20px;
+      }
+      .controls {
+        flex-direction: column;
+        gap: 10px;
+        padding: 0 10px;
+      }
+      .controls input[type="file"],
+      .controls input[type="text"],
+      .controls button {
+        width: 100%;
+        box-sizing: border-box;
+      }
+      .styled-table th,
+      .styled-table td {
+        font-size: 12px;
+        padding: 8px;
+      }
+      h1 {
+        font-size: 22px;
+        margin: 15px;
+      }
+      .designer-info {
+        font-size: 12px;
+        padding: 10px;
+      }
+    }
+  </style>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js')
+        .then(() => console.log("✅ Service Worker Registered"))
+        .catch(err => console.error("❌ Service Worker Failed", err));
+    }
+
+    function fixText(text) {
+      const arabicRegex = /[؀-ۿ]/;
+      if (typeof text !== 'string') return '';
+      return arabicRegex.test(text) ? text.split('').reverse().join('') : text;
+    }
+
+    function searchTable() {
+      const input = document.getElementById("searchInput").value.toLowerCase();
+      const rows = document.querySelectorAll("#tariffTable tbody tr");
+      rows.forEach(row => {
+        const cells = row.querySelectorAll("td");
+        const match = [...cells].some(cell => {
+          const cellText = cell.textContent.toLowerCase();
+          const reversedText = cellText.split('').reverse().join('');
+          return cellText.includes(input) || reversedText.includes(input);
+        });
+        row.style.display = match ? "" : "none";
+      });
+    }
+
+    function downloadPDF() {
+      const element = document.getElementById("tariffTable").cloneNode(true);
+      element.style.fontFamily = 'Cairo';
+      element.style.direction = 'rtl';
+      element.style.width = '100%';
+
+      element.querySelectorAll('table').forEach(table => {
+        table.style.width = '100%';
+        table.style.fontSize = '12px';
+      });
+
+      const opt = {
+        margin: 0.3,
+        filename: 'سجل_التعريفة_الجمركية.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true },
+        jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+      };
+
+      html2pdf().set(opt).from(element).save();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('jsonInput').addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          try {
+            const data = JSON.parse(e.target.result);
+            const tbody = document.getElementById('tableBody');
+            tbody.innerHTML = "";
+            data.forEach(row => {
+              const tr = document.createElement('tr');
+              tr.innerHTML = `
+                <td>${row["رمز النظام المنسق"]}</td>
+                <td>${fixText(row["وصف البضاعة"] || '')}</td>
+                <td>${fixText(row["النوع"] || '')}</td>
+                <td>${row["الحد الأدنى"]}</td>
+                <td>${row["الحد الأعلى"]}</td>
+              `;
+              tbody.appendChild(tr);
+            });
+          } catch (error) {
+            alert("فشل في قراءة الملف. تأكد من تنسيقه كـ JSON صحيح.");
+          }
+        };
+        reader.readAsText(file);
+      });
+    });
+  </script>
+</head>
+<body>
+  <div class="header-container">
+    <div class="right-header">
+      <img src="https://www2.0zz0.com/2025/05/19/22/510831948.png" alt="شعار يمين" />
+    </div>
+    <div class="program-name">
+      جمهورية العراق - وزارة المالية<br />
+      <span>الهيئة العامة للكمارك</span><br />
+      <span class="small">سجل التعريفة الجمركية - مركز كمرك طريبيل</span>
+    </div>
+    <div class="left-header">
+      <img src="https://www2.0zz0.com/2025/05/19/22/823371779.png" alt="شعار يسار" />
+    </div>
+  </div>
+
+  <h1>سجل التعريفة الجمركية – حزيران 2025/قرار/270</h1>
+
+  <div class="controls">
+    <input type="file" id="jsonInput" accept=".json" />
+    <input type="text" id="searchInput" placeholder="🔍 ابحث عن بند جمركي أو وصف..." onkeyup="searchTable()" />
+    <button onclick="downloadPDF()">📥 تحميل PDF</button>
+  </div>
+
+  <table class="styled-table" id="tariffTable">
+    <thead>
+      <tr>
+        <th>رمز النظام المنسق</th>
+        <th>وصف البضاعة</th>
+        <th>النوع</th>
+        <th>الحد الأدنى</th>
+        <th>الحد الأعلى</th>
+      </tr>
+    </thead>
+    <tbody id="tableBody">
+      <tr><td>1041010</td><td>مانغا أصلية للبيت</td><td>مانغا</td><td>4</td><td>6</td></tr>
+      <tr><td>2071400</td><td>كبدة دجاج</td><td>كبدة</td><td>1</td><td>2</td></tr>
+    </tbody>
+  </table>
+
+  <div class="designer-info">
+    تم تصميم وبرمجة البرنامج بواسطة: <strong>احمد عبد القادر مشحن العبيدي</strong><br />
+    Email: <a href="mailto:alobaidymo@gmail.com">alobaidymo@gmail.com</a> |
+    Whatsapp: <a href="tel:+9647768525871">+9647768525871</a>
+  </div>
+</body>
+</html>
