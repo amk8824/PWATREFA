@@ -6,7 +6,6 @@
   <title>الكمارك العراقية - سجل التعريفة الجمركية</title>
   <link href="https://fonts.googleapis.com/css2?family=Cairo&display=swap" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-  <link rel="manifest" href="manifest.json" />
   <style>
     html, body {
       margin: 0;
@@ -18,6 +17,30 @@
     }
     * {
       box-sizing: border-box;
+    }
+    .activation-screen {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+    .activation-screen input {
+      padding: 10px;
+      font-size: 18px;
+      margin: 10px;
+    }
+    .activation-screen button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #002147;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
     }
     .header-container {
       display: flex;
@@ -136,7 +159,49 @@
       }
     }
   </style>
+</head>
+<body>
+  <div class="activation-screen" id="activationScreen">
+    <h2>يرجى إدخال كود التفعيل</h2>
+    <input type="text" id="activationCode" placeholder="كود التفعيل">
+    <button onclick="verifyCode()">تفعيل</button>
+  </div>
+
+  <div id="mainContent" style="display:none">
+    <div class="header-container">
+      <div class="right-header">
+        <img src="https://www2.0zz0.com/2025/05/19/22/510831948.png" alt="شعار يمين" />
+      </div>
+      <div class="program-name">
+        جمهورية العراق - وزارة المالية<br />
+        <span>الهيئة العامة للكمارك</span><br />
+        <span class="small">سجل التعريفة الجمركية - مركز كمرك طريبيل</span>
+      </div>
+      <div class="left-header">
+        <img src="https://www2.0zz0.com/2025/05/19/22/823371779.png" alt="شعار يسار" />
+      </div>
+    </div>
+    <h1>سجل التعريفة الجمركية – حزيران 2025/قرار/270</h1>
+    <div class="controls">
+      <input type="file" id="excelInput" accept=".xlsx,.xls" />
+      <input type="text" id="searchInput" placeholder="🔍 ابحث عن أي شيء..." onkeyup="searchTable()" />
+    </div>
+    <div class="styled-table">
+      <table id="tariffTable">
+        <thead id="tableHead"></thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </div>
+    <div class="designer-info">
+      تم تصميم وبرمجة البرنامج بواسطة: <strong>احمد عبد القادر مشحن العبيدي</strong><br />
+      Email: <a href="mailto:alobaidymo@gmail.com">alobaidymo@gmail.com</a> |
+      Whatsapp: <a href="tel:+9647768525871">+9647768525871</a>
+    </div>
+  </div>
+
   <script>
+    const validCodes = Array.from({ length: 88 }, (_, i) => `K-88-${String(i + 1).padStart(3, '0')}`);
+
     function cleanText(text) {
       return typeof text === 'string' ? text : String(text);
     }
@@ -149,6 +214,35 @@
         row.style.display = match ? "" : "none";
       });
     }
+
+    function verifyCode() {
+      const enteredCode = document.getElementById("activationCode").value.trim();
+      const usedCodes = JSON.parse(localStorage.getItem("usedCodes") || "[]");
+
+      if (validCodes.includes(enteredCode) && !usedCodes.includes(enteredCode)) {
+        const expiry = new Date();
+        expiry.setMonth(expiry.getMonth() + 3);
+        localStorage.setItem("activation", JSON.stringify({ code: enteredCode, expires: expiry }));
+        usedCodes.push(enteredCode);
+        localStorage.setItem("usedCodes", JSON.stringify(usedCodes));
+        activateProgram();
+      } else {
+        alert("كود غير صالح أو مستخدم مسبقًا");
+      }
+    }
+
+    function activateProgram() {
+      document.getElementById("activationScreen").style.display = "none";
+      document.getElementById("mainContent").style.display = "block";
+    }
+
+    window.onload = function () {
+      const activation = JSON.parse(localStorage.getItem("activation"));
+      if (activation && new Date(activation.expires) > new Date()) {
+        activateProgram();
+      }
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('excelInput').addEventListener('change', function(event) {
         const file = event.target.files[0];
@@ -194,36 +288,5 @@
       });
     });
   </script>
-</head>
-<body>
-  <div class="header-container">
-    <div class="right-header">
-      <img src="https://www2.0zz0.com/2025/05/19/22/510831948.png" alt="شعار يمين" />
-    </div>
-    <div class="program-name">
-      جمهورية العراق - وزارة المالية<br />
-      <span>الهيئة العامة للكمارك</span><br />
-      <span class="small">سجل التعريفة الجمركية - مركز كمرك طريبيل</span>
-    </div>
-    <div class="left-header">
-      <img src="https://www2.0zz0.com/2025/05/19/22/823371779.png" alt="شعار يسار" />
-    </div>
-  </div>
-  <h1>سجل التعريفة الجمركية – حزيران 2025/قرار/270</h1>
-  <div class="controls">
-    <input type="file" id="excelInput" accept=".xlsx,.xls" />
-    <input type="text" id="searchInput" placeholder="🔍 ابحث عن أي شيء..." onkeyup="searchTable()" />
-  </div>
-  <div class="styled-table">
-    <table id="tariffTable">
-      <thead id="tableHead"></thead>
-      <tbody id="tableBody"></tbody>
-    </table>
-  </div>
-  <div class="designer-info">
-    تم تصميم وبرمجة البرنامج بواسطة: <strong>احمد عبد القادر مشحن العبيدي</strong><br />
-    Email: <a href="mailto:alobaidymo@gmail.com">alobaidymo@gmail.com</a> |
-    Whatsapp: <a href="tel:+9647768525871">+9647768525871</a>
-  </div>
 </body>
 </html>
