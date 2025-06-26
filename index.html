@@ -15,6 +15,7 @@
       font-family: 'Cairo', sans-serif;
       background-color: #f4f4f4;
       color: #333;
+      overflow-x: hidden;
     }
     * {
       box-sizing: border-box;
@@ -74,20 +75,19 @@
     }
     .styled-table {
       width: 100%;
-      overflow-x: auto;
       margin: 0 auto 40px;
-      border-collapse: collapse;
-      background-color: #fff;
-      border-radius: 8px;
-      border: 1px solid #ddd;
+      overflow-x: auto;
     }
     .styled-table table {
       width: 100%;
-      min-width: 600px;
+      border-collapse: collapse;
+      background-color: #fff;
+      border: 1px solid #ddd;
+      font-size: 14px;
     }
     .styled-table th,
     .styled-table td {
-      padding: 14px;
+      padding: 8px;
       text-align: center;
       border: 1px solid #ddd;
     }
@@ -115,34 +115,32 @@
     .designer-info a:hover {
       text-decoration: underline;
     }
-
     @media (max-width: 768px) {
       .header-container {
-        flex-direction: column;
-        text-align: center;
-        padding: 15px;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
       }
-      .right-header img,
-      .left-header img {
-        width: 2.5cm;
+      .right-header img, .left-header img {
+        width: 1.8cm;
       }
       .program-name {
-        font-size: 22px;
+        font-size: 14px;
+        margin: 0 5px;
       }
       .program-name .small {
-        font-size: 14px;
+        font-size: 11px;
       }
       h1 {
-        font-size: 20px;
+        font-size: 18px;
         margin: 15px 0;
       }
-      .styled-table th,
-      .styled-table td {
-        font-size: 12px;
-        padding: 8px;
-      }
       .styled-table table {
-        min-width: unset;
+        font-size: 11px;
+      }
+      .styled-table th, .styled-table td {
+        padding: 4px;
       }
     }
   </style>
