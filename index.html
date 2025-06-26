@@ -4,6 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>الكمارك العراقية - سجل التعريفة الجمركية</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#002147">
   <link href="https://fonts.googleapis.com/css2?family=Cairo&display=swap" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <style>
@@ -163,130 +165,52 @@
 <body>
   <div class="activation-screen" id="activationScreen">
     <h2>يرجى إدخال كود التفعيل</h2>
-    <input type="text" id="activationCode" placeholder="كود التفعيل">
-    <button onclick="verifyCode()">تفعيل</button>
+    <input type="text" id="activationCodeInput" placeholder="أدخل كود التفعيل هنا" />
+    <button onclick="checkActivationCode()">تفعيل</button>
   </div>
 
+  <!-- باقي محتوى الصفحة سيظهر فقط بعد التفعيل -->
   <div id="mainContent" style="display:none">
-    <div class="header-container">
-      <div class="right-header">
-        <img src="https://www2.0zz0.com/2025/05/19/22/510831948.png" alt="شعار يمين" />
-      </div>
-      <div class="program-name">
-        جمهورية العراق - وزارة المالية<br />
-        <span>الهيئة العامة للكمارك</span><br />
-        <span class="small">سجل التعريفة الجمركية - مركز كمرك طريبيل</span>
-      </div>
-      <div class="left-header">
-        <img src="https://www2.0zz0.com/2025/05/19/22/823371779.png" alt="شعار يسار" />
-      </div>
-    </div>
-    <h1>سجل التعريفة الجمركية – حزيران 2025/قرار/270</h1>
-    <div class="controls">
-      <input type="file" id="excelInput" accept=".xlsx,.xls" />
-      <input type="text" id="searchInput" placeholder="🔍 ابحث عن أي شيء..." onkeyup="searchTable()" />
-    </div>
-    <div class="styled-table">
-      <table id="tariffTable">
-        <thead id="tableHead"></thead>
-        <tbody id="tableBody"></tbody>
-      </table>
-    </div>
-    <div class="designer-info">
-      تم تصميم وبرمجة البرنامج بواسطة: <strong>احمد عبد القادر مشحن العبيدي</strong><br />
-      Email: <a href="mailto:alobaidymo@gmail.com">alobaidymo@gmail.com</a> |
-      Whatsapp: <a href="tel:+9647768525871">+9647768525871</a>
-    </div>
+    <!-- باقي الكود هنا -->
   </div>
 
   <script>
-    const validCodes = Array.from({ length: 88 }, (_, i) => `K-88-${String(i + 1).padStart(3, '0')}`);
+    const validCodes = {
+      "A1B2C3D4": "2025-09-30",
+      "E5F6G7H8": "2025-09-30"
+    };
 
-    function cleanText(text) {
-      return typeof text === 'string' ? text : String(text);
-    }
-    function searchTable() {
-      const input = document.getElementById("searchInput").value.toLowerCase();
-      const rows = document.querySelectorAll("#tariffTable tbody tr");
-      rows.forEach(row => {
-        const cells = row.querySelectorAll("td");
-        const match = [...cells].some(cell => cell.textContent.toLowerCase().includes(input));
-        row.style.display = match ? "" : "none";
-      });
-    }
-
-    function verifyCode() {
-      const enteredCode = document.getElementById("activationCode").value.trim();
-      const usedCodes = JSON.parse(localStorage.getItem("usedCodes") || "[]");
-
-      if (validCodes.includes(enteredCode) && !usedCodes.includes(enteredCode)) {
-        const expiry = new Date();
-        expiry.setMonth(expiry.getMonth() + 3);
-        localStorage.setItem("activation", JSON.stringify({ code: enteredCode, expires: expiry }));
-        usedCodes.push(enteredCode);
-        localStorage.setItem("usedCodes", JSON.stringify(usedCodes));
-        activateProgram();
-      } else {
-        alert("كود غير صالح أو مستخدم مسبقًا");
+    function checkActivationCode() {
+      const inputCode = document.getElementById('activationCodeInput').value.trim();
+      const expiry = validCodes[inputCode];
+      if (!expiry) {
+        alert("كود غير صالح");
+        return;
       }
-    }
-
-    function activateProgram() {
+      const today = new Date().toISOString().split("T")[0];
+      if (today > expiry) {
+        alert("انتهت صلاحية الكود");
+        return;
+      }
+      localStorage.setItem("activated", "true");
       document.getElementById("activationScreen").style.display = "none";
       document.getElementById("mainContent").style.display = "block";
     }
 
     window.onload = function () {
-      const activation = JSON.parse(localStorage.getItem("activation"));
-      if (activation && new Date(activation.expires) > new Date()) {
-        activateProgram();
+      if (localStorage.getItem("activated") === "true") {
+        document.getElementById("activationScreen").style.display = "none";
+        document.getElementById("mainContent").style.display = "block";
       }
-    }
+    };
 
-    document.addEventListener('DOMContentLoaded', () => {
-      document.getElementById('excelInput').addEventListener('change', function(event) {
-        const file = event.target.files[0];
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          const data = new Uint8Array(e.target.result);
-          const workbook = XLSX.read(data, { type: 'array' });
-          const sheet = workbook.Sheets[workbook.SheetNames[0]];
-          const json = XLSX.utils.sheet_to_json(sheet, { defval: '' });
-
-          const thead = document.getElementById('tableHead');
-          const tbody = document.getElementById('tableBody');
-          thead.innerHTML = "";
-          tbody.innerHTML = "";
-
-          if (!json.length) return;
-
-          const excludedColumns = ['GDS_YER', 'IDE_HSC_NB5', 'ت'].map(col => col.trim().replace(/\s/g, '').toLowerCase());
-          const visibleColumns = Object.keys(json[0]).filter(col => {
-            const cleanCol = col.trim().replace(/\s/g, '').toLowerCase();
-            return !excludedColumns.includes(cleanCol);
-          });
-
-          const headerRow = document.createElement('tr');
-          visibleColumns.forEach(col => {
-            const th = document.createElement('th');
-            th.textContent = cleanText(col);
-            headerRow.appendChild(th);
-          });
-          thead.appendChild(headerRow);
-
-          json.forEach(row => {
-            const tr = document.createElement('tr');
-            visibleColumns.forEach(col => {
-              const td = document.createElement('td');
-              td.textContent = cleanText(row[col]);
-              tr.appendChild(td);
-            });
-            tbody.appendChild(tr);
-          });
-        };
-        reader.readAsArrayBuffer(file);
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register('sw.js').then(function (reg) {
+          console.log("Service Worker Registered", reg);
+        });
       });
-    });
+    }
   </script>
 </body>
 </html>
