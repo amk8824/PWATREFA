@@ -149,9 +149,7 @@
     }
 
     function fixText(text) {
-      const arabicRegex = /[؀-ۿ]/;
-      if (typeof text !== 'string') return '';
-      return arabicRegex.test(text) ? text.split('').reverse().join('') : text;
+      return text; // لا تقم بعكس النصوص
     }
 
     function searchTable() {
@@ -161,8 +159,7 @@
         const cells = row.querySelectorAll("td");
         const match = [...cells].some(cell => {
           const cellText = cell.textContent.toLowerCase();
-          const reversedText = cellText.split('').reverse().join('');
-          return cellText.includes(input) || reversedText.includes(input);
+          return cellText.includes(input);
         });
         row.style.display = match ? "" : "none";
       });
@@ -202,9 +199,9 @@
             data.forEach(row => {
               const tr = document.createElement('tr');
               tr.innerHTML = `
-                <td>${row["رمز النظام المنسق"]}</td>
-                <td>${fixText(row["وصف البضاعة"] || '')}</td>
-                <td>${fixText(row["النوع"] || '')}</td>
+                <td>${row["رمز النظام المنسق"] || ''}</td>
+                <td>${row["وصف البضاعة"] || ''}</td>
+                <td>${row["النوع"] || ''}</td>
                 <td>${row["الحد الأدنى"]}</td>
                 <td>${row["الحد الأعلى"]}</td>
               `;
