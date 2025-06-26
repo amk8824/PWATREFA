@@ -6,15 +6,18 @@
   <title>الكمارك العراقية - سجل التعريفة الجمركية</title>
   <link href="https://fonts.googleapis.com/css2?family=Cairo&display=swap" rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <link rel="manifest" href="manifest.json" />
   <style>
     body {
       background-color: #f4f4f4;
-      font-family: 'Cairo', sans-serif;
+      font-family: 'Cairo', sans-serif !important;
       margin: 0;
       padding: 0;
       color: #333;
-      box-sizing: border-box;
+    }
+    * {
+      font-family: 'Cairo', sans-serif !important;
     }
     .header-container {
       display: flex;
@@ -142,14 +145,8 @@
     }
   </style>
   <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('service-worker.js')
-        .then(() => console.log("✅ Service Worker Registered"))
-        .catch(err => console.error("❌ Service Worker Failed", err));
-    }
-
-    function fixText(text) {
-      return text; // لا تقم بعكس النصوص
+    function cleanText(text) {
+      return typeof text === 'string' ? text : String(text);
     }
 
     function searchTable() {
@@ -157,25 +154,63 @@
       const rows = document.querySelectorAll("#tariffTable tbody tr");
       rows.forEach(row => {
         const cells = row.querySelectorAll("td");
-        const match = [...cells].some(cell => {
-          const cellText = cell.textContent.toLowerCase();
-          return cellText.includes(input);
-        });
+        const match = [...cells].some(cell => cell.textContent.toLowerCase().includes(input));
         row.style.display = match ? "" : "none";
       });
     }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('excelInput').addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const data = new Uint8Array(e.target.result);
+          const workbook = XLSX.read(data, { type: 'array' });
+          const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+          const json = XLSX.utils.sheet_to_json(firstSheet, { defval: '' });
+
+          const thead = document.getElementById('tableHead');
+          const tbody = document.getElementById('tableBody');
+          thead.innerHTML = "";
+          tbody.innerHTML = "";
+
+          const hiddenColumns = ['gds_yer', 't', 'ide_hsc_nb5', 'ide_hsc_nb 5', 'ت', 'GDS_YER', 'GDS_ YER'];
+
+          const allColumns = Object.keys(json[0] || {});
+
+          const visibleColumns = allColumns.filter(col => {
+            const normalized = col.replace(/\s|_/g, '').toLowerCase();
+            return !hiddenColumns.includes(normalized) && !hiddenColumns.includes(col);
+          });
+
+          const headerRow = document.createElement('tr');
+          visibleColumns.forEach(col => {
+            const th = document.createElement('th');
+            th.textContent = cleanText(col);
+            headerRow.appendChild(th);
+          });
+          thead.appendChild(headerRow);
+
+          json.forEach(row => {
+            const tr = document.createElement('tr');
+            visibleColumns.forEach(col => {
+              const td = document.createElement('td');
+              const value = row[col];
+              td.textContent = value !== undefined && value !== null ? cleanText(value) : '';
+              tr.appendChild(td);
+            });
+            tbody.appendChild(tr);
+          });
+        };
+        reader.readAsArrayBuffer(file);
+      });
+    });
 
     function downloadPDF() {
       const element = document.getElementById("tariffTable").cloneNode(true);
       element.style.fontFamily = 'Cairo';
       element.style.direction = 'rtl';
       element.style.width = '100%';
-
-      element.querySelectorAll('table').forEach(table => {
-        table.style.width = '100%';
-        table.style.fontSize = '12px';
-      });
-
       const opt = {
         margin: 0.3,
         filename: 'سجل_التعريفة_الجمركية.pdf',
@@ -183,37 +218,8 @@
         html2canvas: { scale: 2, useCORS: true },
         jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
       };
-
       html2pdf().set(opt).from(element).save();
     }
-
-    document.addEventListener('DOMContentLoaded', () => {
-      document.getElementById('jsonInput').addEventListener('change', function(event) {
-        const file = event.target.files[0];
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          try {
-            const data = JSON.parse(e.target.result);
-            const tbody = document.getElementById('tableBody');
-            tbody.innerHTML = "";
-            data.forEach(row => {
-              const tr = document.createElement('tr');
-              tr.innerHTML = `
-                <td>${row["رمز النظام المنسق"] || ''}</td>
-                <td>${row["وصف البضاعة"] || ''}</td>
-                <td>${row["النوع"] || ''}</td>
-                <td>${row["الحد الأدنى"]}</td>
-                <td>${row["الحد الأعلى"]}</td>
-              `;
-              tbody.appendChild(tr);
-            });
-          } catch (error) {
-            alert("فشل في قراءة الملف. تأكد من تنسيقه كـ JSON صحيح.");
-          }
-        };
-        reader.readAsText(file);
-      });
-    });
   </script>
 </head>
 <body>
@@ -230,31 +236,16 @@
       <img src="https://www2.0zz0.com/2025/05/19/22/823371779.png" alt="شعار يسار" />
     </div>
   </div>
-
   <h1>سجل التعريفة الجمركية – حزيران 2025/قرار/270</h1>
-
   <div class="controls">
-    <input type="file" id="jsonInput" accept=".json" />
-    <input type="text" id="searchInput" placeholder="🔍 ابحث عن بند جمركي أو وصف..." onkeyup="searchTable()" />
+    <input type="file" id="excelInput" accept=".xlsx,.xls" />
+    <input type="text" id="searchInput" placeholder="🔍 ابحث عن أي شيء..." onkeyup="searchTable()" />
     <button onclick="downloadPDF()">📥 تحميل PDF</button>
   </div>
-
   <table class="styled-table" id="tariffTable">
-    <thead>
-      <tr>
-        <th>رمز النظام المنسق</th>
-        <th>وصف البضاعة</th>
-        <th>النوع</th>
-        <th>الحد الأدنى</th>
-        <th>الحد الأعلى</th>
-      </tr>
-    </thead>
-    <tbody id="tableBody">
-      <tr><td>1041010</td><td>مانغا أصلية للبيت</td><td>مانغا</td><td>4</td><td>6</td></tr>
-      <tr><td>2071400</td><td>كبدة دجاج</td><td>كبدة</td><td>1</td><td>2</td></tr>
-    </tbody>
+    <thead id="tableHead"></thead>
+    <tbody id="tableBody"></tbody>
   </table>
-
   <div class="designer-info">
     تم تصميم وبرمجة البرنامج بواسطة: <strong>احمد عبد القادر مشحن العبيدي</strong><br />
     Email: <a href="mailto:alobaidymo@gmail.com">alobaidymo@gmail.com</a> |
