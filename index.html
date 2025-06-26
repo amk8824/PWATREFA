@@ -169,9 +169,36 @@
     <button onclick="checkActivationCode()">تفعيل</button>
   </div>
 
-  <!-- باقي محتوى الصفحة سيظهر فقط بعد التفعيل -->
   <div id="mainContent" style="display:none">
-    <!-- باقي الكود هنا -->
+    <div class="header-container">
+      <div class="right-header">
+        <img src="https://www2.0zz0.com/2025/05/19/22/510831948.png" alt="شعار يمين" />
+      </div>
+      <div class="program-name">
+        جمهورية العراق - وزارة المالية<br />
+        <span>الهيئة العامة للكمارك</span><br />
+        <span class="small">سجل التعريفة الجمركية - مركز كمرك طريبيل</span>
+      </div>
+      <div class="left-header">
+        <img src="https://www2.0zz0.com/2025/05/19/22/823371779.png" alt="شعار يسار" />
+      </div>
+    </div>
+    <h1>سجل التعريفة الجمركية – حزيران 2025/قرار/270</h1>
+    <div class="controls">
+      <input type="file" id="excelInput" accept=".xlsx,.xls" />
+      <input type="text" id="searchInput" placeholder="🔍 ابحث عن أي شيء..." onkeyup="searchTable()" />
+    </div>
+    <div class="styled-table">
+      <table id="tariffTable">
+        <thead id="tableHead"></thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </div>
+    <div class="designer-info">
+      تم تصميم وبرمجة البرنامج بواسطة: <strong>احمد عبد القادر مشحن العبيدي</strong><br />
+      Email: <a href="mailto:alobaidymo@gmail.com">alobaidymo@gmail.com</a> |
+      Whatsapp: <a href="tel:+9647768525871">+9647768525871</a>
+    </div>
   </div>
 
   <script>
@@ -203,6 +230,63 @@
         document.getElementById("mainContent").style.display = "block";
       }
     };
+
+    function cleanText(text) {
+      return typeof text === 'string' ? text : String(text);
+    }
+    function searchTable() {
+      const input = document.getElementById("searchInput").value.toLowerCase();
+      const rows = document.querySelectorAll("#tariffTable tbody tr");
+      rows.forEach(row => {
+        const cells = row.querySelectorAll("td");
+        const match = [...cells].some(cell => cell.textContent.toLowerCase().includes(input));
+        row.style.display = match ? "" : "none";
+      });
+    }
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('excelInput').addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const data = new Uint8Array(e.target.result);
+          const workbook = XLSX.read(data, { type: 'array' });
+          const sheet = workbook.Sheets[workbook.SheetNames[0]];
+          const json = XLSX.utils.sheet_to_json(sheet, { defval: '' });
+
+          const thead = document.getElementById('tableHead');
+          const tbody = document.getElementById('tableBody');
+          thead.innerHTML = "";
+          tbody.innerHTML = "";
+
+          if (!json.length) return;
+
+          const excludedColumns = ['GDS_YER', 'IDE_HSC_NB5', 'ت'].map(col => col.trim().replace(/\s/g, '').toLowerCase());
+          const visibleColumns = Object.keys(json[0]).filter(col => {
+            const cleanCol = col.trim().replace(/\s/g, '').toLowerCase();
+            return !excludedColumns.includes(cleanCol);
+          });
+
+          const headerRow = document.createElement('tr');
+          visibleColumns.forEach(col => {
+            const th = document.createElement('th');
+            th.textContent = cleanText(col);
+            headerRow.appendChild(th);
+          });
+          thead.appendChild(headerRow);
+
+          json.forEach(row => {
+            const tr = document.createElement('tr');
+            visibleColumns.forEach(col => {
+              const td = document.createElement('td');
+              td.textContent = cleanText(row[col]);
+              tr.appendChild(td);
+            });
+            tbody.appendChild(tr);
+          });
+        };
+        reader.readAsArrayBuffer(file);
+      });
+    });
 
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', function () {
