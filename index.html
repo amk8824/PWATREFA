@@ -73,13 +73,17 @@
       cursor: pointer;
     }
     .styled-table {
-      width: 95%;
+      width: 100%;
+      overflow-x: auto;
       margin: 0 auto 40px;
       border-collapse: collapse;
       background-color: #fff;
       border-radius: 8px;
       border: 1px solid #ddd;
-      overflow-x: auto;
+    }
+    .styled-table table {
+      width: 100%;
+      min-width: 600px;
     }
     .styled-table th,
     .styled-table td {
@@ -136,6 +140,9 @@
       .styled-table td {
         font-size: 12px;
         padding: 8px;
+      }
+      .styled-table table {
+        min-width: unset;
       }
     }
   </style>
