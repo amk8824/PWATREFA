@@ -341,7 +341,7 @@
       text-align: center;
       border-bottom: 1px solid var(--border);
       font-size: 9px;
-      font-weight: 600;
+      font-weight: 700;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -867,43 +867,82 @@
       const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
       const tableBody = document.getElementById('tableBody');
       
+      // مسح الجدول أولاً
+      tableBody.innerHTML = '';
+      
       if (!searchTerm) {
+        // إذا لم يكن هناك نص بحث، عرض جميع البيانات
         filteredData = [...originalData];
       } else {
-        // البحث العادي - يظهر أي سجل يحتوي على النص المكتوب
-        filteredData = originalData.filter(row => 
-          row.some(cell => 
-            cell && cell.toString().toLowerCase().includes(searchTerm)
-          )
-        );
+        // البحث الدقيق - عرض السجلات التي تحتوي على النص المكتوب فقط
+        filteredData = originalData.filter(row => {
+          return row.some(cell => {
+            if (!cell) return false;
+            const cellText = cell.toString().toLowerCase();
+            return cellText.includes(searchTerm);
+          });
+        });
       }
       
-      // إعادة إنشاء الجدول بدفعات للأداء السريع
-      renderTableInBatches(filteredData);
+      // عرض النتائج المطابقة فقط وتحديث الإحصائيات
+      renderFilteredResults(filteredData);
       updateStats();
     }
 
-    // عرض الجدول بدفعات لتحسين الأداء
+    // دالة منفصلة لعرض النتائج المفلترة فقط
+    function renderFilteredResults(data) {
+      const tableBody = document.getElementById('tableBody');
+      const headers = document.querySelectorAll('#tableHead th');
+      
+      // مسح الجدول تماماً قبل إضافة النتائج الجديدة
+      tableBody.innerHTML = '';
+      
+      // عرض البيانات المفلترة فقط
+      data.forEach(row => {
+        if (!row || row.every(cell => !cell)) return;
+        
+        const tr = document.createElement('tr');
+        headers.forEach((header, index) => {
+          const td = document.createElement('td');
+          const cellValue = row[index] || '';
+          td.textContent = cellValue;
+          
+          // إضافة كلاس للحقول الطويلة
+          if (header && header.textContent && (header.textContent.includes('GDS') || header.textContent.includes('DS') || header.textContent.length > 15)) {
+            td.classList.add('long-field');
+          }
+          
+          tr.appendChild(td);
+        });
+        tableBody.appendChild(tr);
+      });
+    }
+
+    // عرض النتائج المفلترة فقط
     function renderTableInBatches(data) {
       const tableBody = document.getElementById('tableBody');
       tableBody.innerHTML = '';
+      
+      // التأكد من أننا نعرض البيانات المفلترة فقط
+      const dataToRender = data || filteredData;
       const headers = document.querySelectorAll('#tableHead th');
-      const batchSize = 50;
+      const batchSize = 25; // تقليل حجم الدفعة للهاتف
       let currentIndex = 0;
 
       function renderBatch() {
-        const endIndex = Math.min(currentIndex + batchSize, data.length);
+        const endIndex = Math.min(currentIndex + batchSize, dataToRender.length);
         
         for (let i = currentIndex; i < endIndex; i++) {
-          const row = data[i];
+          const row = dataToRender[i];
           if (!row || row.every(cell => !cell)) continue;
           
           const tr = document.createElement('tr');
           headers.forEach((header, index) => {
             const td = document.createElement('td');
-            td.textContent = row[index] || '';
+            const cellValue = row[index] || '';
+            td.textContent = cellValue;
             
-            // إضافة كلاس للحقول الطويلة في البحث
+            // إضافة كلاس للحقول الطويلة
             if (header && header.textContent && (header.textContent.includes('GDS') || header.textContent.includes('DS') || header.textContent.length > 15)) {
               td.classList.add('long-field');
             }
@@ -915,7 +954,8 @@
         
         currentIndex = endIndex;
         
-        if (currentIndex < data.length) {
+        // التحقق من أن البيانات المعروضة تطابق البيانات المفلترة
+        if (currentIndex < dataToRender.length && dataToRender === filteredData) {
           requestAnimationFrame(renderBatch);
         }
       }
@@ -960,25 +1000,41 @@
 
     window.addEventListener('offline', function() {
       isOnline = false;
-      showNotification('انقطع الاتصال بالإنترنت', 'warning');
+      showNotification('انقطع الاتصال بالإنترنت - البيانات محفوظة محلياً', 'warning');
     });
 
-    // تحميل الصفحة
-    window.onload = function() {
-      if (localStorage.getItem("activated") === "true") {
+    // تهيئة التطبيق
+    window.addEventListener('load', function() {
+      // فحص إذا كان التطبيق مفعل مسبقاً
+      const isActivated = localStorage.getItem('activated');
+      if (isActivated === 'true') {
         document.getElementById('activationScreen').style.display = 'none';
         document.getElementById('mainContent').style.display = 'block';
         
-        // تحميل البيانات المحفوظة تلقائياً
-        setTimeout(() => {
-          if (loadSavedData()) {
-            showNotification('مرحباً! تم تحميل بياناتك المحفوظة تلقائياً', 'success');
-          } else {
-            showNotification('لا توجد بيانات محفوظة - قم بتحميل ملف Excel جديد', 'warning');
-          }
-        }, 500);
+        // تحميل البيانات المحفوظة إن وجدت
+        if (loadSavedData()) {
+          document.getElementById('tableContainer').style.display = 'block';
+          document.getElementById('tableStats').style.display = 'flex';
+        }
       }
-    };
+    });
+
+    // منع النقر بالزر الأيمن
+    document.addEventListener('contextmenu', function(e) {
+      e.preventDefault();
+    });
+
+    // منع F12 وطرق فتح أدوات المطور
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'F12' || 
+          (e.ctrlKey && e.shiftKey && e.key === 'I') ||
+          (e.ctrlKey && e.shiftKey && e.key === 'C') ||
+          (e.ctrlKey && e.shiftKey && e.key === 'J') ||
+          (e.ctrlKey && e.key === 'U')) {
+        e.preventDefault();
+        return false;
+      }
+    });
   </script>
 </body>
 </html>
