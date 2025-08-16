@@ -294,6 +294,16 @@
       max-width: 80px;
     }
 
+    /* خلايا خاصة للحقول الطويلة */
+    .styled-table th[data-field*="GDS"], 
+    .styled-table th[data-field*="DS"],
+    .styled-table td.long-field {
+      max-width: 120px;
+      white-space: normal;
+      word-wrap: break-word;
+      line-height: 1.2;
+    }
+
     .styled-table td {
       padding: 6px 4px;
       text-align: center;
@@ -395,6 +405,15 @@
         padding: 4px 3px;
         font-size: 8px;
         max-width: 60px;
+      }
+      
+      /* حقول GDS وDS تحتاج مساحة أكبر على الموبايل */
+      .styled-table th[data-field*="GDS"], 
+      .styled-table th[data-field*="DS"],
+      .styled-table td.long-field {
+        max-width: 100px;
+        font-size: 7px;
+        padding: 3px 2px;
       }
       
       .table-stats {
@@ -641,9 +660,15 @@
       tableHead.innerHTML = '';
       const headerRow = document.createElement('tr');
       
-      headers.forEach(header => {
+      headers.forEach((header, index) => {
         const th = document.createElement('th');
         th.textContent = header || '';
+        
+        // إضافة كلاس خاص للحقول الطويلة
+        if (header && (header.includes('GDS') || header.includes('DS') || header.length > 15)) {
+          th.setAttribute('data-field', header);
+        }
+        
         headerRow.appendChild(th);
       });
       
@@ -665,9 +690,15 @@
           
           const tr = document.createElement('tr');
           
-          headers.forEach((_, index) => {
+          headers.forEach((header, index) => {
             const td = document.createElement('td');
             td.textContent = row[index] || '';
+            
+            // إضافة كلاس للحقول الطويلة
+            if (header && (header.includes('GDS') || header.includes('DS') || header.length > 15)) {
+              td.classList.add('long-field');
+            }
+            
             tr.appendChild(td);
           });
           
@@ -741,9 +772,15 @@
           if (!row || row.every(cell => !cell)) continue;
           
           const tr = document.createElement('tr');
-          headers.forEach((_, index) => {
+          headers.forEach((header, index) => {
             const td = document.createElement('td');
             td.textContent = row[index] || '';
+            
+            // إضافة كلاس للحقول الطويلة في البحث
+            if (header && header.textContent && (header.textContent.includes('GDS') || header.textContent.includes('DS') || header.textContent.length > 15)) {
+              td.classList.add('long-field');
+            }
+            
             tr.appendChild(td);
           });
           tableBody.appendChild(tr);
