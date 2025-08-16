@@ -29,6 +29,7 @@
 
     body {
       font-family: 'Cairo', sans-serif;
+      font-weight: 600;
       background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
       color: var(--text);
       min-height: 100vh;
@@ -115,6 +116,7 @@
       border-radius: 10px;
       cursor: pointer;
       font-weight: 600;
+      font-family: 'Cairo', sans-serif;
     }
 
     /* الرأس المبسط */
@@ -200,6 +202,7 @@
       border-radius: 10px;
       cursor: pointer;
       font-weight: 600;
+      font-family: 'Cairo', sans-serif;
     }
 
     .search-container {
@@ -315,7 +318,7 @@
       color: white;
       padding: 6px 4px;
       text-align: center;
-      font-weight: 600;
+      font-weight: 700;
       font-size: 9px;
       white-space: nowrap;
       overflow: hidden;
@@ -338,6 +341,7 @@
       text-align: center;
       border-bottom: 1px solid var(--border);
       font-size: 9px;
+      font-weight: 600;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -540,16 +544,16 @@
       </div>
       
       <div class="search-container">
-        <input type="text" id="searchInput" class="search-input" placeholder="ابحث..." onkeyup="searchTable()" />
+        <input type="text" id="searchInput" class="search-input" placeholder="ابحث..." oninput="searchTable()" />
         <i class="fas fa-search search-icon"></i>
       </div>
       
       <!-- أزرار التحكم في البيانات -->
       <div style="display: flex; gap: 10px;">
-        <button onclick="clearSavedData()" class="btn-clear" style="flex: 1; padding: 10px; background: #dc3545; color: white; border: none; border-radius: 8px; font-weight: 600;">
+        <button onclick="clearSavedData()" class="btn-clear" style="flex: 1; padding: 10px; background: #dc3545; color: white; border: none; border-radius: 8px; font-weight: 600; font-family: 'Cairo', sans-serif;">
           <i class="fas fa-trash"></i> مسح البيانات المحفوظة
         </button>
-        <button onclick="location.reload()" class="btn-refresh" style="flex: 1; padding: 10px; background: #28a745; color: white; border: none; border-radius: 8px; font-weight: 600;">
+        <button onclick="location.reload()" class="btn-refresh" style="flex: 1; padding: 10px; background: #28a745; color: white; border: none; border-radius: 8px; font-weight: 600; font-family: 'Cairo', sans-serif;">
           <i class="fas fa-sync"></i> تحديث الصفحة
         </button>
       </div>
@@ -856,7 +860,7 @@
       clearTimeout(searchTimeout);
       searchTimeout = setTimeout(() => {
         performSearch();
-      }, 300); // تأخير 300ms لتحسين الأداء
+      }, 150); // تأخير 150ms للبحث السريع
     }
 
     function performSearch() {
