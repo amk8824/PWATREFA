@@ -715,7 +715,7 @@
       100% { transform: rotate(360deg); }
     }
 
-    /* بطاقات الإحصائيات الملونة */
+    /* بطاقات الإحصائيات الملونة المحسنة */
     .table-stats {
       display: flex;
       justify-content: center;
@@ -1129,10 +1129,12 @@
         <div class="contact-links">
           <a href="mailto:alobaidymo@gmail.com" class="contact-link">
             <i class="fas fa-envelope"></i>
-a.alobaidymo@gmail.com          </a>
+            البريد الإلكتروني
+          </a>
           <a href="tel:+9647768525871" class="contact-link">
             <i class="fab fa-whatsapp"></i>
-07768525871          </a>
+            واتساب
+          </a>
         </div>
       </div>
     </div>
@@ -1191,164 +1193,401 @@ a.alobaidymo@gmail.com          </a>
       
       // تفعيل ناجح
       localStorage.setItem("activated", "true");
-      showNotification("تم تفعيل البرنامج بنجاح! 🎉", 'success');
+      showNotification("تم تفعيل البرنامج بنجاح!", 'success');
+      
+      // إخفاء شاشة التفعيل مع تأثير
+      const activationScreen = document.getElementById("activationScreen");
+      activationScreen.classList.add('fade-out');
       
       setTimeout(() => {
-        document.getElementById('activationScreen').classList.add('fade-out');
-        setTimeout(() => {
-          document.getElementById('activationScreen').style.display = 'none';
-          document.getElementById('mainContent').style.display = 'block';
-          document.getElementById('mainContent').classList.add('fade-in');
-        }, 500);
-      }, 1500);
+        activationScreen.style.display = "none";
+        document.getElementById("mainContent").style.display = "block";
+        
+        // إضافة تأثيرات الظهور
+        const elementsToAnimate = document.querySelectorAll('.fade-in, .slide-in-left, .slide-in-right');
+        elementsToAnimate.forEach((el, index) => {
+          el.style.animationDelay = `${index * 0.1}s`;
+        });
+      }, 500);
     }
 
-    // فحص حالة التفعيل عند التحميل
-    window.addEventListener('DOMContentLoaded', function() {
+    // تحميل الصفحة
+    window.onload = function () {
       if (localStorage.getItem("activated") === "true") {
-        document.getElementById('activationScreen').style.display = 'none';
-        document.getElementById('mainContent').style.display = 'block';
+        document.getElementById("activationScreen").style.display = "none";
+        document.getElementById("mainContent").style.display = "block";
       }
-    });
-
-    // متغيرات عامة
-    let excelData = [];
-    let filteredData = [];
-
-    // معالج تحميل ملف Excel
-    document.getElementById('excelInput').addEventListener('change', function(e) {
-      const file = e.target.files[0];
-      if (!file) return;
-
-      showNotification("جارٍ تحميل الملف...", 'info');
-      document.getElementById('loadingSpinner').style.display = 'flex';
-
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        try {
-          const data = new Uint8Array(e.target.result);
-          const workbook = XLSX.read(data, { type: 'array' });
-          const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
-          const jsonData = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
-
-          if (jsonData.length === 0) {
-            throw new Error("الملف فارغ");
-          }
-
-          excelData = jsonData;
-          filteredData = [...excelData];
-          
-          displayTable(filteredData);
-          updateStats();
-          
-          document.getElementById('loadingSpinner').style.display = 'none';
-          document.getElementById('tableContainer').style.display = 'block';
-          document.getElementById('tableStats').style.display = 'flex';
-          
-          showNotification(`تم تحميل ${jsonData.length - 1} سجل بنجاح`, 'success');
-          
-        } catch (error) {
-          document.getElementById('loadingSpinner').style.display = 'none';
-          showNotification("خطأ في قراءة الملف: " + error.message, 'error');
-        }
-      };
       
-      reader.onerror = function() {
-        document.getElementById('loadingSpinner').style.display = 'none';
-        showNotification("فشل في قراءة الملف", 'error');
-      };
-
-      reader.readAsArrayBuffer(file);
-    });
-
-    // عرض الجدول
-    function displayTable(data) {
-      if (data.length === 0) return;
-
-      const table = document.getElementById('tariffTable');
-      const thead = document.getElementById('tableHead');
-      const tbody = document.getElementById('tableBody');
-
-      // مسح المحتوى السابق
-      thead.innerHTML = '';
-      tbody.innerHTML = '';
-
-      // إنشاء رأس الجدول
-      const headerRow = document.createElement('tr');
-      if (data[0]) {
-        data[0].forEach(header => {
-          const th = document.createElement('th');
-          th.textContent = header || 'عمود';
-          headerRow.appendChild(th);
-        });
-      }
-      thead.appendChild(headerRow);
-
-      // إنشاء بيانات الجدول
-      for (let i = 1; i < data.length; i++) {
-        const row = document.createElement('tr');
-        const rowData = data[i];
-        
-        if (data[0]) {
-          data[0].forEach((_, index) => {
-            const td = document.createElement('td');
-            td.textContent = rowData[index] || '';
-            row.appendChild(td);
-          });
+      // إضافة مستمع أحداث Enter لحقل التفعيل
+      document.getElementById('activationCodeInput').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          checkActivationCode();
         }
+      });
+    };
+
+    // تنظيف النص
+    function cleanText(text) {
+      return typeof text === 'string' ? text : String(text);
+    }
+
+    // البحث في الجدول مع تحسينات
+    function searchTable() {
+      const input = document.getElementById("searchInput").value.toLowerCase();
+      const rows = document.querySelectorAll("#tariffTable tbody tr");
+      let visibleCount = 0;
+      
+      rows.forEach(row => {
+        const cells = row.querySelectorAll("td");
+        const match = [...cells].some(cell => cell.textContent.toLowerCase().includes(input));
         
-        tbody.appendChild(row);
-      }
+        if (match) {
+          row.style.display = "";
+          row.classList.add('fade-in');
+          visibleCount++;
+        } else {
+          row.style.display = "none";
+          row.classList.remove('fade-in');
+        }
+      });
+      
+      // تحديث عدد السجلات المعروضة
+      document.getElementById('visibleRows').textContent = visibleCount;
     }
 
     // تحديث الإحصائيات
-    function updateStats() {
-      const totalRows = Math.max(0, excelData.length - 1); // طرح صف الرأس
-      const visibleRows = Math.max(0, filteredData.length - 1); // طرح صف الرأس
-      const totalColumns = excelData.length > 0 ? (excelData[0]?.length || 0) : 0;
-
-      document.getElementById('totalRows').textContent = totalRows.toLocaleString('ar-SA');
-      document.getElementById('visibleRows').textContent = visibleRows.toLocaleString('ar-SA');
-      document.getElementById('totalColumns').textContent = totalColumns.toLocaleString('ar-SA');
+    function updateStats(totalRows, totalColumns) {
+      document.getElementById('totalRows').textContent = totalRows;
+      document.getElementById('visibleRows').textContent = totalRows;
+      document.getElementById('totalColumns').textContent = totalColumns;
+      document.getElementById('tableStats').style.display = 'flex';
     }
 
-    // البحث في الجدول
-    function searchTable() {
-      const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+    // معالجة تحميل الملف المحسنة للهواتف المحمولة
+    function initializeFileHandler() {
+      const fileInput = document.getElementById('excelInput');
+      const loadingSpinner = document.getElementById('loadingSpinner');
+      const tableContainer = document.getElementById('tableContainer');
       
-      if (!searchTerm) {
-        filteredData = [...excelData];
-      } else {
-        // البحث في جميع الصفوف باستثناء الصف الأول (الرأس)
-        filteredData = [excelData[0]]; // الاحتفاظ بصف الرأس
-        
-        for (let i = 1; i < excelData.length; i++) {
-          const row = excelData[i];
-          const rowText = row.join('').toLowerCase();
+      if (!fileInput) return;
+      
+      // إزالة المستمعات القديمة
+      fileInput.removeEventListener('change', handleFileUpload);
+      
+      // إضافة المستمع الجديد
+      fileInput.addEventListener('change', handleFileUpload, { passive: false });
+      
+      // معالجة انقطاع الشبكة
+      window.addEventListener('online', () => {
+        showNotification('تم استعادة الاتصال بالإنترنت', 'success');
+      });
+      
+      window.addEventListener('offline', () => {
+        showNotification('انقطع الاتصال بالإنترنت - ستعمل الوظائف الأساسية', 'warning');
+      });
+    }
+    
+    // معالج تحميل الملف المطور
+    function handleFileUpload(event) {
+      const file = event.target.files[0];
+      
+      if (!file) {
+        console.log('لم يتم اختيار ملف');
+        return;
+      }
+      
+      // التحقق من نوع الملف
+      const validTypes = [
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        'application/vnd.ms-excel',
+        'application/excel',
+        'text/csv'
+      ];
+      
+      const isValidType = validTypes.includes(file.type) || 
+                         file.name.toLowerCase().endsWith('.xlsx') || 
+                         file.name.toLowerCase().endsWith('.xls') ||
+                         file.name.toLowerCase().endsWith('.csv');
+      
+      if (!isValidType) {
+        showNotification('نوع الملف غير صالح. يرجى اختيار ملف Excel (.xlsx, .xls)', 'error');
+        event.target.value = '';
+        return;
+      }
+      
+      // التحقق من حجم الملف (10MB max)
+      const maxSize = 10 * 1024 * 1024;
+      if (file.size > maxSize) {
+        showNotification('الملف كبير جداً. الحد الأقصى 10 ميجا بايت', 'error');
+        event.target.value = '';
+        return;
+      }
+      
+      console.log('بدء معالجة الملف:', file.name, 'الحجم:', file.size, 'النوع:', file.type);
+      
+      // إظهار مؤشر التحميل
+      const loadingSpinner = document.getElementById('loadingSpinner');
+      const tableContainer = document.getElementById('tableContainer');
+      
+      loadingSpinner.style.display = 'flex';
+      tableContainer.style.display = 'none';
+      
+      showNotification('جاري قراءة الملف...', 'warning');
+      
+      // استخدام setTimeout لمنح الواجهة وقتاً للتحديث
+      setTimeout(() => {
+        processExcelFile(file);
+      }, 100);
+    }
+    
+    // معالج قراءة ملف Excel المطور
+    function processExcelFile(file) {
+      const reader = new FileReader();
+      
+      reader.onload = function(e) {
+        try {
+          console.log('تم قراءة الملف، جاري التحليل...');
           
-          if (rowText.includes(searchTerm)) {
-            filteredData.push(row);
+          const data = new Uint8Array(e.target.result);
+          const workbook = XLSX.read(data, { 
+            type: 'array',
+            cellDates: true,
+            cellNF: false,
+            cellText: false
+          });
+          
+          if (!workbook.SheetNames.length) {
+            throw new Error('الملف لا يحتوي على أوراق عمل');
           }
+          
+          const sheetName = workbook.SheetNames[0];
+          const sheet = workbook.Sheets[sheetName];
+          const json = XLSX.utils.sheet_to_json(sheet, { 
+            defval: '',
+            header: 1,
+            raw: false
+          });
+          
+          console.log('تم تحويل البيانات، عدد الصفوف:', json.length);
+          
+          if (!json.length || json.length < 2) {
+            showNotification("الملف فارغ أو لا يحتوي على بيانات كافية", 'warning');
+            document.getElementById('loadingSpinner').style.display = 'none';
+            return;
+          }
+          
+          // معالجة البيانات بشكل متدرج لتجنب تجميد الواجهة
+          processDataGradually(json);
+          
+        } catch (error) {
+          console.error('خطأ في قراءة الملف:', error);
+          let errorMessage = "خطأ في قراءة الملف. ";
+          
+          if (error.message.includes('Unsupported file')) {
+            errorMessage += "نوع الملف غير مدعوم";
+          } else if (error.message.includes('Cannot read')) {
+            errorMessage += "الملف تالف أو محمي";
+          } else {
+            errorMessage += "تأكد من صحة الملف";
+          }
+          
+          showNotification(errorMessage, 'error');
+          document.getElementById('loadingSpinner').style.display = 'none';
+          document.getElementById('excelInput').value = '';
+        }
+      };
+      
+      reader.onerror = function(error) {
+        console.error('خطأ في قراءة الملف:', error);
+        showNotification('خطأ في قراءة الملف. يرجى المحاولة مرة أخرى', 'error');
+        document.getElementById('loadingSpinner').style.display = 'none';
+        document.getElementById('excelInput').value = '';
+      };
+      
+      reader.onprogress = function(e) {
+        if (e.lengthComputable) {
+          const percentLoaded = Math.round((e.loaded / e.total) * 100);
+          console.log(`تقدم القراءة: ${percentLoaded}%`);
+        }
+      };
+      
+      // قراءة الملف
+      try {
+        reader.readAsArrayBuffer(file);
+      } catch (error) {
+        console.error('خطأ في بدء قراءة الملف:', error);
+        showNotification('خطأ في بدء قراءة الملف', 'error');
+        document.getElementById('loadingSpinner').style.display = 'none';
+      }
+    }
+    
+    // معالجة البيانات بشكل متدرج
+    function processDataGradually(json) {
+      const thead = document.getElementById('tableHead');
+      const tbody = document.getElementById('tableBody');
+      
+      if (!thead || !tbody) {
+        showNotification('خطأ في العثور على عناصر الجدول', 'error');
+        document.getElementById('loadingSpinner').style.display = 'none';
+        return;
+      }
+      
+      thead.innerHTML = "";
+      tbody.innerHTML = "";
+      
+      // استخراج رأس الجدول (الصف الأول)
+      const headers = json[0] || [];
+      const dataRows = json.slice(1);
+      
+      // استبعاد الأعمدة غير المرغوبة
+      const excludedColumns = ['GDS_YER', 'IDE_HSC_NB5', 'ت'].map(col => 
+        col.trim().replace(/\s/g, '').toLowerCase()
+      );
+      
+      const visibleColumnIndices = [];
+      const visibleHeaders = [];
+      
+      headers.forEach((header, index) => {
+        const cleanHeader = String(header).trim().replace(/\s/g, '').toLowerCase();
+        if (!excludedColumns.includes(cleanHeader) && header) {
+          visibleColumnIndices.push(index);
+          visibleHeaders.push(cleanText(header));
+        }
+      });
+      
+      if (!visibleHeaders.length) {
+        showNotification('لم يتم العثور على أعمدة صالحة في الملف', 'warning');
+        document.getElementById('loadingSpinner').style.display = 'none';
+        return;
+      }
+      
+      console.log('إنشاء رأس الجدول مع', visibleHeaders.length, 'عمود');
+      
+      // إنشاء رأس الجدول
+      const headerRow = document.createElement('tr');
+      visibleHeaders.forEach(header => {
+        const th = document.createElement('th');
+        th.textContent = header;
+        headerRow.appendChild(th);
+      });
+      thead.appendChild(headerRow);
+      
+      // معالجة البيانات بشكل متدرج (batch processing)
+      let currentRow = 0;
+      const batchSize = 50; // معالجة 50 صف في كل مرة
+      
+      function processBatch() {
+        const endRow = Math.min(currentRow + batchSize, dataRows.length);
+        
+        for (let i = currentRow; i < endRow; i++) {
+          const rowData = dataRows[i] || [];
+          const tr = document.createElement('tr');
+          
+          visibleColumnIndices.forEach(colIndex => {
+            const td = document.createElement('td');
+            const cellValue = rowData[colIndex] || '';
+            td.textContent = cleanText(cellValue);
+            tr.appendChild(td);
+          });
+          
+          tbody.appendChild(tr);
+        }
+        
+        currentRow = endRow;
+        
+        // تحديث التقدم
+        const progress = Math.round((currentRow / dataRows.length) * 100);
+        console.log(`تقدم معالجة البيانات: ${progress}%`);
+        
+        if (currentRow < dataRows.length) {
+          // متابعة المعالجة في الدفعة التالية
+          setTimeout(processBatch, 10);
+        } else {
+          // انتهاء المعالجة
+          finishProcessing(dataRows.length, visibleHeaders.length);
         }
       }
       
-      displayTable(filteredData);
-      updateStats();
+      // بدء معالجة البيانات
+      setTimeout(processBatch, 10);
     }
-
-    // إضافة مستمع لضغطة Enter في حقل البحث
-    document.getElementById('searchInput').addEventListener('keypress', function(e) {
-      if (e.key === 'Enter') {
-        searchTable();
+    
+    // إنهاء المعالجة وإظهار النتائج
+    function finishProcessing(totalRows, totalColumns) {
+      console.log('انتهاء معالجة', totalRows, 'صف و', totalColumns, 'عمود');
+      
+      // تحديث الإحصائيات
+      updateStats(totalRows, totalColumns);
+      
+      // إخفاء مؤشر التحميل وإظهار الجدول
+      setTimeout(() => {
+        document.getElementById('loadingSpinner').style.display = 'none';
+        document.getElementById('tableContainer').style.display = 'block';
+        showNotification(`تم تحميل ${totalRows} سجل بنجاح!`, 'success');
+        
+        // إضافة تأثيرات بصرية للجدول
+        const tableRows = document.querySelectorAll('#tariffTable tbody tr');
+        tableRows.forEach((row, index) => {
+          if (index < 100) { // تأثيرات فقط للأول 100 صف
+            row.style.opacity = '0';
+            row.style.transform = 'translateY(10px)';
+            setTimeout(() => {
+              row.style.transition = 'all 0.3s ease';
+              row.style.opacity = '1';
+              row.style.transform = 'translateY(0)';
+            }, index * 10);
+          }
+        });
+      }, 500);
+    }
+    
+    // تهيئة معالج الملفات عند تحميل الصفحة
+    document.addEventListener('DOMContentLoaded', () => {
+      initializeFileHandler();
+      
+      // إضافة معالج لإعادة تعيين حقل الملف عند النقر عليه
+      const fileInput = document.getElementById('excelInput');
+      if (fileInput) {
+        fileInput.addEventListener('click', function() {
+          this.value = '';
+        });
       }
     });
 
-    // تأثيرات التحميل
+    // تسجيل Service Worker
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register('sw.js').then(function (reg) {
+          console.log("Service Worker مسجل بنجاح", reg);
+        }).catch(function(err) {
+          console.log("فشل في تسجيل Service Worker", err);
+        });
+      });
+    }
+
+    // تحسينات إضافية للأداء
     document.addEventListener('DOMContentLoaded', function() {
-      // إضافة تأثيرات التحميل للعناصر
-      const elements = document.querySelectorAll('.fade-in, .slide-in-left, .slide-in-right');
-      elements.forEach((element, index) => {
-        element.style.animationDelay = `${index * 0.1}s`;
+      // تحسين الأداء باستخدام Intersection Observer
+      const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+      };
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateY(0)';
+          }
+        });
+      }, observerOptions);
+
+      // مراقبة العناصر للتأثيرات
+      document.querySelectorAll('.fade-in').forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(20px)';
+        el.style.transition = 'all 0.6s ease-out';
+        observer.observe(el);
       });
     });
   </script>
