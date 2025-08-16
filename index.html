@@ -495,9 +495,10 @@
 
     /* تحسينات الموبايل */
     @media (max-width: 480px) {
-      /* إيقاف الفيديو على الهواتف الصغيرة */
+      /* السماح بالفيديو على جميع الأجهزة */
       .header-video {
-        display: none !important;
+        display: block !important;
+        opacity: 0.5 !important;
       }
       
       .styled-table th,
@@ -587,8 +588,20 @@
     <!-- الرأس مع فيديو الخلفية -->
     <div class="header-container">
       <!-- فيديو الخلفية -->
-      <video class="header-video" autoplay muted loop playsinline>
+      <video class="header-video" 
+             autoplay 
+             muted 
+             loop 
+             playsinline
+             preload="auto"
+             webkit-playsinline="true"
+             controls="false"
+             x5-playsinline="true"
+             x5-video-player-type="h5"
+             x5-video-player-fullscreen="true"
+             x-webkit-airplay="deny">
         <source src="https://storage.nodesbox.com/customs.mof.gov.iq/2025/01/20/2025_01_20_12161817836_7618544517557373.mp4" type="video/mp4">
+        متصفحك لا يدعم تشغيل الفيديو
       </video>
       
       <!-- طبقة شفافة -->
@@ -757,12 +770,8 @@
       
       console.log('تهيئة الفيديو... عرض الشاشة:', window.innerWidth);
       
-      // إيقاف الفيديو على الهواتف الصغيرة فقط
-      if (window.innerWidth <= 480) {
-        video.style.display = 'none';
-        console.log('الفيديو متوقف للهاتف الصغير');
-        return;
-      }
+      // السماح بالفيديو لجميع أحجام الشاشات
+      console.log('حجم الشاشة:', window.innerWidth);
       
       // تأكد من عرض الفيديو
       video.style.display = 'block';
@@ -774,6 +783,12 @@
       video.style.height = 'auto';
       video.style.minWidth = '100%';
       video.style.minHeight = '100%';
+      
+      // خصائص إضافية للموبايل
+      video.muted = true;
+      video.playsInline = true;
+      video.setAttribute('webkit-playsinline', 'true');
+      video.setAttribute('x5-playsinline', 'true');
       
       console.log('محاولة تشغيل الفيديو...');
       
@@ -796,7 +811,27 @@
       video.addEventListener('loadeddata', function() {
         console.log('تم تحميل بيانات الفيديو');
       });
+      
+      // محاولة إضافية لتشغيل الفيديو بعد تحميل الصفحة
+      setTimeout(() => {
+        if (video.paused) {
+          video.play().catch(e => console.log('محاولة إضافية فشلت:', e));
+        }
+      }, 1000);
     }
+    
+    // إعادة تشغيل الفيديو عند تغيير حجم الشاشة
+    window.addEventListener('resize', function() {
+      setTimeout(initializeHeaderVideo, 500);
+    });
+    
+    // محاولة إضافية عند النقر على الشاشة (للموبايل)
+    document.addEventListener('touchstart', function() {
+      const video = document.querySelector('.header-video');
+      if (video && video.paused) {
+        video.play().catch(e => console.log('تشغيل باللمس فشل:', e));
+      }
+    }, { once: true });
 
     // إظهار الإشعارات
     function showNotification(message, type = 'success') {
