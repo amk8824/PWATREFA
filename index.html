@@ -119,38 +119,77 @@
       font-family: 'Cairo', sans-serif;
     }
 
-    /* الرأس المبسط */
+    /* الرأس مع فيديو خلفية */
     .header-container {
-      background: var(--primary);
-      padding: 15px;
+      position: relative;
+      padding: 35px 15px;
       color: white;
       text-align: center;
+      overflow: visible;
+      background: var(--primary);
+      height: 250px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .header-video {
+      position: absolute !important;
+      top: 50% !important;
+      left: 50% !important;
+      width: 120% !important;
+      height: auto !important;
+      min-width: 100% !important;
+      min-height: 100% !important;
+      transform: translate(-50%, -50%) !important;
+      object-fit: cover !important;
+      opacity: 0.6 !important;
+      z-index: 1 !important;
+      pointer-events: none !important;
+      filter: brightness(1.3) contrast(1.2) saturate(1.1);
+    }
+
+    .header-video-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 33, 71, 0.6);
+      z-index: 2;
+    }
+
+    .header-content {
+      position: relative;
+      z-index: 3;
     }
 
     .header-logos {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 10px;
+      margin-bottom: 15px;
     }
 
     .header-logo {
-      width: 50px;
+      width: 60px;
       height: auto;
     }
 
     .header-title {
-      font-size: 16px;
+      font-size: 18px;
       font-weight: 800;
-      margin-bottom: 5px;
+      margin-bottom: 8px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
     }
 
     .header-subtitle {
-      font-size: 12px;
+      font-size: 14px;
       opacity: 0.9;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
     }
 
-    /* العنوان الرئيسي المبسط */
+    /* العنوان الرئيسي المحسن مثل الصورة */
     .main-title {
       text-align: center;
       margin: 20px 0;
@@ -162,14 +201,38 @@
     }
 
     .main-title h1 {
-      font-size: 18px;
-      color: #FFD700;
-      background: linear-gradient(135deg, #000000, #333333);
-      padding: 15px;
-      border-radius: 8px;
+      font-size: 20px;
+      color: white;
+      background: linear-gradient(135deg, #d63384 0%, #c5396b 30%, #b02a5b 70%, #8b1e3f 100%);
+      padding: 22px 25px;
+      border-radius: 30px;
       font-weight: 800;
-      text-shadow: 1px 1px 3px rgba(255, 215, 0, 0.3);
-      border: 2px solid #FFD700;
+      text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
+      box-shadow: 
+        0 10px 30px rgba(214, 51, 132, 0.4),
+        0 4px 15px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      border: none;
+      line-height: 1.5;
+      letter-spacing: 0.8px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .main-title h1::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+      animation: shine 3s infinite;
+    }
+
+    @keyframes shine {
+      0% { left: -100%; }
+      100% { left: 100%; }
     }
 
     /* أدوات التحكم المبسطة */
@@ -231,7 +294,7 @@
       color: #666;
     }
 
-    /* إحصائيات ملونة */
+    /* إحصائيات مبسطة */
     .table-stats {
       display: flex;
       gap: 10px;
@@ -326,7 +389,6 @@
       max-width: 80px;
     }
 
-    /* خلايا خاصة للحقول الطويلة */
     .styled-table th[data-field*="GDS"], 
     .styled-table th[data-field*="DS"],
     .styled-table td.long-field {
@@ -433,6 +495,11 @@
 
     /* تحسينات الموبايل */
     @media (max-width: 480px) {
+      /* إيقاف الفيديو على الهواتف الصغيرة */
+      .header-video {
+        display: none !important;
+      }
+      
       .styled-table th,
       .styled-table td {
         padding: 4px 3px;
@@ -440,7 +507,6 @@
         max-width: 60px;
       }
       
-      /* حقول GDS وDS تحتاج مساحة أكبر على الموبايل */
       .styled-table th[data-field*="GDS"], 
       .styled-table th[data-field*="DS"],
       .styled-table td.long-field {
@@ -457,6 +523,7 @@
       .stat-card {
         min-width: 80px;
         flex: 1;
+        transition: none;
       }
       
       .stat-card .number {
@@ -468,30 +535,31 @@
       }
       
       .header-logo {
-        width: 40px;
+        width: 45px;
+      }
+      
+      .header-container {
+        height: 180px;
+        padding: 25px 15px;
+      }
+      
+      .header-title {
+        font-size: 16px;
+      }
+      
+      .header-subtitle {
+        font-size: 12px;
       }
       
       .main-title h1 {
         font-size: 16px;
-        padding: 12px;
-      }
-
-      /* تعطيل الحركات على الهاتف للأداء */
-      .stat-card {
-        transition: none;
+        padding: 15px;
+        border-radius: 20px;
+        box-shadow: 0 6px 20px rgba(214, 51, 132, 0.4);
       }
 
       .stat-card:hover {
         transform: none;
-      }
-    }
-
-    /* إخفاء العناصر غير الضرورية على الموبايل */
-    @media (max-width: 768px) {
-      .activation-screen::before,
-      .header-container::before,
-      .header-container::after {
-        display: none;
       }
     }
   </style>
@@ -516,15 +584,25 @@
 
   <!-- المحتوى الرئيسي -->
   <div id="mainContent" style="display:none">
-    <!-- الرأس -->
+    <!-- الرأس مع فيديو الخلفية -->
     <div class="header-container">
-      <div class="header-logos">
-        <img src="https://www2.0zz0.com/2025/05/19/22/510831948.png" alt="العراق" class="header-logo" />
-        <div style="text-align: center;">
-          <div class="header-title">جمهورية العراق - وزارة المالية</div>
-          <div class="header-subtitle">الهيئة العامة للكمارك - مركز كمرك طريبيل</div>
+      <!-- فيديو الخلفية -->
+      <video class="header-video" autoplay muted loop playsinline>
+        <source src="https://storage.nodesbox.com/customs.mof.gov.iq/2025/01/20/2025_01_20_12161817836_7618544517557373.mp4" type="video/mp4">
+      </video>
+      
+      <!-- طبقة شفافة -->
+      <div class="header-video-overlay"></div>
+      
+      <div class="header-content">
+        <div class="header-logos">
+          <img src="https://www2.0zz0.com/2025/05/19/22/510831948.png" alt="العراق" class="header-logo" />
+          <div style="text-align: center;">
+            <div class="header-title">جمهورية العراق - وزارة المالية</div>
+            <div class="header-subtitle">الهيئة العامة للكمارك - مركز كمرك طريبيل</div>
+          </div>
+          <img src="https://www2.0zz0.com/2025/05/19/22/823371779.png" alt="المالية" class="header-logo" />
         </div>
-        <img src="https://www2.0zz0.com/2025/05/19/22/823371779.png" alt="المالية" class="header-logo" />
       </div>
     </div>
 
@@ -548,7 +626,6 @@
         <i class="fas fa-search search-icon"></i>
       </div>
       
-      <!-- أزرار التحكم في البيانات -->
       <div style="display: flex; gap: 10px;">
         <button onclick="clearSavedData()" class="btn-clear" style="flex: 1; padding: 10px; background: #dc3545; color: white; border: none; border-radius: 8px; font-weight: 600; font-family: 'Cairo', sans-serif;">
           <i class="fas fa-trash"></i> مسح البيانات المحفوظة
@@ -559,7 +636,7 @@
       </div>
     </div>
 
-    <!-- إحصائيات ملونة -->
+    <!-- إحصائيات -->
     <div class="table-stats" id="tableStats" style="display: none;">
       <div class="stat-card">
         <i class="fas fa-database" style="font-size: 14px; margin-bottom: 5px; opacity: 0.7;"></i>
@@ -642,33 +719,92 @@
         const currentDate = new Date();
         const expiryDate = new Date(validCode.expiry);
         
-        if (currentDate <= expiryDate) {
-          localStorage.setItem("activated", "true");
-          localStorage.setItem("activationCode", code);
-          localStorage.setItem("activationDate", new Date().toISOString());
-          
-          showNotification('تم تفعيل البرنامج بنجاح', 'success');
-          
-          setTimeout(() => {
-            document.getElementById('activationScreen').style.display = 'none';
-            document.getElementById('mainContent').style.display = 'block';
-          }, 1000);
-        } else {
+        if (currentDate > expiryDate) {
           showNotification('كود التفعيل منتهي الصلاحية', 'error');
+          return;
         }
+
+        localStorage.setItem('activationCode', code);
+        document.getElementById('activationScreen').style.display = 'none';
+        document.getElementById('mainContent').style.display = 'block';
+        
+        showNotification('تم تفعيل النظام بنجاح', 'success');
+        loadSavedData();
+        initializeHeaderVideo();
       } else {
         showNotification('كود التفعيل غير صحيح', 'error');
       }
     }
 
-    // عرض الإشعارات
-    function showNotification(message, type) {
-      const notification = document.createElement('div');
-      notification.className = `notification ${type}`;
-      notification.textContent = message;
-      document.body.appendChild(notification);
+    // فحص التفعيل عند بدء التشغيل
+    function checkActivation() {
+      const savedCode = localStorage.getItem('activationCode');
+      if (savedCode && validCodes.some(c => c.code === savedCode)) {
+        document.getElementById('activationScreen').style.display = 'none';
+        document.getElementById('mainContent').style.display = 'block';
+        loadSavedData();
+        initializeHeaderVideo();
+      }
+    }
+
+    // إدارة الفيديو المحسنة
+    function initializeHeaderVideo() {
+      const video = document.querySelector('.header-video');
+      if (!video) {
+        console.log('لم يتم العثور على عنصر الفيديو');
+        return;
+      }
       
-      setTimeout(() => notification.classList.add('show'), 100);
+      console.log('تهيئة الفيديو... عرض الشاشة:', window.innerWidth);
+      
+      // إيقاف الفيديو على الهواتف الصغيرة فقط
+      if (window.innerWidth <= 480) {
+        video.style.display = 'none';
+        console.log('الفيديو متوقف للهاتف الصغير');
+        return;
+      }
+      
+      // تأكد من عرض الفيديو
+      video.style.display = 'block';
+      video.style.opacity = '0.6';
+      
+      // ضبط خصائص إضافية للعرض الأمثل
+      video.style.objectFit = 'cover';
+      video.style.width = '120%';
+      video.style.height = 'auto';
+      video.style.minWidth = '100%';
+      video.style.minHeight = '100%';
+      
+      console.log('محاولة تشغيل الفيديو...');
+      
+      // محاولة تشغيل الفيديو
+      video.play().then(() => {
+        console.log('تم تشغيل الفيديو بنجاح');
+        showNotification('فيديو الخلفية يعمل بنجاح', 'success');
+      }).catch((error) => {
+        console.log('تعذر تشغيل الفيديو تلقائياً:', error);
+        showNotification('تعذر تشغيل فيديو الخلفية تلقائياً', 'warning');
+      });
+      
+      // معالجة أخطاء الفيديو
+      video.addEventListener('error', function(e) {
+        console.log('خطأ في الفيديو:', e);
+        showNotification('فشل تحميل فيديو الخلفية', 'warning');
+      });
+      
+      // عند تحميل الفيديو
+      video.addEventListener('loadeddata', function() {
+        console.log('تم تحميل بيانات الفيديو');
+      });
+    }
+
+    // إظهار الإشعارات
+    function showNotification(message, type = 'success') {
+      const notification = document.createElement('div');
+      notification.className = `notification ${type} show`;
+      notification.textContent = message;
+      
+      document.body.appendChild(notification);
       
       setTimeout(() => {
         notification.classList.remove('show');
@@ -692,7 +828,6 @@
             return;
           }
           
-          // معالجة البيانات بدفعات صغيرة للموبايل
           const batchSize = window.innerWidth <= 768 ? 25 : 50;
           processBatchData(jsonData, batchSize);
           
@@ -720,247 +855,208 @@
           timestamp: new Date().toISOString(),
           filename: document.getElementById('excelInput').files[0]?.name || 'unknown'
         };
-        localStorage.setItem('tariff_data', JSON.stringify(dataToSave));
+        
+        localStorage.setItem('tariffData', JSON.stringify(dataToSave));
         showNotification('تم حفظ البيانات محلياً', 'success');
       } catch (error) {
-        console.error('خطأ في حفظ البيانات:', error);
+        console.warn('فشل في حفظ البيانات محلياً:', error);
       }
-    }
-
-    // تحميل البيانات المحفوظة محلياً
-    function loadSavedData() {
-      try {
-        const savedData = localStorage.getItem('tariff_data');
-        if (savedData) {
-          const parsedData = JSON.parse(savedData);
-          headers = parsedData.headers;
-          originalData = parsedData.data;
-          filteredData = [...originalData];
-          
-          // عرض البيانات المحفوظة
-          displayTable(headers, originalData);
-          updateStats();
-          
-          const savedTime = new Date(parsedData.timestamp).toLocaleString('ar-EG');
-          showNotification(`تم تحميل البيانات المحفوظة (${parsedData.filename} - ${savedTime})`, 'success');
-          return true;
-        }
-      } catch (error) {
-        console.error('خطأ في تحميل البيانات المحفوظة:', error);
-        localStorage.removeItem('tariff_data');
-      }
-      return false;
-    }
-
-    // مسح البيانات المحفوظة
-    function clearSavedData() {
-      localStorage.removeItem('tariff_data');
-      originalData = [];
-      filteredData = [];
-      headers = [];
-      document.getElementById('tableContainer').style.display = 'none';
-      document.getElementById('tableStats').style.display = 'none';
-      showNotification('تم مسح البيانات المحفوظة', 'warning');
     }
 
     // معالجة البيانات بدفعات
-    function processBatchData(data, batchSize) {
-      headers = data[0];
-      const rows = data.slice(1);
+    function processBatchData(jsonData, batchSize) {
+      if (jsonData.length === 0) return;
       
-      originalData = rows;
-      filteredData = [...originalData];
+      headers = jsonData[0].map((header, index) => 
+        header && header.toString().trim() !== '' ? header.toString() : `العمود ${index + 1}`
+      );
       
-      // حفظ البيانات محلياً
-      saveDataLocally(headers, rows);
+      const data = jsonData.slice(1).filter(row => 
+        row.some(cell => cell !== null && cell !== undefined && cell.toString().trim() !== '')
+      );
       
-      // عرض الجدول
-      displayTable(headers, originalData);
+      originalData = data;
+      filteredData = [...data];
+      
+      saveDataLocally(headers, data);
+      
+      let currentBatch = 0;
+      const totalBatches = Math.ceil(data.length / batchSize);
+      
+      function renderBatch() {
+        if (currentBatch >= totalBatches) {
+          document.getElementById('loadingSpinner').style.display = 'none';
+          document.getElementById('tableContainer').style.display = 'block';
+          document.getElementById('tableStats').style.display = 'flex';
+          updateStats();
+          showNotification(`تم تحميل ${data.length} صف بنجاح`, 'success');
+          return;
+        }
+        
+        const startIndex = currentBatch * batchSize;
+        const endIndex = Math.min(startIndex + batchSize, data.length);
+        const batchData = data.slice(startIndex, endIndex);
+        
+        if (currentBatch === 0) {
+          renderTableHeaders();
+          document.getElementById('tableBody').innerHTML = '';
+        }
+        
+        renderTableBatch(batchData);
+        currentBatch++;
+        
+        setTimeout(() => renderBatch(), 10);
+      }
+      
+      renderBatch();
     }
 
-    // دالة عرض الجدول (منفصلة لإعادة الاستخدام)
-    function displayTable(headers, data) {
-      // إنشاء رأس الجدول
-      const tableHead = document.getElementById('tableHead');
-      tableHead.innerHTML = '';
-      const headerRow = document.createElement('tr');
+    // عرض رؤوس الجدول
+    function renderTableHeaders() {
+      const thead = document.getElementById('tableHead');
+      thead.innerHTML = '';
       
+      const headerRow = document.createElement('tr');
       headers.forEach((header, index) => {
         const th = document.createElement('th');
-        th.textContent = header || '';
+        th.textContent = header;
+        th.setAttribute('data-field', header);
         
-        // إضافة كلاس خاص للحقول الطويلة
-        if (header && (header.includes('GDS') || header.includes('DS') || header.length > 15)) {
-          th.setAttribute('data-field', header);
+        if (header.includes('GDS') || header.includes('DS') || header.length > 10) {
+          th.style.maxWidth = '120px';
         }
         
         headerRow.appendChild(th);
       });
       
-      tableHead.appendChild(headerRow);
-      
-      // إنشاء الجدول بدفعات
-      const tableBody = document.getElementById('tableBody');
-      tableBody.innerHTML = '';
-      const batchSize = window.innerWidth <= 768 ? 25 : 50;
-      
-      let currentBatch = 0;
-      
-      function processBatch() {
-        const start = currentBatch * batchSize;
-        const end = Math.min(start + batchSize, data.length);
-        
-        for (let i = start; i < end; i++) {
-          const row = data[i];
-          if (!row || row.every(cell => !cell)) continue;
-          
-          const tr = document.createElement('tr');
-          
-          headers.forEach((header, index) => {
-            const td = document.createElement('td');
-            td.textContent = row[index] || '';
-            
-            // إضافة كلاس للحقول الطويلة
-            if (header && (header.includes('GDS') || header.includes('DS') || header.length > 15)) {
-              td.classList.add('long-field');
-            }
-            
-            tr.appendChild(td);
-          });
-          
-          tableBody.appendChild(tr);
-        }
-        
-        currentBatch++;
-        
-        if (end < data.length) {
-          setTimeout(processBatch, 10); // معالجة تدريجية
-        } else {
-          // انتهاء التحميل
-          updateStats();
-          document.getElementById('tableContainer').style.display = 'block';
-          document.getElementById('tableStats').style.display = 'flex';
-          showNotification(`تم تحميل ${data.length} سجل`, 'success');
-        }
-      }
-      
-      processBatch();
+      thead.appendChild(headerRow);
     }
 
-    // تحديث الإحصائيات
-    function updateStats() {
-      document.getElementById('totalRows').textContent = originalData.length;
-      document.getElementById('visibleRows').textContent = filteredData.length;
-      document.getElementById('totalColumns').textContent = originalData.length > 0 ? originalData[0].length : 0;
-    }
-
-    // البحث المحسن في الجدول
-    let searchTimeout;
-    function searchTable() {
-      clearTimeout(searchTimeout);
-      searchTimeout = setTimeout(() => {
-        performSearch();
-      }, 150); // تأخير 150ms للبحث السريع
-    }
-
-    function performSearch() {
-      const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
-      const tableBody = document.getElementById('tableBody');
+    // عرض دفعة من البيانات
+    function renderTableBatch(batchData) {
+      const tbody = document.getElementById('tableBody');
       
-      // مسح الجدول أولاً
-      tableBody.innerHTML = '';
-      
-      if (!searchTerm) {
-        // إذا لم يكن هناك نص بحث، عرض جميع البيانات
-        filteredData = [...originalData];
-      } else {
-        // البحث الدقيق - عرض السجلات التي تحتوي على النص المكتوب فقط
-        filteredData = originalData.filter(row => {
-          return row.some(cell => {
-            if (!cell) return false;
-            const cellText = cell.toString().toLowerCase();
-            return cellText.includes(searchTerm);
-          });
-        });
-      }
-      
-      // عرض النتائج المطابقة فقط وتحديث الإحصائيات
-      renderFilteredResults(filteredData);
-      updateStats();
-    }
-
-    // دالة منفصلة لعرض النتائج المفلترة فقط
-    function renderFilteredResults(data) {
-      const tableBody = document.getElementById('tableBody');
-      const headers = document.querySelectorAll('#tableHead th');
-      
-      // مسح الجدول تماماً قبل إضافة النتائج الجديدة
-      tableBody.innerHTML = '';
-      
-      // عرض البيانات المفلترة فقط
-      data.forEach(row => {
-        if (!row || row.every(cell => !cell)) return;
-        
+      batchData.forEach(row => {
         const tr = document.createElement('tr');
+        
         headers.forEach((header, index) => {
           const td = document.createElement('td');
-          const cellValue = row[index] || '';
-          td.textContent = cellValue;
+          const cellValue = row[index];
           
-          // إضافة كلاس للحقول الطويلة
-          if (header && header.textContent && (header.textContent.includes('GDS') || header.textContent.includes('DS') || header.textContent.length > 15)) {
+          if (cellValue !== null && cellValue !== undefined) {
+            td.textContent = cellValue.toString();
+          } else {
+            td.textContent = '';
+          }
+          
+          if (header.includes('GDS') || header.includes('DS') || (cellValue && cellValue.toString().length > 15)) {
             td.classList.add('long-field');
           }
           
           tr.appendChild(td);
         });
-        tableBody.appendChild(tr);
+        
+        tbody.appendChild(tr);
       });
     }
 
-    // عرض النتائج المفلترة فقط
-    function renderTableInBatches(data) {
-      const tableBody = document.getElementById('tableBody');
-      tableBody.innerHTML = '';
-      
-      // التأكد من أننا نعرض البيانات المفلترة فقط
-      const dataToRender = data || filteredData;
-      const headers = document.querySelectorAll('#tableHead th');
-      const batchSize = 25; // تقليل حجم الدفعة للهاتف
-      let currentIndex = 0;
+    // تحديث الإحصائيات
+    function updateStats() {
+      document.getElementById('totalRows').textContent = originalData.length.toLocaleString('ar');
+      document.getElementById('visibleRows').textContent = filteredData.length.toLocaleString('ar');
+      document.getElementById('totalColumns').textContent = headers.length.toLocaleString('ar');
+    }
 
-      function renderBatch() {
-        const endIndex = Math.min(currentIndex + batchSize, dataToRender.length);
-        
-        for (let i = currentIndex; i < endIndex; i++) {
-          const row = dataToRender[i];
-          if (!row || row.every(cell => !cell)) continue;
-          
-          const tr = document.createElement('tr');
-          headers.forEach((header, index) => {
-            const td = document.createElement('td');
-            const cellValue = row[index] || '';
-            td.textContent = cellValue;
-            
-            // إضافة كلاس للحقول الطويلة
-            if (header && header.textContent && (header.textContent.includes('GDS') || header.textContent.includes('DS') || header.textContent.length > 15)) {
-              td.classList.add('long-field');
-            }
-            
-            tr.appendChild(td);
-          });
-          tableBody.appendChild(tr);
+    // البحث السريع
+    let searchTimeout;
+    function searchTable() {
+      const searchTerm = document.getElementById('searchInput').value.trim().toLowerCase();
+      
+      clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(() => {
+        if (searchTerm === '') {
+          filteredData = [...originalData];
+        } else {
+          filteredData = originalData.filter(row => 
+            row.some(cell => 
+              cell && cell.toString().toLowerCase().includes(searchTerm)
+            )
+          );
         }
         
-        currentIndex = endIndex;
-        
-        // التحقق من أن البيانات المعروضة تطابق البيانات المفلترة
-        if (currentIndex < dataToRender.length && dataToRender === filteredData) {
-          requestAnimationFrame(renderBatch);
-        }
+        renderFilteredTable();
+        updateStats();
+      }, 150);
+    }
+
+    // عرض النتائج المفلترة
+    function renderFilteredTable() {
+      const tbody = document.getElementById('tableBody');
+      tbody.innerHTML = '';
+      
+      if (filteredData.length === 0) {
+        const tr = document.createElement('tr');
+        const td = document.createElement('td');
+        td.colSpan = headers.length;
+        td.textContent = 'لا توجد نتائج مطابقة';
+        td.style.textAlign = 'center';
+        td.style.padding = '20px';
+        td.style.color = '#666';
+        tr.appendChild(td);
+        tbody.appendChild(tr);
+        return;
       }
       
-      renderBatch();
+      const batchSize = window.innerWidth <= 768 ? 25 : 50;
+      renderTableBatch(filteredData.slice(0, batchSize));
+      
+      if (filteredData.length > batchSize) {
+        setTimeout(() => {
+          renderTableBatch(filteredData.slice(batchSize));
+        }, 100);
+      }
+    }
+
+    // تحميل البيانات المحفوظة
+    function loadSavedData() {
+      try {
+        const savedData = localStorage.getItem('tariffData');
+        if (savedData) {
+          const parsed = JSON.parse(savedData);
+          headers = parsed.headers || [];
+          originalData = parsed.data || [];
+          filteredData = [...originalData];
+          
+          if (originalData.length > 0) {
+            renderTableHeaders();
+            renderFilteredTable();
+            document.getElementById('tableContainer').style.display = 'block';
+            document.getElementById('tableStats').style.display = 'flex';
+            updateStats();
+            
+            const filename = parsed.filename || 'ملف محفوظ';
+            showNotification(`تم تحميل البيانات المحفوظة (${filename})`, 'success');
+          }
+        }
+      } catch (error) {
+        console.warn('فشل في تحميل البيانات المحفوظة:', error);
+      }
+    }
+
+    // مسح البيانات المحفوظة
+    function clearSavedData() {
+      if (confirm('هل أنت متأكد من مسح جميع البيانات المحفوظة؟')) {
+        localStorage.removeItem('tariffData');
+        originalData = [];
+        filteredData = [];
+        headers = [];
+        
+        document.getElementById('tableContainer').style.display = 'none';
+        document.getElementById('tableStats').style.display = 'none';
+        document.getElementById('searchInput').value = '';
+        
+        showNotification('تم مسح البيانات المحفوظة', 'success');
+      }
     }
 
     // معالج تحميل الملف
@@ -968,14 +1064,12 @@
       const file = event.target.files[0];
       if (!file) return;
       
-      // فحص نوع الملف
       if (!file.name.match(/\.(xlsx|xls)$/i)) {
         showNotification('يرجى اختيار ملف Excel (.xlsx أو .xls)', 'error');
         this.value = '';
         return;
       }
       
-      // فحص حجم الملف (5MB كحد أقصى للموبايل)
       const maxSize = window.innerWidth <= 768 ? 5 * 1024 * 1024 : 10 * 1024 * 1024;
       if (file.size > maxSize) {
         showNotification('حجم الملف كبير جداً', 'error');
@@ -988,52 +1082,23 @@
       
       showNotification('جاري قراءة الملف...', 'warning');
       
-      // إعطاء الواجهة وقت للتحديث
       setTimeout(() => processExcelFile(file), 100);
     });
 
-    // مراقبة الاتصال
+    // اكتشاف الاتصال
     window.addEventListener('online', function() {
       isOnline = true;
-      showNotification('تم استعادة الاتصال بالإنترنت', 'success');
+      showNotification('تم استعادة الاتصال', 'success');
     });
 
     window.addEventListener('offline', function() {
       isOnline = false;
-      showNotification('انقطع الاتصال بالإنترنت - البيانات محفوظة محلياً', 'warning');
+      showNotification('فقدان الاتصال - وضع عدم الاتصال', 'warning');
     });
 
-    // تهيئة التطبيق
-    window.addEventListener('load', function() {
-      // فحص إذا كان التطبيق مفعل مسبقاً
-      const isActivated = localStorage.getItem('activated');
-      if (isActivated === 'true') {
-        document.getElementById('activationScreen').style.display = 'none';
-        document.getElementById('mainContent').style.display = 'block';
-        
-        // تحميل البيانات المحفوظة إن وجدت
-        if (loadSavedData()) {
-          document.getElementById('tableContainer').style.display = 'block';
-          document.getElementById('tableStats').style.display = 'flex';
-        }
-      }
-    });
-
-    // منع النقر بالزر الأيمن
-    document.addEventListener('contextmenu', function(e) {
-      e.preventDefault();
-    });
-
-    // منع F12 وطرق فتح أدوات المطور
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'F12' || 
-          (e.ctrlKey && e.shiftKey && e.key === 'I') ||
-          (e.ctrlKey && e.shiftKey && e.key === 'C') ||
-          (e.ctrlKey && e.shiftKey && e.key === 'J') ||
-          (e.ctrlKey && e.key === 'U')) {
-        e.preventDefault();
-        return false;
-      }
+    // بدء التشغيل
+    document.addEventListener('DOMContentLoaded', function() {
+      checkActivation();
     });
   </script>
 </body>
