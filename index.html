@@ -161,9 +161,13 @@
 
     .main-title h1 {
       font-size: 18px;
-      color: var(--accent);
+      color: #FFD700;
+      background: linear-gradient(135deg, #000000, #333333);
+      padding: 15px;
+      border-radius: 8px;
       font-weight: 800;
-      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+      text-shadow: 1px 1px 3px rgba(255, 215, 0, 0.3);
+      border: 2px solid #FFD700;
     }
 
     /* أدوات التحكم المبسطة */
@@ -417,6 +421,7 @@
       
       .main-title h1 {
         font-size: 16px;
+        padding: 12px;
       }
     }
 
@@ -518,15 +523,9 @@
     <div class="designer-info">
       <div class="designer-content">
         <h3>تصميم وتطوير</h3>
-        <p> احمد عبد القادر مشحن العبيدي</p>
-        <div class="contact-links">
-          <a href="mailto:emadabood1234@gmail.com" class="contact-link">
-            <i class="fas fa-envelope"></i> A.ALOBAIDYMO@GMAIL.COM
-          </a>
-          <a href="https://wa.me/+9647713201949" class="contact-link">
-            <i class="fab fa-whatsapp"></i> 07768525871
-          </a>
-        </div>
+        <p>مطور نظم الكمارك العراقية</p>
+        <p>نظام محسن للأداء والسرعة</p>
+        <p>متوافق مع جميع الأجهزة والمتصفحات</p>
       </div>
     </div>
   </div>
@@ -698,8 +697,16 @@
       document.getElementById('totalColumns').textContent = originalData.length > 0 ? originalData[0].length : 0;
     }
 
-    // البحث في الجدول
+    // البحث المحسن في الجدول
+    let searchTimeout;
     function searchTable() {
+      clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(() => {
+        performSearch();
+      }, 300); // تأخير 300ms لتحسين الأداء
+    }
+
+    function performSearch() {
       const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
       const tableBody = document.getElementById('tableBody');
       
@@ -713,25 +720,43 @@
         );
       }
       
-      // إعادة إنشاء الجدول
+      // إعادة إنشاء الجدول بدفعات للأداء السريع
+      renderTableInBatches(filteredData);
+      updateStats();
+    }
+
+    // عرض الجدول بدفعات لتحسين الأداء
+    function renderTableInBatches(data) {
+      const tableBody = document.getElementById('tableBody');
       tableBody.innerHTML = '';
       const headers = document.querySelectorAll('#tableHead th');
+      const batchSize = 50;
+      let currentIndex = 0;
+
+      function renderBatch() {
+        const endIndex = Math.min(currentIndex + batchSize, data.length);
+        
+        for (let i = currentIndex; i < endIndex; i++) {
+          const row = data[i];
+          if (!row || row.every(cell => !cell)) continue;
+          
+          const tr = document.createElement('tr');
+          headers.forEach((_, index) => {
+            const td = document.createElement('td');
+            td.textContent = row[index] || '';
+            tr.appendChild(td);
+          });
+          tableBody.appendChild(tr);
+        }
+        
+        currentIndex = endIndex;
+        
+        if (currentIndex < data.length) {
+          requestAnimationFrame(renderBatch);
+        }
+      }
       
-      filteredData.forEach(row => {
-        if (!row || row.every(cell => !cell)) return;
-        
-        const tr = document.createElement('tr');
-        
-        headers.forEach((_, index) => {
-          const td = document.createElement('td');
-          td.textContent = row[index] || '';
-          tr.appendChild(td);
-        });
-        
-        tableBody.appendChild(tr);
-      });
-      
-      updateStats();
+      renderBatch();
     }
 
     // معالج تحميل الملف
