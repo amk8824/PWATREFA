@@ -228,7 +228,7 @@
       color: #666;
     }
 
-    /* إحصائيات مبسطة */
+    /* إحصائيات ملونة */
     .table-stats {
       display: flex;
       gap: 10px;
@@ -240,18 +240,47 @@
     .stat-card {
       flex: 1;
       min-width: 100px;
-      background: white;
+      background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
       padding: 12px 8px;
       border-radius: 10px;
       text-align: center;
       box-shadow: var(--shadow);
+      border-left: 4px solid var(--primary);
+      transition: transform 0.2s ease;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-2px);
+    }
+
+    .stat-card:nth-child(1) {
+      border-left-color: #007bff;
+    }
+
+    .stat-card:nth-child(2) {
+      border-left-color: #28a745;
+    }
+
+    .stat-card:nth-child(3) {
+      border-left-color: #ffc107;
     }
 
     .stat-card .number {
       font-size: 18px;
       font-weight: 800;
-      color: var(--primary);
       display: block;
+    }
+
+    .stat-card:nth-child(1) .number {
+      color: #007bff;
+    }
+
+    .stat-card:nth-child(2) .number {
+      color: #28a745;
+    }
+
+    .stat-card:nth-child(3) .number {
+      color: #ffc107;
     }
 
     .stat-card .label {
@@ -442,6 +471,15 @@
         font-size: 16px;
         padding: 12px;
       }
+
+      /* تعطيل الحركات على الهاتف للأداء */
+      .stat-card {
+        transition: none;
+      }
+
+      .stat-card:hover {
+        transform: none;
+      }
     }
 
     /* إخفاء العناصر غير الضرورية على الموبايل */
@@ -505,19 +543,32 @@
         <input type="text" id="searchInput" class="search-input" placeholder="ابحث..." onkeyup="searchTable()" />
         <i class="fas fa-search search-icon"></i>
       </div>
+      
+      <!-- أزرار التحكم في البيانات -->
+      <div style="display: flex; gap: 10px;">
+        <button onclick="clearSavedData()" class="btn-clear" style="flex: 1; padding: 10px; background: #dc3545; color: white; border: none; border-radius: 8px; font-weight: 600;">
+          <i class="fas fa-trash"></i> مسح البيانات المحفوظة
+        </button>
+        <button onclick="location.reload()" class="btn-refresh" style="flex: 1; padding: 10px; background: #28a745; color: white; border: none; border-radius: 8px; font-weight: 600;">
+          <i class="fas fa-sync"></i> تحديث الصفحة
+        </button>
+      </div>
     </div>
 
-    <!-- إحصائيات -->
+    <!-- إحصائيات ملونة -->
     <div class="table-stats" id="tableStats" style="display: none;">
       <div class="stat-card">
+        <i class="fas fa-database" style="font-size: 14px; margin-bottom: 5px; opacity: 0.7;"></i>
         <span class="number" id="totalRows">0</span>
         <span class="label">إجمالي</span>
       </div>
       <div class="stat-card">
+        <i class="fas fa-eye" style="font-size: 14px; margin-bottom: 5px; opacity: 0.7;"></i>
         <span class="number" id="visibleRows">0</span>
         <span class="label">المعروض</span>
       </div>
       <div class="stat-card">
+        <i class="fas fa-columns" style="font-size: 14px; margin-bottom: 5px; opacity: 0.7;"></i>
         <span class="number" id="totalColumns">0</span>
         <span class="label">أعمدة</span>
       </div>
@@ -542,9 +593,17 @@
     <div class="designer-info">
       <div class="designer-content">
         <h3>تصميم وتطوير</h3>
+        <p>أحمد عبد القادر مشحن</p>
         <p>مطور نظم الكمارك العراقية</p>
-        <p>نظام محسن للأداء والسرعة</p>
-        <p>متوافق مع جميع الأجهزة والمتصفحات</p>
+        <div class="contact-links">
+          <a href="mailto:a.alobaidymo@gmail.com" class="contact-link">
+            <i class="fas fa-envelope"></i> a.alobaidymo@gmail.com
+          </a>
+          <a href="tel:07768525871" class="contact-link">
+            <i class="fas fa-phone"></i> 07768525871
+          </a>
+        </div>
+        <p style="margin-top: 10px;">نظام محسن للأداء والسرعة - متوافق مع جميع الأجهزة</p>
       </div>
     </div>
   </div>
@@ -554,6 +613,7 @@
     let originalData = [];
     let filteredData = [];
     let isOnline = navigator.onLine;
+    let headers = [];
     
     // رموز التفعيل
     const validCodes = [
@@ -647,14 +707,75 @@
       reader.readAsArrayBuffer(file);
     }
 
+    // حفظ البيانات محلياً
+    function saveDataLocally(headers, data) {
+      try {
+        const dataToSave = {
+          headers: headers,
+          data: data,
+          timestamp: new Date().toISOString(),
+          filename: document.getElementById('excelInput').files[0]?.name || 'unknown'
+        };
+        localStorage.setItem('tariff_data', JSON.stringify(dataToSave));
+        showNotification('تم حفظ البيانات محلياً', 'success');
+      } catch (error) {
+        console.error('خطأ في حفظ البيانات:', error);
+      }
+    }
+
+    // تحميل البيانات المحفوظة محلياً
+    function loadSavedData() {
+      try {
+        const savedData = localStorage.getItem('tariff_data');
+        if (savedData) {
+          const parsedData = JSON.parse(savedData);
+          headers = parsedData.headers;
+          originalData = parsedData.data;
+          filteredData = [...originalData];
+          
+          // عرض البيانات المحفوظة
+          displayTable(headers, originalData);
+          updateStats();
+          
+          const savedTime = new Date(parsedData.timestamp).toLocaleString('ar-EG');
+          showNotification(`تم تحميل البيانات المحفوظة (${parsedData.filename} - ${savedTime})`, 'success');
+          return true;
+        }
+      } catch (error) {
+        console.error('خطأ في تحميل البيانات المحفوظة:', error);
+        localStorage.removeItem('tariff_data');
+      }
+      return false;
+    }
+
+    // مسح البيانات المحفوظة
+    function clearSavedData() {
+      localStorage.removeItem('tariff_data');
+      originalData = [];
+      filteredData = [];
+      headers = [];
+      document.getElementById('tableContainer').style.display = 'none';
+      document.getElementById('tableStats').style.display = 'none';
+      showNotification('تم مسح البيانات المحفوظة', 'warning');
+    }
+
     // معالجة البيانات بدفعات
     function processBatchData(data, batchSize) {
-      const headers = data[0];
+      headers = data[0];
       const rows = data.slice(1);
       
       originalData = rows;
       filteredData = [...originalData];
       
+      // حفظ البيانات محلياً
+      saveDataLocally(headers, rows);
+      
+      // عرض الجدول
+      displayTable(headers, originalData);
+    }
+
+    // دالة عرض الجدول (منفصلة لإعادة الاستخدام)
+    function displayTable(headers, data) {
       // إنشاء رأس الجدول
       const tableHead = document.getElementById('tableHead');
       tableHead.innerHTML = '';
@@ -677,15 +798,16 @@
       // إنشاء الجدول بدفعات
       const tableBody = document.getElementById('tableBody');
       tableBody.innerHTML = '';
+      const batchSize = window.innerWidth <= 768 ? 25 : 50;
       
       let currentBatch = 0;
       
       function processBatch() {
         const start = currentBatch * batchSize;
-        const end = Math.min(start + batchSize, filteredData.length);
+        const end = Math.min(start + batchSize, data.length);
         
         for (let i = start; i < end; i++) {
-          const row = filteredData[i];
+          const row = data[i];
           if (!row || row.every(cell => !cell)) continue;
           
           const tr = document.createElement('tr');
@@ -707,14 +829,14 @@
         
         currentBatch++;
         
-        if (end < filteredData.length) {
+        if (end < data.length) {
           setTimeout(processBatch, 10); // معالجة تدريجية
         } else {
           // انتهاء التحميل
           updateStats();
           document.getElementById('tableContainer').style.display = 'block';
           document.getElementById('tableStats').style.display = 'flex';
-          showNotification(`تم تحميل ${filteredData.length} سجل`, 'success');
+          showNotification(`تم تحميل ${data.length} سجل`, 'success');
         }
       }
       
@@ -744,6 +866,7 @@
       if (!searchTerm) {
         filteredData = [...originalData];
       } else {
+        // البحث العادي - يظهر أي سجل يحتوي على النص المكتوب
         filteredData = originalData.filter(row => 
           row.some(cell => 
             cell && cell.toString().toLowerCase().includes(searchTerm)
@@ -841,6 +964,15 @@
       if (localStorage.getItem("activated") === "true") {
         document.getElementById('activationScreen').style.display = 'none';
         document.getElementById('mainContent').style.display = 'block';
+        
+        // تحميل البيانات المحفوظة تلقائياً
+        setTimeout(() => {
+          if (loadSavedData()) {
+            showNotification('مرحباً! تم تحميل بياناتك المحفوظة تلقائياً', 'success');
+          } else {
+            showNotification('لا توجد بيانات محفوظة - قم بتحميل ملف Excel جديد', 'warning');
+          }
+        }, 500);
       }
     };
   </script>
