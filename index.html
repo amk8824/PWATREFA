@@ -5,6 +5,32 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>الكمارك العراقية - سجل التعريفة</title>
   <meta name="theme-color" content="#002147">
+  
+  <!-- أيقونات الموقع للشاشة الرئيسية -->
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www2.0zz0.com/2025/05/19/22/510831948.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www2.0zz0.com/2025/05/19/22/510831948.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www2.0zz0.com/2025/05/19/22/510831948.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="https://www2.0zz0.com/2025/05/19/22/510831948.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="https://www2.0zz0.com/2025/05/19/22/510831948.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="https://www2.0zz0.com/2025/05/19/22/510831948.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="https://www2.0zz0.com/2025/05/19/22/510831948.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="https://www2.0zz0.com/2025/05/19/22/510831948.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="https://www2.0zz0.com/2025/05/19/22/510831948.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="https://www2.0zz0.com/2025/05/19/22/510831948.png">
+  <link rel="apple-touch-icon" sizes="57x57" href="https://www2.0zz0.com/2025/05/19/22/510831948.png">
+  <link rel="shortcut icon" href="https://www2.0zz0.com/2025/05/19/22/510831948.png">
+  
+  <!-- Meta tags للتطبيق على الموبايل -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="التعريفة الجمركية">
+  <meta name="application-name" content="التعريفة الجمركية">
+  <meta name="msapplication-TileColor" content="#002147">
+  <meta name="msapplication-TileImage" href="https://www2.0zz0.com/2025/05/19/22/510831948.png">
+  
+  <!-- ملف Manifest للتطبيق -->
+  <link rel="manifest" href="./manifest.json">
+  
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&display=swap" rel="stylesheet" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
@@ -1194,6 +1220,18 @@
       isOnline = false;
       showNotification('فقدان الاتصال - وضع عدم الاتصال', 'warning');
     });
+
+    // تسجيل Service Worker للأيقونة والتخزين المؤقت
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('./sw.js')
+          .then(function(registration) {
+            console.log('Service Worker تم تسجيله بنجاح:', registration.scope);
+          }, function(err) {
+            console.log('فشل تسجيل Service Worker:', err);
+          });
+      });
+    }
 
     // بدء التشغيل
     document.addEventListener('DOMContentLoaded', function() {
