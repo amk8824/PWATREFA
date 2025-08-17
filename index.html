@@ -61,6 +61,114 @@
       min-height: 100vh;
     }
 
+    /* إعلان البداية */
+    .announcement-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #ffeaa7);
+      background-size: 300% 300%;
+      animation: gradientShift 4s ease infinite;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 10000;
+    }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .announcement-card {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 40px;
+      border-radius: 25px;
+      text-align: center;
+      max-width: 500px;
+      margin: 20px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      transform: scale(0.5);
+      animation: announceIn 1s ease forwards, pulse 2s ease-in-out infinite 2s;
+      border: 3px solid #gold;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(248, 249, 250, 0.95));
+    }
+
+    @keyframes announceIn {
+      to {
+        transform: scale(1);
+      }
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    .announcement-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #2c3e50;
+      margin-bottom: 20px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+      animation: textGlow 3s ease-in-out infinite;
+    }
+
+    @keyframes textGlow {
+      0%, 100% { text-shadow: 2px 2px 4px rgba(0,0,0,0.1); }
+      50% { text-shadow: 2px 2px 4px rgba(0,0,0,0.1), 0 0 20px rgba(52, 152, 219, 0.5); }
+    }
+
+    .announcement-content {
+      font-size: 18px;
+      line-height: 1.6;
+      color: #34495e;
+      margin-bottom: 25px;
+      padding: 20px;
+      background: rgba(52, 152, 219, 0.05);
+      border-radius: 15px;
+      border-left: 5px solid #3498db;
+    }
+
+    .announcement-signature {
+      font-size: 16px;
+      font-weight: 700;
+      color: #e74c3c;
+      margin-bottom: 10px;
+    }
+
+    .announcement-name {
+      font-size: 20px;
+      font-weight: 800;
+      color: #2c3e50;
+      text-decoration: underline;
+      text-decoration-color: #3498db;
+    }
+
+    .announcement-progress {
+      width: 100%;
+      height: 6px;
+      background: rgba(0, 0, 0, 0.1);
+      border-radius: 3px;
+      margin-top: 20px;
+      overflow: hidden;
+    }
+
+    .announcement-progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #3498db, #2ecc71);
+      border-radius: 3px;
+      animation: progressFill 8s linear forwards;
+    }
+
+    @keyframes progressFill {
+      from { width: 0%; }
+      to { width: 100%; }
+    }
+
     /* شاشة التفعيل المبسطة */
     .activation-screen {
       position: fixed;
@@ -636,12 +744,51 @@
       .stat-card:hover {
         transform: none;
       }
+      
+      .announcement-card {
+        padding: 25px;
+        max-width: 90%;
+      }
+      
+      .announcement-title {
+        font-size: 20px;
+      }
+      
+      .announcement-content {
+        font-size: 16px;
+        padding: 15px;
+      }
+      
+      .announcement-signature {
+        font-size: 14px;
+      }
+      
+      .announcement-name {
+        font-size: 18px;
+      }
     }
 
 
   </style>
 </head>
 <body>
+  <!-- شاشة الإعلان -->
+  <div class="announcement-screen" id="announcementScreen">
+    <div class="announcement-card">
+      <div class="announcement-title">🔔 إشعار هام</div>
+      <div class="announcement-content">
+        الأخوة الوكلاء الكرام<br><br>
+        في حال تحديث أي سعر من الهيئة العامة للكمارك<br>
+        سيتم إضافته للبرنامج بصورة مباشرة
+      </div>
+      <div class="announcement-signature">إدارة النظام</div>
+      <div class="announcement-name">أحمد العبيدي</div>
+      <div class="announcement-progress">
+        <div class="announcement-progress-bar"></div>
+      </div>
+    </div>
+  </div>
+
   <!-- شاشة التفعيل -->
   <div class="activation-screen" id="activationScreen">
     <div class="activation-card">
@@ -1259,9 +1406,20 @@
       });
     }
 
+    // إدارة الإعلان
+    function showAnnouncement() {
+      document.getElementById('announcementScreen').style.display = 'flex';
+      
+      // إخفاء الإعلان بعد 8 ثواني
+      setTimeout(() => {
+        document.getElementById('announcementScreen').style.display = 'none';
+        checkActivation();
+      }, 8000);
+    }
+
     // بدء التشغيل
     document.addEventListener('DOMContentLoaded', function() {
-      checkActivation();
+      showAnnouncement();
     });
   </script>
 </body>
