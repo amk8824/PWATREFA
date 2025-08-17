@@ -428,7 +428,7 @@
       width: 100%;
       border-collapse: collapse;
       font-size: 10px;
-      table-layout: fixed;
+      table-layout: auto;
     }
 
     .styled-table th {
@@ -438,10 +438,11 @@
       text-align: center;
       font-weight: 700;
       font-size: 9px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      max-width: 80px;
+      white-space: normal;
+      word-wrap: break-word;
+      overflow: visible;
+      min-width: 80px;
+      width: auto;
     }
 
     .styled-table th[data-field*="GDS"], 
@@ -459,10 +460,11 @@
       border-bottom: 1px solid var(--border);
       font-size: 9px;
       font-weight: 700;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      max-width: 80px;
+      white-space: normal;
+      word-wrap: break-word;
+      overflow: visible;
+      min-width: 80px;
+      width: auto;
     }
 
     .styled-table tbody tr:nth-child(even) {
@@ -560,15 +562,27 @@
       .styled-table td {
         padding: 4px 3px;
         font-size: 8px;
-        max-width: 60px;
+        white-space: normal !important;
+        word-wrap: break-word !important;
+        overflow: visible !important;
+        text-overflow: initial !important;
+        min-width: 60px;
+        width: auto !important;
+        max-width: none !important;
       }
       
       .styled-table th[data-field*="GDS"], 
       .styled-table th[data-field*="DS"],
       .styled-table td.long-field {
-        max-width: 100px;
+        white-space: normal !important;
+        word-wrap: break-word !important;
+        overflow: visible !important;
+        text-overflow: initial !important;
         font-size: 7px;
         padding: 3px 2px;
+        width: auto !important;
+        max-width: none !important;
+        min-width: 100px;
       }
       
       .table-stats {
@@ -616,6 +630,41 @@
 
       .stat-card:hover {
         transform: none;
+      }
+    }
+
+    /* CSS خاص بعرض الأرقام كاملة على جميع الأجهزة */
+    .styled-table td,
+    .styled-table th {
+      white-space: normal !important;
+      word-wrap: break-word !important;
+      overflow: visible !important;
+      text-overflow: initial !important;
+      min-width: fit-content !important;
+      width: auto !important;
+    }
+    
+    /* للتأكد من عدم اختصار الأرقام في الموبايل */
+    @media (max-width: 768px) {
+      .styled-table {
+        overflow-x: auto !important;
+      }
+      
+      .styled-table table {
+        table-layout: auto !important;
+        width: max-content !important;
+        min-width: 100% !important;
+      }
+      
+      .styled-table td,
+      .styled-table th {
+        white-space: normal !important;
+        word-wrap: break-word !important;
+        overflow: visible !important;
+        text-overflow: initial !important;
+        width: auto !important;
+        max-width: none !important;
+        min-width: fit-content !important;
       }
     }
   </style>
