@@ -1406,8 +1406,9 @@
       });
     }
 
-    // إدارة الإعلان
+    // إدارة الإعلان - يظهر في كل مرة
     function showAnnouncement() {
+      // إظهار الإعلان دائماً عند فتح التطبيق
       document.getElementById('announcementScreen').style.display = 'flex';
       
       // إخفاء الإعلان بعد 8 ثواني
@@ -1419,6 +1420,19 @@
 
     // بدء التشغيل
     document.addEventListener('DOMContentLoaded', function() {
+      showAnnouncement();
+    });
+
+    // إظهار الإعلان عند إعادة تركيز التطبيق (الرجوع من الخلفية)
+    document.addEventListener('visibilitychange', function() {
+      if (!document.hidden) {
+        // التطبيق عاد للمقدمة - أظهر الإعلان
+        showAnnouncement();
+      }
+    });
+
+    // إظهار الإعلان عند focus للنافذة
+    window.addEventListener('focus', function() {
       showAnnouncement();
     });
   </script>
