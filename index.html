@@ -126,7 +126,7 @@
       color: white;
       text-align: center;
       overflow: visible;
-      background: var(--primary);
+      background: transparent;
       height: 250px;
       display: flex;
       align-items: center;
@@ -149,13 +149,42 @@
       filter: brightness(1.3) contrast(1.2) saturate(1.1);
     }
 
+    /* إخفاء أدوات التحكم في الفيديو نهائياً */
+    .header-video::-webkit-media-controls {
+      display: none !important;
+      -webkit-appearance: none !important;
+    }
+
+    .header-video::-webkit-media-controls-panel {
+      display: none !important;
+      -webkit-appearance: none !important;
+    }
+
+    .header-video::-webkit-media-controls-play-button {
+      display: none !important;
+      -webkit-appearance: none !important;
+    }
+
+    .header-video::-webkit-media-controls-start-playback-button {
+      display: none !important;
+      -webkit-appearance: none !important;
+    }
+
+    .header-video::-moz-media-controls {
+      display: none !important;
+    }
+
+    .header-video::-webkit-media-controls-enclosure {
+      display: none !important;
+    }
+
     .header-video-overlay {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 33, 71, 0.6);
+      background: transparent;
       z-index: 2;
     }
 
@@ -595,17 +624,19 @@
              playsinline
              preload="auto"
              webkit-playsinline="true"
-             controls="false"
+             disablepictureinpicture
+             controlslist="nodownload nofullscreen noremoteplayback"
              x5-playsinline="true"
              x5-video-player-type="h5"
-             x5-video-player-fullscreen="true"
-             x-webkit-airplay="deny">
+             x5-video-player-fullscreen="false"
+             x5-video-orientation="portrait"
+             x-webkit-airplay="deny"
+             data-object-fit="cover">
         <source src="https://storage.nodesbox.com/customs.mof.gov.iq/2025/01/20/2025_01_20_12161817836_7618544517557373.mp4" type="video/mp4">
         متصفحك لا يدعم تشغيل الفيديو
       </video>
       
-      <!-- طبقة شفافة -->
-      <div class="header-video-overlay"></div>
+      <!-- تم إزالة الطبقة الشفافة -->
       
       <div class="header-content">
         <div class="header-logos">
@@ -790,6 +821,17 @@
       video.setAttribute('webkit-playsinline', 'true');
       video.setAttribute('x5-playsinline', 'true');
       
+      // إزالة أدوات التحكم نهائياً
+      video.removeAttribute('controls');
+      video.controls = false;
+      video.setAttribute('disablepictureinpicture', 'true');
+      video.setAttribute('controlslist', 'nodownload nofullscreen noremoteplayback');
+      
+      // إخفاء أدوات التحكم عبر CSS المباشر
+      video.style.setProperty('-webkit-media-controls', 'none', 'important');
+      video.style.setProperty('-moz-media-controls', 'none', 'important');
+      video.style.setProperty('media-controls', 'none', 'important');
+      
       console.log('محاولة تشغيل الفيديو...');
       
       // محاولة تشغيل الفيديو
@@ -818,6 +860,28 @@
           video.play().catch(e => console.log('محاولة إضافية فشلت:', e));
         }
       }, 1000);
+      
+      // مراقب دائم لإزالة أدوات التحكم
+      const controlsObserver = new MutationObserver(() => {
+        if (video.hasAttribute('controls')) {
+          video.removeAttribute('controls');
+          video.controls = false;
+        }
+      });
+      
+      controlsObserver.observe(video, { attributes: true, attributeFilter: ['controls'] });
+      
+      // مراقب للنقرات لمنع إظهار أدوات التحكم
+      video.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        return false;
+      }, true);
+      
+      video.addEventListener('contextmenu', (e) => {
+        e.preventDefault();
+        return false;
+      });
     }
     
     // إعادة تشغيل الفيديو عند تغيير حجم الشاشة
