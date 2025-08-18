@@ -857,12 +857,32 @@
     // فحص التفعيل عند بدء التشغيل
     function checkActivation() {
       const savedCode = localStorage.getItem('activationCode');
-      if (savedCode && validCodes.some(c => c.code === savedCode)) {
-        document.getElementById('activationScreen').style.display = 'none';
-        document.getElementById('mainContent').style.display = 'block';
-        loadSavedData();
-        initializeHeaderVideo();
+      if (savedCode) {
+        const validCode = validCodes.find(c => c.code === savedCode);
+        if (validCode) {
+          const currentDate = new Date();
+          const expiryDate = new Date(validCode.expiry);
+          
+          if (currentDate <= expiryDate) {
+            // الكود صالح وغير منتهي الصلاحية
+            document.getElementById('activationScreen').style.display = 'none';
+            document.getElementById('mainContent').style.display = 'block';
+            loadSavedData();
+            initializeHeaderVideo();
+            return;
+          } else {
+            // الكود منتهي الصلاحية - امسحه
+            localStorage.removeItem('activationCode');
+            showNotification('انتهت صلاحية التفعيل، يرجى إدخال كود جديد', 'warning');
+          }
+        } else {
+          // الكود غير صحيح - امسحه
+          localStorage.removeItem('activationCode');
+        }
       }
+      
+      // أظهر شاشة التفعيل إذا لم يكن هناك كود صالح
+      document.getElementById('activationScreen').style.display = 'flex';
     }
 
     // إدارة الفيديو المحسنة
