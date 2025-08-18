@@ -530,13 +530,14 @@
     .styled-table {
       width: 100%;
       overflow-x: visible;
+      display: block;
     }
 
     .styled-table table {
       width: 100%;
       border-collapse: collapse;
       font-size: 10px;
-      table-layout: fixed;
+      table-layout: auto;
     }
 
     .styled-table th {
@@ -547,9 +548,10 @@
       font-weight: 700;
       font-size: 9px;
       white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      max-width: 80px;
+      overflow: visible;
+      text-overflow: clip;
+      width: auto;
+      min-width: 70px;
     }
 
     .styled-table th[data-field*="GDS"], 
@@ -568,9 +570,10 @@
       font-size: 9px;
       font-weight: 700;
       white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      max-width: 80px;
+      overflow: visible;
+      text-overflow: clip;
+      width: auto;
+      min-width: 70px;
     }
 
     /* خلايا الأرقام - عدم اختصار */
@@ -666,7 +669,7 @@
       border-radius: 5px;
     }
 
-    /* تحسينات الموبايل */
+    /* تحسينات الموبايل والأندرويد */
     @media (max-width: 480px) {
       /* السماح بالفيديو على جميع الأجهزة */
       .header-video {
@@ -674,20 +677,38 @@
         opacity: 0.5 !important;
       }
       
+      /* الجدول ثابت للأندرويد - بدون تمرير أفقي */
+      .table-container {
+        overflow-x: visible;
+        overflow-y: visible;
+      }
+      
       .styled-table th,
       .styled-table td {
         padding: 4px 3px;
         font-size: 8px;
-        max-width: 60px;
+        white-space: nowrap !important;
+        overflow: visible !important;
+        text-overflow: clip !important;
+        width: auto !important;
+        min-width: 60px !important;
+        max-width: none !important;
       }
       
+      /* خاص بأرقام IDE_HSC_NB1 - لا اختصار في الأندرويد */
+      .styled-table td[data-field*="IDE"],
+      .styled-table td[data-field*="HSC"],
+      .styled-table td[data-field*="NB1"],
       .styled-table td.number-cell {
-        white-space: normal !important;
-        word-wrap: break-word !important;
+        white-space: nowrap !important;
+        word-wrap: normal !important;
         overflow: visible !important;
-        text-overflow: initial !important;
+        text-overflow: clip !important;
         width: auto !important;
+        min-width: 80px !important;
         max-width: none !important;
+        font-size: 8px !important;
+        padding: 4px 2px !important;
       }
       
       .styled-table th[data-field*="GDS"], 
@@ -1242,9 +1263,16 @@
             td.textContent = '';
           }
           
-          // تحديد الحقول الرقمية وعدم اختصارها
-          if (cellValue && !isNaN(cellValue) && cellValue.toString().includes('.')) {
+          // تحديد الحقول الرقمية وعدم اختصارها - خاص بالأندرويد
+          if (cellValue && (!isNaN(cellValue) || cellValue.toString().match(/^\d+\.?\d*$/))) {
             td.classList.add('number-cell');
+          }
+          
+          // إضافة class خاص للأرقام الطويلة مثل IDE_HSC_NB1
+          if (header.includes('IDE') || header.includes('HSC') || header.includes('NB1') || header.includes('NB') || 
+              (cellValue && cellValue.toString().length > 8 && !isNaN(cellValue))) {
+            td.classList.add('number-cell');
+            td.setAttribute('data-field', header);
           }
           
           if (header.includes('GDS') || header.includes('DS') || (cellValue && cellValue.toString().length > 15)) {
