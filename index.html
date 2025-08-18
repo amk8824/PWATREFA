@@ -529,15 +529,14 @@
 
     .styled-table {
       width: 100%;
-      overflow-x: visible;
-      display: block;
+      overflow-x: auto;
     }
 
     .styled-table table {
       width: 100%;
       border-collapse: collapse;
       font-size: 10px;
-      table-layout: auto;
+      table-layout: fixed;
     }
 
     .styled-table th {
@@ -548,10 +547,9 @@
       font-weight: 700;
       font-size: 9px;
       white-space: nowrap;
-      overflow: visible;
-      text-overflow: clip;
-      width: auto;
-      min-width: 70px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 80px;
     }
 
     .styled-table th[data-field*="GDS"], 
@@ -570,10 +568,9 @@
       font-size: 9px;
       font-weight: 700;
       white-space: nowrap;
-      overflow: visible;
-      text-overflow: clip;
-      width: auto;
-      min-width: 70px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 80px;
     }
 
     /* خلايا الأرقام - عدم اختصار */
@@ -677,38 +674,25 @@
         opacity: 0.5 !important;
       }
       
-      /* الجدول ثابت للأندرويد - بدون تمرير أفقي */
-      .table-container {
-        overflow-x: visible;
-        overflow-y: visible;
-      }
-      
       .styled-table th,
       .styled-table td {
         padding: 4px 3px;
         font-size: 8px;
-        white-space: nowrap !important;
-        overflow: visible !important;
-        text-overflow: clip !important;
-        width: auto !important;
-        min-width: 60px !important;
-        max-width: none !important;
+        max-width: 60px;
       }
       
-      /* خاص بأرقام IDE_HSC_NB1 - لا اختصار في الأندرويد */
+      /* خاص بأرقام IDE_HSC_NB1 في الأندرويد فقط - عرض كامل */
+      .styled-table td.number-cell,
       .styled-table td[data-field*="IDE"],
-      .styled-table td[data-field*="HSC"],
+      .styled-table td[data-field*="HSC"], 
       .styled-table td[data-field*="NB1"],
-      .styled-table td.number-cell {
+      .styled-table td[data-field*="NB"] {
         white-space: nowrap !important;
-        word-wrap: normal !important;
         overflow: visible !important;
-        text-overflow: clip !important;
-        width: auto !important;
-        min-width: 80px !important;
+        text-overflow: initial !important;
         max-width: none !important;
-        font-size: 8px !important;
-        padding: 4px 2px !important;
+        min-width: 70px !important;
+        font-size: 7px !important;
       }
       
       .styled-table th[data-field*="GDS"], 
