@@ -842,7 +842,19 @@
           return;
         }
 
+        // حفظ الكود بطرق متعددة للتأكد
         localStorage.setItem('activationCode', code);
+        sessionStorage.setItem('activationCode', code);
+        
+        // تأكيد الحفظ
+        setTimeout(() => {
+          const saved = localStorage.getItem('activationCode');
+          console.log('تأكيد حفظ الكود:', saved);
+          if (!saved) {
+            localStorage.setItem('activationCode', code);
+          }
+        }, 100);
+        
         document.getElementById('activationScreen').style.display = 'none';
         document.getElementById('mainContent').style.display = 'block';
         
@@ -856,33 +868,61 @@
 
     // فحص التفعيل عند بدء التشغيل
     function checkActivation() {
-      const savedCode = localStorage.getItem('activationCode');
-      if (savedCode) {
-        const validCode = validCodes.find(c => c.code === savedCode);
-        if (validCode) {
-          const currentDate = new Date();
-          const expiryDate = new Date(validCode.expiry);
+      try {
+        // إضافة تشخيص للمشكلة
+        console.log('فحص التفعيل - بداية');
+        let savedCode = localStorage.getItem('activationCode');
+        
+        // إذا لم يوجد في localStorage، تحقق من sessionStorage
+        if (!savedCode) {
+          savedCode = sessionStorage.getItem('activationCode');
+          if (savedCode) {
+            // إذا وُجد في sessionStorage، احفظه في localStorage
+            localStorage.setItem('activationCode', savedCode);
+          }
+        }
+        
+        console.log('الكود المحفوظ:', savedCode);
+        
+        if (savedCode) {
+          const validCode = validCodes.find(c => c.code === savedCode);
+          console.log('الكود صالح:', validCode);
           
-          if (currentDate <= expiryDate) {
-            // الكود صالح وغير منتهي الصلاحية
-            document.getElementById('activationScreen').style.display = 'none';
-            document.getElementById('mainContent').style.display = 'block';
-            loadSavedData();
-            initializeHeaderVideo();
-            return;
+          if (validCode) {
+            const currentDate = new Date();
+            const expiryDate = new Date(validCode.expiry);
+            console.log('التاريخ الحالي:', currentDate, 'تاريخ الانتهاء:', expiryDate);
+            
+            if (currentDate <= expiryDate) {
+              // الكود صالح وغير منتهي الصلاحية
+              console.log('الكود صالح - إخفاء شاشة التفعيل');
+              document.getElementById('activationScreen').style.display = 'none';
+              document.getElementById('mainContent').style.display = 'block';
+              loadSavedData();
+              initializeHeaderVideo();
+              return;
+            } else {
+              // الكود منتهي الصلاحية - امسحه
+              console.log('الكود منتهي الصلاحية');
+              localStorage.removeItem('activationCode');
+              showNotification('انتهت صلاحية التفعيل، يرجى إدخال كود جديد', 'warning');
+            }
           } else {
-            // الكود منتهي الصلاحية - امسحه
+            // الكود غير صحيح - امسحه
+            console.log('الكود غير صحيح');
             localStorage.removeItem('activationCode');
-            showNotification('انتهت صلاحية التفعيل، يرجى إدخال كود جديد', 'warning');
           }
         } else {
-          // الكود غير صحيح - امسحه
-          localStorage.removeItem('activationCode');
+          console.log('لا يوجد كود محفوظ');
         }
+        
+        // أظهر شاشة التفعيل إذا لم يكن هناك كود صالح
+        console.log('إظهار شاشة التفعيل');
+        document.getElementById('activationScreen').style.display = 'flex';
+      } catch (error) {
+        console.error('خطأ في فحص التفعيل:', error);
+        document.getElementById('activationScreen').style.display = 'flex';
       }
-      
-      // أظهر شاشة التفعيل إذا لم يكن هناك كود صالح
-      document.getElementById('activationScreen').style.display = 'flex';
     }
 
     // إدارة الفيديو المحسنة
