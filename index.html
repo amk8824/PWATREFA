@@ -2,8 +2,8 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=0.8, maximum-scale=3.0" />
-  <title>الكمارك العراقية - سجل التعريفة للموبايل</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>الكمارك العراقية - سجل التعريفة</title>
   <meta name="theme-color" content="#002147">
   
   <!-- أيقونات الموقع للشاشة الرئيسية -->
@@ -56,8 +56,8 @@
     /* منع الحركة الأفقية تماماً */
     html, body {
       width: 100%;
+      max-width: 100%;
       overflow-x: hidden;
-      position: relative;
     }
 
     body {
@@ -66,7 +66,6 @@
       background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
       color: var(--text);
       min-height: 100vh;
-      touch-action: pan-y pinch-zoom; /* السماح بالتحريك العمودي والزوم فقط */
     }
 
     /* شاشة التفعيل المبسطة */
@@ -85,44 +84,44 @@
 
     .activation-card {
       background: rgba(255, 255, 255, 0.98);
-      padding: 30px 20px;
-      border-radius: 15px;
+      padding: 40px 30px;
+      border-radius: 20px;
       box-shadow: var(--shadow);
       text-align: center;
-      max-width: 350px;
+      max-width: 400px;
       width: 90%;
     }
 
     .activation-logos {
       display: flex;
       justify-content: space-between;
-      margin-bottom: 15px;
+      margin-bottom: 20px;
       padding: 0 10px;
     }
 
     .activation-logo {
-      width: 50px;
+      width: 60px;
       height: auto;
     }
 
     .activation-title {
       color: var(--primary);
       font-weight: 800;
-      font-size: 16px;
-      margin-bottom: 6px;
+      font-size: 18px;
+      margin-bottom: 8px;
     }
 
     .activation-subtitle {
       color: #666;
       font-weight: 500;
-      font-size: 12px;
-      margin-bottom: 4px;
+      font-size: 14px;
+      margin-bottom: 5px;
     }
 
     .activation-subsubtitle {
       color: #666;
-      font-size: 10px;
-      margin-bottom: 15px;
+      font-size: 12px;
+      margin-bottom: 20px;
     }
 
     .activation-card input {
@@ -130,8 +129,8 @@
       padding: 12px;
       font-size: 16px;
       border: 2px solid var(--border);
-      border-radius: 8px;
-      margin-bottom: 12px;
+      border-radius: 10px;
+      margin-bottom: 15px;
       text-align: center;
     }
 
@@ -147,83 +146,169 @@
       background: var(--primary);
       color: white;
       border: none;
-      border-radius: 8px;
+      border-radius: 10px;
       cursor: pointer;
       font-weight: 600;
       font-family: 'Cairo', sans-serif;
     }
 
-    /* الرأس المحسن للموبايل */
+    /* الرأس مع فيديو خلفية */
     .header-container {
-      background: linear-gradient(135deg, var(--primary), #001a33);
+      position: relative;
+      padding: 35px 15px;
       color: white;
-      padding: 20px 10px 15px 10px;
       text-align: center;
+      overflow: visible;
+      background: transparent;
+      height: 250px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .header-video {
+      position: absolute !important;
+      top: 50% !important;
+      left: 50% !important;
+      width: 120% !important;
+      height: auto !important;
+      min-width: 100% !important;
+      min-height: 100% !important;
+      transform: translate(-50%, -50%) !important;
+      object-fit: cover !important;
+      opacity: 0.6 !important;
+      z-index: 1 !important;
+      pointer-events: none !important;
+      filter: brightness(1.3) contrast(1.2) saturate(1.1);
+    }
+
+    /* إخفاء أدوات التحكم في الفيديو نهائياً */
+    .header-video::-webkit-media-controls {
+      display: none !important;
+      -webkit-appearance: none !important;
+    }
+
+    .header-video::-webkit-media-controls-panel {
+      display: none !important;
+      -webkit-appearance: none !important;
+    }
+
+    .header-video::-webkit-media-controls-play-button {
+      display: none !important;
+      -webkit-appearance: none !important;
+    }
+
+    .header-video::-webkit-media-controls-start-playback-button {
+      display: none !important;
+      -webkit-appearance: none !important;
+    }
+
+    .header-video::-moz-media-controls {
+      display: none !important;
+    }
+
+    .header-video::-webkit-media-controls-enclosure {
+      display: none !important;
+    }
+
+    .header-video-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
       width: 100%;
+      height: 100%;
+      background: transparent;
+      z-index: 2;
+    }
+
+    .header-content {
+      position: relative;
+      z-index: 3;
     }
 
     .header-logos {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 10px;
-      max-width: 100%;
+      margin-bottom: 15px;
     }
 
     .header-logo {
-      width: 40px;
+      width: 60px;
       height: auto;
     }
 
     .header-title {
-      font-size: 14px;
+      font-size: 18px;
       font-weight: 800;
-      margin-bottom: 5px;
-      line-height: 1.2;
+      margin-bottom: 8px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
     }
 
     .header-subtitle {
-      font-size: 11px;
+      font-size: 14px;
       opacity: 0.9;
-      line-height: 1.2;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
     }
 
-    /* العنوان الرئيسي المحسن للموبايل */
+    /* العنوان الرئيسي المحسن مثل الصورة */
     .main-title {
       text-align: center;
-      margin: 10px;
-      padding: 10px;
+      margin: 20px 0;
+      padding: 15px;
       background: white;
-      border-radius: 8px;
+      border-radius: 10px;
+      margin: 20px 15px;
       box-shadow: var(--shadow);
-      width: calc(100% - 20px);
     }
 
     .main-title h1 {
-      font-size: 14px;
+      font-size: 20px;
       color: white;
       background: linear-gradient(135deg, #d63384 0%, #c5396b 30%, #b02a5b 70%, #8b1e3f 100%);
-      padding: 12px 15px;
-      border-radius: 20px;
+      padding: 22px 25px;
+      border-radius: 30px;
       font-weight: 800;
-      line-height: 1.3;
-      letter-spacing: 0.3px;
+      text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
+      box-shadow: 
+        0 10px 30px rgba(214, 51, 132, 0.4),
+        0 4px 15px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      border: none;
+      line-height: 1.5;
+      letter-spacing: 0.8px;
+      position: relative;
+      overflow: hidden;
     }
 
-    /* أدوات التحكم المحسنة للموبايل */
+    .main-title h1::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+      animation: shine 3s infinite;
+    }
+
+    @keyframes shine {
+      0% { left: -100%; }
+      100% { left: 100%; }
+    }
+
+    /* أدوات التحكم المبسطة */
     .controls {
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      margin: 10px;
-      width: calc(100% - 20px);
+      gap: 15px;
+      margin: 20px 15px;
     }
 
     .file-input-wrapper {
       position: relative;
       overflow: hidden;
       display: inline-block;
-      width: 100%;
     }
 
     .file-input-wrapper input[type="file"] {
@@ -235,29 +320,26 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
+      gap: 10px;
       padding: 12px 20px;
       background: #4a90e2;
       color: white;
-      border-radius: 8px;
+      border-radius: 10px;
       cursor: pointer;
       font-weight: 600;
       font-family: 'Cairo', sans-serif;
-      font-size: 14px;
-      width: 100%;
     }
 
     .search-container {
       position: relative;
-      width: 100%;
     }
 
     .search-input {
       width: 100%;
       padding: 12px 40px 12px 15px;
-      font-size: 14px;
+      font-size: 16px;
       border: 2px solid var(--border);
-      border-radius: 8px;
+      border-radius: 10px;
       background: white;
     }
 
@@ -274,189 +356,185 @@
       color: #666;
     }
 
-    /* أزرار التحكم */
-    .control-buttons {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-      width: 100%;
-    }
-
-    .control-buttons-full {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      width: 100%;
-      margin-top: 8px;
-    }
-
-    .btn {
-      padding: 10px;
-      border: none;
-      border-radius: 6px;
-      font-weight: 600;
-      font-family: 'Cairo', sans-serif;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 5px;
-      text-decoration: none;
-      font-size: 12px;
-    }
-
-    .btn-clear { background: #dc3545; color: white; }
-    .btn-refresh { background: #28a745; color: white; }
-    .btn-download { background: #6f42c1; color: white; }
-    .btn-load { background: #17a2b8; color: white; }
-
-    /* إحصائيات محسنة للموبايل */
+    /* إحصائيات مبسطة */
     .table-stats {
       display: flex;
-      gap: 6px;
-      margin: 10px;
-      width: calc(100% - 20px);
+      gap: 10px;
+      margin: 15px;
+      flex-wrap: nowrap;
+      overflow-x: auto;
     }
 
     .stat-card {
       flex: 1;
+      min-width: 100px;
       background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
-      padding: 8px 6px;
-      border-radius: 6px;
+      padding: 12px 8px;
+      border-radius: 10px;
       text-align: center;
       box-shadow: var(--shadow);
-      border-left: 3px solid var(--primary);
-      min-width: 0;
+      border-left: 4px solid var(--primary);
+      transition: transform 0.2s ease;
     }
 
-    .stat-card:nth-child(1) { border-left-color: #007bff; }
-    .stat-card:nth-child(2) { border-left-color: #28a745; }
-    .stat-card:nth-child(3) { border-left-color: #ffc107; }
+    .stat-card:hover {
+      transform: translateY(-2px);
+    }
+
+    .stat-card:nth-child(1) {
+      border-left-color: #007bff;
+    }
+
+    .stat-card:nth-child(2) {
+      border-left-color: #28a745;
+    }
+
+    .stat-card:nth-child(3) {
+      border-left-color: #ffc107;
+    }
 
     .stat-card .number {
-      font-size: 14px;
+      font-size: 18px;
       font-weight: 800;
       display: block;
     }
 
-    .stat-card:nth-child(1) .number { color: #007bff; }
-    .stat-card:nth-child(2) .number { color: #28a745; }
-    .stat-card:nth-child(3) .number { color: #ffc107; }
+    .stat-card:nth-child(1) .number {
+      color: #007bff;
+    }
+
+    .stat-card:nth-child(2) .number {
+      color: #28a745;
+    }
+
+    .stat-card:nth-child(3) .number {
+      color: #ffc107;
+    }
 
     .stat-card .label {
-      font-size: 8px;
+      font-size: 10px;
       color: #666;
-      margin-top: 2px;
+      margin-top: 3px;
     }
 
-    /* الجدول المحسن للموبايل - بدون حركة أفقية */
+    /* الجدول المحسن للعرض بدون تحريك أفقي */
     .table-container {
-      margin: 10px;
+      margin: 15px;
       background: white;
-      border-radius: 8px;
-      box-shadow: var(--shadow);
-      width: calc(100% - 20px);
+      border-radius: 10px;
       overflow: hidden;
+      box-shadow: var(--shadow);
+      width: calc(100% - 30px);
     }
 
-    /* جدول ثابت بدون تمرير أفقي */
-    .mobile-fixed-table {
+    .styled-table {
+      width: 100%;
+      overflow: visible;
+    }
+
+    .styled-table table {
       width: 100%;
       border-collapse: collapse;
       table-layout: fixed;
     }
 
-    .mobile-fixed-table thead {
-      background: var(--primary);
+    /* رؤوس الأعمدة ثابتة */
+    .styled-table thead {
       position: sticky;
       top: 0;
-      z-index: 5;
+      z-index: 10;
     }
 
-    .mobile-fixed-table th {
+    .styled-table th {
       background: var(--primary);
       color: white;
-      padding: 8px 3px;
+      padding: 8px 4px;
       text-align: center;
       font-weight: 700;
       font-size: 10px;
-      border-right: 1px solid rgba(255, 255, 255, 0.2);
       word-wrap: break-word;
-      line-height: 1.1;
+      line-height: 1.2;
+      border-right: 1px solid rgba(255, 255, 255, 0.2);
     }
 
-    .mobile-fixed-table th:last-child {
+    .styled-table th:last-child {
       border-right: none;
     }
 
-    /* تحديد عرض الأعمدة للـ 7 أعمدة المتبقية */
-    .mobile-fixed-table th:nth-child(1), 
-    .mobile-fixed-table td:nth-child(1) { width: 12%; } /* IDE_HSC_NB1 */
+    /* توزيع عرض الأعمدة بناءً على المحتوى */
+    .styled-table th:nth-child(1),
+    .styled-table td:nth-child(1) { width: 13%; } /* رقم التعريفة الأول */
     
-    .mobile-fixed-table th:nth-child(2), 
-    .mobile-fixed-table td:nth-child(2) { width: 12%; } /* IDE_HSC_NB5 */
+    .styled-table th:nth-child(2),
+    .styled-table td:nth-child(2) { width: 13%; } /* رقم التعريفة الثاني */
     
-    .mobile-fixed-table th:nth-child(3), 
-    .mobile-fixed-table td:nth-child(3) { width: 20%; } /* IDE_COO_NAM */
+    .styled-table th:nth-child(3),
+    .styled-table td:nth-child(3) { width: 18%; } /* اسم البلد */
     
-    .mobile-fixed-table th:nth-child(4), 
-    .mobile-fixed-table td:nth-child(4) { width: 25%; } /* GDS_DS2 */
+    .styled-table th:nth-child(4),
+    .styled-table td:nth-child(4) { width: 28%; } /* وصف السلعة */
     
-    .mobile-fixed-table th:nth-child(5), 
-    .mobile-fixed-table td:nth-child(5) { width: 15%; } /* GDS_BRD */
+    .styled-table th:nth-child(5),
+    .styled-table td:nth-child(5) { width: 16%; } /* العلامة التجارية */
     
-    .mobile-fixed-table th:nth-child(6), 
-    .mobile-fixed-table td:nth-child(6) { width: 8%; } /* GDS_MIN */
+    .styled-table th:nth-child(6),
+    .styled-table td:nth-child(6) { width: 6%; } /* الحد الأدنى */
     
-    .mobile-fixed-table th:nth-child(7), 
-    .mobile-fixed-table td:nth-child(7) { width: 8%; } /* GDS_MAX */
+    .styled-table th:nth-child(7),
+    .styled-table td:nth-child(7) { width: 6%; } /* الحد الأقصى */
 
-    .mobile-fixed-table td {
-      padding: 8px 3px;
+    .styled-table td {
+      padding: 8px 4px;
       text-align: center;
       border-bottom: 1px solid var(--border);
       border-right: 1px solid var(--border);
       font-size: 9px;
       font-weight: 600;
       word-wrap: break-word;
-      line-height: 1.2;
+      line-height: 1.3;
       vertical-align: top;
     }
 
-    .mobile-fixed-table td:last-child {
+    .styled-table td:last-child {
       border-right: none;
     }
 
-    /* تلوين الصفوف المتناوبة */
-    .mobile-fixed-table tbody tr:nth-child(even) {
+    /* النصوص الطويلة - محاذاة لليمين */
+    .styled-table td:nth-child(3),
+    .styled-table td:nth-child(4),
+    .styled-table td:nth-child(5) {
+      text-align: right;
+      padding-right: 6px;
+    }
+
+    /* الأرقام - محاذاة للوسط مع خط ثابت */
+    .styled-table td:nth-child(1),
+    .styled-table td:nth-child(2),
+    .styled-table td:nth-child(6),
+    .styled-table td:nth-child(7) {
+      font-family: 'Courier New', monospace;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .styled-table tbody tr:nth-child(even) {
       background-color: #f8f9fa;
     }
 
-    .mobile-fixed-table tbody tr:hover {
+    .styled-table tbody tr:hover {
       background-color: #e3f2fd;
     }
 
-    /* تحسين النصوص الطويلة */
-    .mobile-fixed-table .text-cell {
-      text-align: right;
-      padding-right: 5px;
-    }
-
-    .mobile-fixed-table .number-cell {
-      font-family: 'Courier New', monospace;
-      font-weight: 700;
-    }
-
-    /* مؤشر التحميل */
+    /* مؤشر التحميل المبسط */
     .loading-spinner {
       display: none;
       justify-content: center;
-      margin: 15px 0;
+      margin: 20px 0;
     }
 
     .spinner {
-      width: 25px;
-      height: 25px;
+      width: 30px;
+      height: 30px;
       border: 3px solid var(--border);
       border-top: 3px solid var(--primary);
       border-radius: 50%;
@@ -468,65 +546,129 @@
       100% { transform: rotate(360deg); }
     }
 
-    /* إشعارات محسنة للموبايل */
+    /* الإشعارات المبسطة */
     .notification {
       position: fixed;
       top: 10px;
       right: 10px;
-      left: 10px;
-      padding: 10px 12px;
-      border-radius: 6px;
+      padding: 10px 15px;
+      border-radius: 5px;
       color: white;
-      font-size: 12px;
+      font-size: 14px;
       z-index: 10000;
-      transform: translateY(-100px);
+      transform: translateX(100%);
       transition: transform 0.3s ease;
-      text-align: center;
     }
 
     .notification.show {
-      transform: translateY(0);
+      transform: translateX(0);
     }
 
     .notification.success { background: var(--success); }
     .notification.error { background: var(--danger); }
     .notification.warning { background: var(--warning); color: #000; }
 
-    /* تحسينات إضافية للأجهزة الصغيرة جداً */
-    @media (max-width: 350px) {
-      .mobile-fixed-table th,
-      .mobile-fixed-table td {
-        padding: 6px 2px;
+    /* معلومات المطور المبسطة */
+    .designer-info {
+      background: var(--primary);
+      color: white;
+      padding: 20px 15px;
+      text-align: center;
+      margin-top: 30px;
+    }
+
+    .designer-info h3 {
+      font-size: 16px;
+      margin-bottom: 10px;
+      color: var(--accent);
+    }
+
+    .designer-info p {
+      font-size: 12px;
+      margin-bottom: 8px;
+    }
+
+    .contact-links {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .contact-link {
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 12px;
+      padding: 5px 10px;
+      border: 1px solid var(--accent);
+      border-radius: 5px;
+    }
+
+    /* تحسينات الموبايل */
+    @media (max-width: 480px) {
+      .styled-table th,
+      .styled-table td {
+        padding: 6px 3px;
         font-size: 8px;
       }
       
+      .table-stats {
+        flex-direction: row;
+        justify-content: space-between;
+      }
+      
+      .stat-card {
+        min-width: 80px;
+        flex: 1;
+        transition: none;
+      }
+      
+      .stat-card .number {
+        font-size: 14px;
+      }
+      
+      .stat-card .label {
+        font-size: 8px;
+      }
+      
+      .header-logo {
+        width: 45px;
+      }
+      
+      .header-container {
+        height: 180px;
+        padding: 25px 15px;
+      }
+      
       .header-title {
-        font-size: 12px;
+        font-size: 16px;
       }
       
       .header-subtitle {
-        font-size: 10px;
+        font-size: 12px;
       }
       
       .main-title h1 {
-        font-size: 12px;
-        padding: 10px 12px;
+        font-size: 16px;
+        padding: 15px;
+        border-radius: 20px;
+        box-shadow: 0 6px 20px rgba(214, 51, 132, 0.4);
+      }
+
+      .stat-card:hover {
+        transform: none;
       }
     }
 
-    /* إزالة أي scrollbar أفقي */
+    /* منع التمرير الأفقي نهائياً */
+    * {
+      max-width: 100%;
+    }
+
     ::-webkit-scrollbar:horizontal {
       display: none;
     }
-    
-    * {
-      scrollbar-width: thin;
-      scrollbar-color: transparent transparent;
-    }
-    
-    *::-webkit-scrollbar:horizontal {
-      display: none;
-    }
+
   </style>
 </head>
 <body>
@@ -549,21 +691,45 @@
 
   <!-- المحتوى الرئيسي -->
   <div id="mainContent" style="display:none">
-    <!-- الرأس المحسن للموبايل -->
+    <!-- الرأس مع فيديو الخلفية -->
     <div class="header-container">
-      <div class="header-logos">
-        <img src="https://www2.0zz0.com/2025/05/19/22/510831948.png" alt="العراق" class="header-logo" />
-        <div style="text-align: center; flex: 1;">
-          <div class="header-title">جمهورية العراق - وزارة المالية</div>
-          <div class="header-subtitle">الهيئة العامة للكمارك - مركز كمرك طريبيل</div>
+      <!-- فيديو الخلفية -->
+      <video class="header-video" 
+             autoplay 
+             muted 
+             loop 
+             playsinline
+             preload="auto"
+             webkit-playsinline="true"
+             disablepictureinpicture
+             controlslist="nodownload nofullscreen noremoteplayback"
+             x5-playsinline="true"
+             x5-video-player-type="h5"
+             x5-video-player-fullscreen="false"
+             x5-video-orientation="portrait"
+             x-webkit-airplay="deny"
+             data-object-fit="cover">
+        <source src="https://storage.nodesbox.com/customs.mof.gov.iq/2025/01/20/2025_01_20_12161817836_7618544517557373.mp4" type="video/mp4">
+        متصفحك لا يدعم تشغيل الفيديو
+      </video>
+      
+      <!-- تم إزالة الطبقة الشفافة -->
+      
+      <div class="header-content">
+        <div class="header-logos">
+          <img src="https://www2.0zz0.com/2025/05/19/22/510831948.png" alt="العراق" class="header-logo" />
+          <div style="text-align: center;">
+            <div class="header-title">جمهورية العراق - وزارة المالية</div>
+            <div class="header-subtitle">الهيئة العامة للكمارك - مركز كمرك طريبيل</div>
+          </div>
+          <img src="https://www2.0zz0.com/2025/05/19/22/823371779.png" alt="المالية" class="header-logo" />
         </div>
-        <img src="https://www2.0zz0.com/2025/05/19/22/823371779.png" alt="المالية" class="header-logo" />
       </div>
     </div>
 
     <!-- العنوان الرئيسي -->
     <div class="main-title">
-      <h1>سجل التعريفة الجمركية المحسن للموبايل - 7 أعمدة</h1>
+      <h1>سجل التعريفة الجمركية – حزيران 2025/قرار/270</h1>
     </div>
 
     <!-- أدوات التحكم -->
@@ -581,36 +747,30 @@
         <i class="fas fa-search search-icon"></i>
       </div>
       
-      <div class="control-buttons">
-        <button onclick="clearSavedData()" class="btn btn-clear">
-          <i class="fas fa-trash"></i> مسح البيانات
+      <div style="display: flex; gap: 10px;">
+        <button onclick="clearSavedData()" class="btn-clear" style="flex: 1; padding: 10px; background: #dc3545; color: white; border: none; border-radius: 8px; font-weight: 600; font-family: 'Cairo', sans-serif;">
+          <i class="fas fa-trash"></i> مسح البيانات المحفوظة
         </button>
-        <button onclick="location.reload()" class="btn btn-refresh">
-          <i class="fas fa-sync"></i> تحديث
+        <button onclick="location.reload()" class="btn-refresh" style="flex: 1; padding: 10px; background: #28a745; color: white; border: none; border-radius: 8px; font-weight: 600; font-family: 'Cairo', sans-serif;">
+          <i class="fas fa-sync"></i> تحديث الصفحة
         </button>
-      </div>
-      
-      <div class="control-buttons-full">
-        <button onclick="loadOptimizedFile()" class="btn btn-load">
-          <i class="fas fa-mobile-alt"></i> تحميل الملف المحسن
-        </button>
-        <a href="/download/TSC_ultra_optimized.xlsx" class="btn btn-download">
-          <i class="fas fa-download"></i> تحميل مباشر
-        </a>
       </div>
     </div>
 
     <!-- إحصائيات -->
     <div class="table-stats" id="tableStats" style="display: none;">
       <div class="stat-card">
+        <i class="fas fa-database" style="font-size: 14px; margin-bottom: 5px; opacity: 0.7;"></i>
         <span class="number" id="totalRows">0</span>
         <span class="label">إجمالي</span>
       </div>
       <div class="stat-card">
+        <i class="fas fa-eye" style="font-size: 14px; margin-bottom: 5px; opacity: 0.7;"></i>
         <span class="number" id="visibleRows">0</span>
         <span class="label">المعروض</span>
       </div>
       <div class="stat-card">
+        <i class="fas fa-columns" style="font-size: 14px; margin-bottom: 5px; opacity: 0.7;"></i>
         <span class="number" id="totalColumns">0</span>
         <span class="label">أعمدة</span>
       </div>
@@ -621,12 +781,24 @@
       <div class="spinner"></div>
     </div>
 
-    <!-- الجدول الثابت المحسن للموبايل -->
+    <!-- الجدول المحسن للعرض بدون تحريك أفقي -->
     <div class="table-container" id="tableContainer" style="display: none;">
-      <table class="mobile-fixed-table">
-        <thead id="tableHead"></thead>
-        <tbody id="tableBody"></tbody>
-      </table>
+      <div class="styled-table">
+        <table>
+          <thead id="tableHead"></thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- معلومات المطور -->
+    <div class="designer-info">
+      <h3>مطور التطبيق</h3>
+      <p>أحمد العبيدي - مطور تطبيقات منفذ كمرك طريبيل</p>
+      <p>مختص في تطوير الحلول الرقمية للدوائر الحكومية</p>
+      <div class="contact-links">
+        <span class="contact-link" style="color: #ffd700; pointer-events: none;">07814007075</span>
+      </div>
     </div>
   </div>
 
@@ -634,71 +806,132 @@
     let headers = [];
     let originalData = [];
     let filteredData = [];
+    let isOnline = navigator.onLine;
 
     // قائمة أكواد التفعيل المسموحة
     const validCodes = ['1988', 'CUSTOMS', 'TREBIL', '642', 'IRAQI'];
 
-    // منع التحريك الأفقي تماماً
-    document.addEventListener('touchmove', function(e) {
-      // السماح بالتحريك العمودي والزوم فقط
-      if (e.touches.length === 1) {
-        // التحريك بإصبع واحد - نسمح فقط بالعمودي
-        return;
+    // فحص حالة التفعيل عند بدء التشغيل
+    function checkActivation() {
+      // تحقق من كود التفعيل المحفوظ
+      const savedCode = localStorage.getItem('activationCode');
+      if (savedCode && validCodes.includes(savedCode)) {
+        // تم التفعيل سابقاً
+        document.getElementById('activationScreen').style.display = 'none';
+        document.getElementById('mainContent').style.display = 'block';
+        
+        // تشغيل الفيديو
+        initializeHeaderVideo();
+        
+        // تحميل البيانات المحفوظة إن وجدت
+        loadSavedData();
+      } else {
+        // التركيز على حقل كود التفعيل
+        document.getElementById('activationCodeInput').focus();
+        
+        // السماح بالضغط على Enter للتفعيل
+        document.getElementById('activationCodeInput').addEventListener('keypress', function(e) {
+          if (e.key === 'Enter') {
+            checkActivationCode();
+          }
+        });
       }
-    }, { passive: true });
-
-    // منع التحريك الأفقي بالماوس
-    document.addEventListener('wheel', function(e) {
-      if (e.shiftKey) {
-        e.preventDefault();
-      }
-    }, { passive: false });
+    }
 
     // فحص كود التفعيل
     function checkActivationCode() {
       const code = document.getElementById('activationCodeInput').value.trim().toUpperCase();
       
       if (validCodes.includes(code)) {
+        // حفظ كود التفعيل
+        localStorage.setItem('activationCode', code);
+        
         document.getElementById('activationScreen').style.display = 'none';
         document.getElementById('mainContent').style.display = 'block';
         
-        // تحميل الملف المحسن تلقائياً بعد التفعيل
-        setTimeout(() => {
-          loadOptimizedFile();
-        }, 1000);
+        // تشغيل الفيديو بعد التفعيل
+        initializeHeaderVideo();
+        
+        // تحميل البيانات المحفوظة إن وجدت
+        loadSavedData();
+        
+        showNotification('تم التفعيل بنجاح!', 'success');
       } else {
-        alert('كود التفعيل غير صحيح');
+        showNotification('كود التفعيل غير صحيح', 'error');
+        document.getElementById('activationCodeInput').focus();
       }
     }
 
-    // تحميل الملف المحسن مباشرة
-    function loadOptimizedFile() {
-      showNotification('جاري تحميل الملف المحسن للموبايل...', 'warning');
+    // تشغيل فيديو الرأس
+    function initializeHeaderVideo() {
+      const video = document.querySelector('.header-video');
+      if (!video) return;
       
-      fetch('./static/TSC_ultra_optimized.xlsx')
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('فشل في تحميل الملف');
-          }
-          return response.arrayBuffer();
-        })
-        .then(data => {
-          const workbook = XLSX.read(data, { type: 'array' });
-          const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
-          const jsonData = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
-          
-          if (jsonData.length === 0) {
-            showNotification('الملف فارغ', 'warning');
-            return;
-          }
-          
-          processBatchData(jsonData, 30);
-          showNotification('تم تحميل الملف بنجاح - 7 أعمدة ثابتة!', 'success');
-        })
-        .catch(error => {
-          showNotification('خطأ في تحميل الملف: ' + error.message, 'error');
-        });
+      // إزالة أي أدوات تحكم
+      video.controls = false;
+      video.removeAttribute('controls');
+      
+      // تشغيل الفيديو
+      video.play().then(() => {
+        console.log('تم تشغيل فيديو الخلفية');
+      }).catch((error) => {
+        console.log('تعذر تشغيل الفيديو تلقائياً:', error);
+        showNotification('تعذر تشغيل فيديو الخلفية تلقائياً', 'warning');
+      });
+      
+      // معالجة أخطاء الفيديو
+      video.addEventListener('error', function(e) {
+        console.log('خطأ في الفيديو:', e);
+        showNotification('فشل تحميل فيديو الخلفية', 'warning');
+      });
+      
+      // عند تحميل الفيديو
+      video.addEventListener('loadeddata', function() {
+        console.log('تم تحميل بيانات الفيديو');
+      });
+      
+      // محاولة إضافية لتشغيل الفيديو بعد تحميل الصفحة
+      setTimeout(() => {
+        if (video.paused) {
+          video.play().catch(e => console.log('محاولة إضافية فشلت:', e));
+        }
+      }, 1000);
+      
+      // مراقب دائم لإزالة أدوات التحكم
+      const controlsObserver = new MutationObserver(() => {
+        if (video.hasAttribute('controls')) {
+          video.removeAttribute('controls');
+          video.controls = false;
+        }
+      });
+      
+      controlsObserver.observe(video, { attributes: true, attributeFilter: ['controls'] });
+      
+      // مراقب للنقرات لمنع إظهار أدوات التحكم
+      video.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        return false;
+      }, true);
+      
+      video.addEventListener('contextmenu', (e) => {
+        e.preventDefault();
+        return false;
+      });
     }
+    
+    // إعادة تشغيل الفيديو عند تغيير حجم الشاشة
+    window.addEventListener('resize', function() {
+      setTimeout(initializeHeaderVideo, 500);
+    });
+    
+    // محاولة إضافية عند النقر على الشاشة (للموبايل)
+    document.addEventListener('touchstart', function() {
+      const video = document.querySelector('.header-video');
+      if (video && video.paused) {
+        video.play().catch(e => console.log('تشغيل باللمس فشل:', e));
+      }
+    }, { once: true });
 
     // إظهار الإشعارات
     function showNotification(message, type = 'success') {
@@ -730,7 +963,8 @@
             return;
           }
           
-          processBatchData(jsonData, 30);
+          const batchSize = window.innerWidth <= 768 ? 25 : 50;
+          processBatchData(jsonData, batchSize);
           
         } catch (error) {
           showNotification('خطأ في قراءة الملف: ' + error.message, 'error');
@@ -747,23 +981,25 @@
       reader.readAsArrayBuffer(file);
     }
 
-    // تحديد نوع الخلية
-    function getCellType(header, cellValue) {
-      const headerLower = header.toLowerCase();
-      
-      if (headerLower.includes('nb') || headerLower.includes('min') || headerLower.includes('max')) {
-        return 'number-cell';
+    // حفظ البيانات محلياً
+    function saveDataLocally(headers, data) {
+      try {
+        const dataToSave = {
+          headers: headers,
+          data: data,
+          timestamp: new Date().toISOString(),
+          filename: document.getElementById('excelInput').files[0]?.name || 'unknown'
+        };
+        
+        localStorage.setItem('tariffData', JSON.stringify(dataToSave));
+        showNotification('تم حفظ البيانات محلياً', 'success');
+      } catch (error) {
+        console.warn('فشل في حفظ البيانات محلياً:', error);
       }
-      
-      if (headerLower.includes('nam') || headerLower.includes('ds') || headerLower.includes('brd')) {
-        return 'text-cell';
-      }
-      
-      return '';
     }
 
     // معالجة البيانات بدفعات
-    function processBatchData(jsonData, batchSize = 30) {
+    function processBatchData(jsonData, batchSize) {
       if (jsonData.length === 0) return;
       
       headers = jsonData[0].map((header, index) => 
@@ -777,6 +1013,8 @@
       originalData = data;
       filteredData = [...data];
       
+      saveDataLocally(headers, data);
+      
       let currentBatch = 0;
       const totalBatches = Math.ceil(data.length / batchSize);
       
@@ -786,7 +1024,7 @@
           document.getElementById('tableContainer').style.display = 'block';
           document.getElementById('tableStats').style.display = 'flex';
           updateStats();
-          showNotification(`تم تحميل ${data.length.toLocaleString('ar')} صف بنجاح`, 'success');
+          showNotification(`تم تحميل ${data.length} صف بنجاح`, 'success');
           return;
         }
         
@@ -817,6 +1055,8 @@
       headers.forEach((header, index) => {
         const th = document.createElement('th');
         th.textContent = header;
+        th.setAttribute('data-field', header);
+        
         headerRow.appendChild(th);
       });
       
@@ -833,12 +1073,6 @@
         headers.forEach((header, index) => {
           const td = document.createElement('td');
           const cellValue = row[index];
-          
-          // تحديد نوع الخلية
-          const cellType = getCellType(header, cellValue);
-          if (cellType) {
-            td.className = cellType;
-          }
           
           if (cellValue !== null && cellValue !== undefined) {
             td.textContent = cellValue.toString();
@@ -879,7 +1113,7 @@
         
         renderFilteredTable();
         updateStats();
-      }, 200);
+      }, 150);
     }
 
     // عرض النتائج المفلترة
@@ -893,19 +1127,53 @@
         td.colSpan = headers.length;
         td.textContent = 'لا توجد نتائج مطابقة';
         td.style.textAlign = 'center';
-        td.style.padding = '15px';
+        td.style.padding = '20px';
         td.style.color = '#666';
         tr.appendChild(td);
         tbody.appendChild(tr);
         return;
       }
       
-      renderTableBatch(filteredData.slice(0, 50));
+      const batchSize = window.innerWidth <= 768 ? 25 : 50;
+      renderTableBatch(filteredData.slice(0, batchSize));
+      
+      if (filteredData.length > batchSize) {
+        setTimeout(() => {
+          renderTableBatch(filteredData.slice(batchSize));
+        }, 100);
+      }
+    }
+
+    // تحميل البيانات المحفوظة
+    function loadSavedData() {
+      try {
+        const savedData = localStorage.getItem('tariffData');
+        if (savedData) {
+          const parsed = JSON.parse(savedData);
+          headers = parsed.headers || [];
+          originalData = parsed.data || [];
+          filteredData = [...originalData];
+          
+          if (originalData.length > 0) {
+            renderTableHeaders();
+            renderFilteredTable();
+            document.getElementById('tableContainer').style.display = 'block';
+            document.getElementById('tableStats').style.display = 'flex';
+            updateStats();
+            
+            const filename = parsed.filename || 'ملف محفوظ';
+            showNotification(`تم تحميل البيانات المحفوظة (${filename})`, 'success');
+          }
+        }
+      } catch (error) {
+        console.warn('فشل في تحميل البيانات المحفوظة:', error);
+      }
     }
 
     // مسح البيانات المحفوظة
     function clearSavedData() {
-      if (confirm('هل أنت متأكد من مسح جميع البيانات؟')) {
+      if (confirm('هل أنت متأكد من مسح جميع البيانات المحفوظة؟')) {
+        localStorage.removeItem('tariffData');
         originalData = [];
         filteredData = [];
         headers = [];
@@ -914,7 +1182,7 @@
         document.getElementById('tableStats').style.display = 'none';
         document.getElementById('searchInput').value = '';
         
-        showNotification('تم مسح البيانات', 'success');
+        showNotification('تم مسح البيانات المحفوظة', 'success');
       }
     }
 
@@ -929,9 +1197,9 @@
         return;
       }
       
-      const maxSize = 15 * 1024 * 1024; // 15MB
+      const maxSize = window.innerWidth <= 768 ? 5 * 1024 * 1024 : 10 * 1024 * 1024;
       if (file.size > maxSize) {
-        showNotification('حجم الملف كبير جداً (أكثر من 15MB)', 'error');
+        showNotification('حجم الملف كبير جداً', 'error');
         this.value = '';
         return;
       }
@@ -944,17 +1212,32 @@
       setTimeout(() => processExcelFile(file), 100);
     });
 
-    // تحميل الصفحة
-    document.addEventListener('DOMContentLoaded', function() {
-      // التركيز على حقل كود التفعيل
-      document.getElementById('activationCodeInput').focus();
-      
-      // السماح بالضغط على Enter للتفعيل
-      document.getElementById('activationCodeInput').addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-          checkActivationCode();
-        }
+    // اكتشاف الاتصال
+    window.addEventListener('online', function() {
+      isOnline = true;
+      showNotification('تم استعادة الاتصال', 'success');
+    });
+
+    window.addEventListener('offline', function() {
+      isOnline = false;
+      showNotification('فقدان الاتصال - وضع عدم الاتصال', 'warning');
+    });
+
+    // تسجيل Service Worker للأيقونة والتخزين المؤقت
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('./sw.js')
+          .then(function(registration) {
+            console.log('Service Worker تم تسجيله بنجاح:', registration.scope);
+          }, function(err) {
+            console.log('فشل تسجيل Service Worker:', err);
+          });
       });
+    }
+
+    // بدء التشغيل
+    document.addEventListener('DOMContentLoaded', function() {
+      checkActivation();
     });
   </script>
 </body>
