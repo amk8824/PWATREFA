@@ -600,6 +600,11 @@
       vertical-align: top;
     }
 
+    /* خط فاصل بين GDS_MIN و GDS_MAX */
+    .styled-table td:nth-child(6) {
+      border-left: 2px solid var(--primary);
+    }
+
     .styled-table td:last-child {
       border-right: none;
     }
@@ -612,7 +617,7 @@
       padding-right: 6px;
     }
 
-    /* الأرقام - عرض طبيعي بدون ضغط */
+    /* الأرقام - عرض طبيعي بدون ضغط مع خط أصغر */
     .styled-table td:nth-child(1),
     .styled-table td:nth-child(2),
     .styled-table td:nth-child(6),
@@ -624,6 +629,7 @@
       overflow: visible;
       text-overflow: initial;
       word-break: keep-all;
+      font-size: 8px !important;
     }
 
     .styled-table tbody tr:nth-child(even) {
@@ -719,6 +725,14 @@
       .styled-table td {
         padding: 6px 3px;
         font-size: 8px;
+      }
+      
+      /* الأرقام في الموبايل أصغر قليلاً */
+      .styled-table td:nth-child(1),
+      .styled-table td:nth-child(2),
+      .styled-table td:nth-child(6),
+      .styled-table td:nth-child(7) {
+        font-size: 7px !important;
       }
       
       .table-stats {
