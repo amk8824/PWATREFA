@@ -1311,7 +1311,78 @@
       <div class="contact-links">
         <span class="contact-link" style="color: #ffd700; pointer-events: none;">a.alobaidymo@gmail.com</span>
         <span class="contact-link" style="color: #ffd700; pointer-events: none;">07768525871</span>
+        <!-- زر دخول المطور السري -->
+        <div style="margin-top: 15px; text-align: center;">
+          <button onclick="showDeveloperLogin()" style="background: linear-gradient(45deg, #007bff, #0056b3); color: white; border: none; padding: 10px 15px; border-radius: 50%; font-size: 16px; cursor: pointer; box-shadow: 0 4px 8px rgba(0,0,0,0.2); transition: all 0.3s ease;" title="لوحة تحكم المطور" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">⚙️</button>
+          <div style="font-size: 10px; color: #999; margin-top: 5px;">لوحة المطور</div>
+        </div>
       </div>
+    </div>
+  </div>
+
+  <!-- لوحة تحكم المطور السرية -->
+  <div id="developerPanel" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 10000; padding: 20px; box-sizing: border-box; overflow-y: auto;">
+    <div style="max-width: 600px; margin: 0 auto; background: white; border-radius: 15px; padding: 20px;">
+      <div style="display: flex; justify-content: between; align-items: center; margin-bottom: 20px; border-bottom: 2px solid #eee; padding-bottom: 10px;">
+        <h2 style="margin: 0; color: #333; font-family: 'Cairo', sans-serif;">🔧 لوحة تحكم المطور</h2>
+        <button onclick="closeDeveloperPanel()" style="background: #dc3545; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; float: right;">إغلاق</button>
+      </div>
+      
+      <!-- إحصائيات الاستخدام -->
+      <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; margin-bottom: 15px;">
+        <h3 style="margin: 0 0 10px 0; color: #495057;">📊 إحصائيات الاستخدام</h3>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+          <div style="background: white; padding: 10px; border-radius: 8px; text-align: center;">
+            <div style="font-size: 24px; font-weight: bold; color: #007bff;" id="totalUsers">0</div>
+            <div style="font-size: 12px; color: #666;">إجمالي المستخدمين</div>
+          </div>
+          <div style="background: white; padding: 10px; border-radius: 8px; text-align: center;">
+            <div style="font-size: 24px; font-weight: bold; color: #28a745;" id="todayUsers">0</div>
+            <div style="font-size: 12px; color: #666;">مستخدمي اليوم</div>
+          </div>
+          <div style="background: white; padding: 10px; border-radius: 8px; text-align: center;">
+            <div style="font-size: 24px; font-weight: bold; color: #ffc107;" id="onlineUsers">1</div>
+            <div style="font-size: 12px; color: #666;">متصل الآن</div>
+          </div>
+          <div style="background: white; padding: 10px; border-radius: 8px; text-align: center;">
+            <div style="font-size: 24px; font-weight: bold; color: #dc3545;" id="blockedUsers">0</div>
+            <div style="font-size: 12px; color: #666;">محظور</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- إدارة المستخدمين المحظورين -->
+      <div style="background: #fff3cd; padding: 15px; border-radius: 10px; margin-bottom: 15px;">
+        <h3 style="margin: 0 0 10px 0; color: #856404;">🚫 إدارة الحظر</h3>
+        <div style="margin-bottom: 10px;">
+          <input type="text" id="blockDeviceId" placeholder="معرف الجهاز أو IP للحظر" style="width: 70%; padding: 8px; border: 1px solid #ddd; border-radius: 5px; font-family: 'Cairo', sans-serif;">
+          <button onclick="blockUser()" style="width: 25%; padding: 8px; background: #dc3545; color: white; border: none; border-radius: 5px; cursor: pointer; margin-right: 5%;">حظر</button>
+        </div>
+        <div id="blockedList" style="max-height: 150px; overflow-y: auto; background: white; padding: 10px; border-radius: 5px; border: 1px solid #ddd;">
+          <div style="color: #666; text-align: center;">لا يوجد مستخدمون محظورون</div>
+        </div>
+      </div>
+      
+      <!-- قائمة المستخدمين النشطين -->
+      <div style="background: #d1ecf1; padding: 15px; border-radius: 10px;">
+        <h3 style="margin: 0 0 10px 0; color: #0c5460;">👥 المستخدمون النشطون</h3>
+        <div id="activeUsersList" style="max-height: 200px; overflow-y: auto; background: white; padding: 10px; border-radius: 5px; border: 1px solid #ddd;">
+          <div style="color: #666; text-align: center;">جاري تحميل قائمة المستخدمين...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- نافذة دخول المطور -->
+  <div id="developerLogin" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 9999; justify-content: center; align-items: center;">
+    <div style="background: white; padding: 30px; border-radius: 15px; text-align: center; max-width: 400px; width: 90%;">
+      <h3 style="margin: 0 0 20px 0; color: #333; font-family: 'Cairo', sans-serif;">🔐 دخول المطور</h3>
+      <input type="password" id="developerPassword" placeholder="كلمة المرور" style="width: 100%; padding: 15px; border: 2px solid #ddd; border-radius: 8px; font-size: 16px; text-align: center; font-family: 'Cairo', sans-serif; margin-bottom: 15px;" onkeypress="if(event.key==='Enter') checkDeveloperPassword()">
+      <div style="display: flex; gap: 10px;">
+        <button onclick="checkDeveloperPassword()" style="flex: 1; padding: 15px; background: #007bff; color: white; border: none; border-radius: 8px; cursor: pointer; font-family: 'Cairo', sans-serif;">دخول</button>
+        <button onclick="closeDeveloperLogin()" style="flex: 1; padding: 15px; background: #6c757d; color: white; border: none; border-radius: 8px; cursor: pointer; font-family: 'Cairo', sans-serif;">إلغاء</button>
+      </div>
+      <div id="loginError" style="color: #dc3545; margin-top: 10px; display: none;">كلمة مرور خاطئة!</div>
     </div>
   </div>
 
@@ -1323,9 +1394,641 @@
 
     // قائمة أكواد التفعيل المسموحة
     const validCodes = ['1988', 'CUSTOMS', 'TREBIL', '642', 'IRAQI'];
+    
+    // نظام إدارة المستخدمين والإحصائيات
+    let userStats = {
+      totalUsers: new Set(),
+      todayUsers: new Set(),
+      blockedUsers: new Set(),
+      currentUser: null
+    };
+    
+    // كلمة مرور المطور
+    const developerPassword = '8893';
 
+    // تسجيل المستخدم الحالي وتحديث الإحصائيات
+    function initializeUserTracking() {
+      // فحص التحديث الإجباري
+      const forceRefresh = localStorage.getItem('forceRefresh');
+      if (forceRefresh && Date.now() - parseInt(forceRefresh) < 300000) { // 5 دقائق
+        location.reload();
+        return false;
+      }
+      
+      // فحص تسجيل الخروج الجماعي
+      const globalLogout = localStorage.getItem('globalLogout');
+      if (globalLogout && Date.now() - parseInt(globalLogout) < 300000) { // 5 دقائق
+        localStorage.removeItem('activationCode');
+        location.reload();
+        return false;
+      }
+      
+      // إنشاء معرف فريد للجهاز
+      let deviceId = localStorage.getItem('deviceId');
+      if (!deviceId) {
+        deviceId = 'device_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        localStorage.setItem('deviceId', deviceId);
+      }
+      
+      // تحديد نوع الجهاز
+      const deviceType = detectDeviceType();
+      const deviceTypes = JSON.parse(localStorage.getItem('deviceTypes') || '{}');
+      deviceTypes[deviceId] = deviceType;
+      localStorage.setItem('deviceTypes', JSON.stringify(deviceTypes));
+      
+      userStats.currentUser = {
+        deviceId: deviceId,
+        ip: 'unknown', // سيتم جلبه من API
+        timestamp: new Date().toISOString(),
+        browser: navigator.userAgent,
+        lastActivity: Date.now()
+      };
+      
+      // فحص إذا كان المستخدم محظور
+      const blockedList = JSON.parse(localStorage.getItem('blockedUsers') || '[]');
+      if (blockedList.includes(deviceId)) {
+        showBlockedMessage();
+        return false;
+      }
+      
+      // فحص إذا كان المستخدم مطرود مؤقتاً
+      const kickedUsers = JSON.parse(localStorage.getItem('kickedUsers') || '[]');
+      if (kickedUsers.includes(deviceId)) {
+        // إزالة المستخدم من قائمة المطرودين بعد 30 ثانية
+        setTimeout(() => {
+          const currentKicked = JSON.parse(localStorage.getItem('kickedUsers') || '[]');
+          const updatedKicked = currentKicked.filter(id => id !== deviceId);
+          localStorage.setItem('kickedUsers', JSON.stringify(updatedKicked));
+        }, 30000);
+        
+        localStorage.removeItem('activationCode');
+        location.reload();
+        return false;
+      }
+      
+      // تسجيل المستخدم في الإحصائيات
+      const allUsers = JSON.parse(localStorage.getItem('allUsers') || '[]');
+      const today = new Date().toDateString();
+      const todayUsers = JSON.parse(localStorage.getItem('todayUsers_' + today) || '[]');
+      
+      if (!allUsers.includes(deviceId)) {
+        allUsers.push(deviceId);
+        localStorage.setItem('allUsers', JSON.stringify(allUsers));
+      }
+      
+      if (!todayUsers.includes(deviceId)) {
+        todayUsers.push(deviceId);
+        localStorage.setItem('todayUsers_' + today, JSON.stringify(todayUsers));
+      }
+      
+      // تسجيل نشاط المستخدم
+      const userActivity = {
+        deviceId: deviceId,
+        timestamp: new Date().toISOString(),
+        page: 'tariff_viewer'
+      };
+      
+      const activities = JSON.parse(localStorage.getItem('userActivities') || '[]');
+      activities.push(userActivity);
+      // الاحتفاظ بآخر 1000 نشاط فقط
+      if (activities.length > 1000) {
+        activities.splice(0, activities.length - 1000);
+      }
+      localStorage.setItem('userActivities', JSON.stringify(activities));
+      
+      return true;
+    }
+    
+    // عرض رسالة الحظر
+    function showBlockedMessage() {
+      document.body.innerHTML = `
+        <div style="display: flex; justify-content: center; align-items: center; height: 100vh; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); font-family: 'Cairo', sans-serif;">
+          <div style="background: white; padding: 40px; border-radius: 20px; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.1);">
+            <div style="font-size: 80px; margin-bottom: 20px;">🚫</div>
+            <h2 style="color: #dc3545; margin-bottom: 15px;">تم حظر الوصول</h2>
+            <p style="color: #666; margin-bottom: 20px;">عذراً، تم منع وصولك إلى هذا التطبيق</p>
+            <p style="color: #999; font-size: 14px;">إذا كنت تعتقد أن هذا خطأ، يرجى التواصل مع المطور</p>
+          </div>
+        </div>
+      `;
+    }
+    
+    // وظائف لوحة تحكم المطور
+    function showDeveloperLogin() {
+      const loginDiv = document.getElementById('developerLogin');
+      loginDiv.style.display = 'flex';
+      document.getElementById('developerPassword').focus();
+    }
+    
+    function closeDeveloperLogin() {
+      document.getElementById('developerLogin').style.display = 'none';
+      document.getElementById('developerPassword').value = '';
+      document.getElementById('loginError').style.display = 'none';
+    }
+    
+    function checkDeveloperPassword() {
+      const password = document.getElementById('developerPassword').value;
+      if (password === developerPassword) {
+        closeDeveloperLogin();
+        showDeveloperPanel();
+      } else {
+        document.getElementById('loginError').style.display = 'block';
+        document.getElementById('developerPassword').value = '';
+      }
+    }
+    
+    function showDeveloperPanel() {
+      document.getElementById('developerPanel').style.display = 'block';
+      updateDeveloperStats();
+    }
+    
+    function closeDeveloperPanel() {
+      document.getElementById('developerPanel').style.display = 'none';
+    }
+    
+    function updateDeveloperStats() {
+      const allUsers = JSON.parse(localStorage.getItem('allUsers') || '[]');
+      const today = new Date().toDateString();
+      const todayUsers = JSON.parse(localStorage.getItem('todayUsers_' + today) || '[]');
+      const blockedUsers = JSON.parse(localStorage.getItem('blockedUsers') || '[]');
+      
+      if (document.getElementById('totalUsers')) {
+        document.getElementById('totalUsers').textContent = allUsers.length;
+        document.getElementById('todayUsers').textContent = todayUsers.length;
+        document.getElementById('blockedUsers').textContent = blockedUsers.length;
+        document.getElementById('lastUpdate').textContent = new Date().toLocaleDateString('en-GB') + ' ' + new Date().toLocaleTimeString('en-GB');
+      }
+      
+      updateDeviceStats();
+      updateBlockedList();
+      showActiveUsers(); // عرض العلامة الافتراضية
+      
+      // تحديث حالة الإعدادات
+      const settings = ['allowExcelUpload', 'allowSearch', 'showProhibitedBtn', 'showStats'];
+      settings.forEach(setting => {
+        const enabled = localStorage.getItem(setting) !== 'false';
+        const checkbox = document.getElementById(setting);
+        if (checkbox) checkbox.checked = enabled;
+      });
+    }
+    
+    function blockUser() {
+      const deviceId = document.getElementById('blockDeviceId').value.trim();
+      if (!deviceId) return;
+      
+      const blockedUsers = JSON.parse(localStorage.getItem('blockedUsers') || '[]');
+      if (!blockedUsers.includes(deviceId)) {
+        blockedUsers.push(deviceId);
+        localStorage.setItem('blockedUsers', JSON.stringify(blockedUsers));
+        document.getElementById('blockDeviceId').value = '';
+        updateDeveloperStats();
+      }
+    }
+    
+    function unblockUser(deviceId) {
+      const blockedUsers = JSON.parse(localStorage.getItem('blockedUsers') || '[]');
+      const index = blockedUsers.indexOf(deviceId);
+      if (index > -1) {
+        blockedUsers.splice(index, 1);
+        localStorage.setItem('blockedUsers', JSON.stringify(blockedUsers));
+        updateDeveloperStats();
+      }
+    }
+    
+    function updateBlockedList() {
+      const blockedUsers = JSON.parse(localStorage.getItem('blockedUsers') || '[]');
+      const listElement = document.getElementById('blockedList');
+      
+      if (blockedUsers.length === 0) {
+        listElement.innerHTML = '<div style="color: #666; text-align: center;">لا يوجد مستخدمون محظورون</div>';
+      } else {
+        listElement.innerHTML = blockedUsers.map(deviceId => `
+          <div style="display: flex; justify-content: space-between; align-items: center; padding: 5px; border-bottom: 1px solid #eee;">
+            <span style="font-size: 12px; color: #666;">${deviceId}</span>
+            <button onclick="unblockUser('${deviceId}')" style="background: #28a745; color: white; border: none; padding: 2px 8px; border-radius: 3px; cursor: pointer; font-size: 10px;">إلغاء الحظر</button>
+          </div>
+        `).join('');
+      }
+    }
+    
+    function updateActiveUsersList() {
+      const activities = JSON.parse(localStorage.getItem('userActivities') || '[]');
+      const recent = activities.slice(-20); // آخر 20 نشاط
+      const listElement = document.getElementById('activeUsersList');
+      
+      if (recent.length === 0) {
+        listElement.innerHTML = '<div style="color: #666; text-align: center;">لا يوجد نشاط مسجل</div>';
+      } else {
+        listElement.innerHTML = recent.reverse().map(activity => {
+          const date = new Date(activity.timestamp).toLocaleString('ar-SA');
+          return `
+            <div style="padding: 5px; border-bottom: 1px solid #eee; font-size: 12px;">
+              <div style="color: #333;">📱 ${activity.deviceId.substring(0, 20)}...</div>
+              <div style="color: #666;">⏰ ${date}</div>
+            </div>
+          `;
+        }).join('');
+      }
+    }
+    
+    // وظائف إضافية للوحة المطور
+    function detectDeviceType() {
+      const userAgent = navigator.userAgent;
+      if (/iPhone|iPad|iPod/i.test(userAgent)) {
+        return 'ios';
+      } else if (/Android/i.test(userAgent)) {
+        return 'android';
+      } else {
+        return 'other';
+      }
+    }
+    
+    function updateDeviceStats() {
+      const allUsers = JSON.parse(localStorage.getItem('allUsers') || '[]');
+      const deviceTypes = JSON.parse(localStorage.getItem('deviceTypes') || '{}');
+      
+      let androidCount = 0, iosCount = 0;
+      
+      allUsers.forEach(userId => {
+        const deviceType = deviceTypes[userId] || 'other';
+        if (deviceType === 'android') androidCount++;
+        if (deviceType === 'ios') iosCount++;
+      });
+      
+      if (document.getElementById('androidCount')) {
+        document.getElementById('androidCount').textContent = androidCount;
+        document.getElementById('iosCount').textContent = iosCount;
+      }
+    }
+    
+    function toggleExcelUpload() {
+      const enabled = document.getElementById('allowExcelUpload').checked;
+      const uploadDiv = document.querySelector('.file-input-wrapper');
+      if (uploadDiv) {
+        uploadDiv.style.display = enabled ? 'block' : 'none';
+      }
+      localStorage.setItem('allowExcelUpload', enabled);
+    }
+    
+    function toggleSearch() {
+      const enabled = document.getElementById('allowSearch').checked;
+      const searchDiv = document.querySelector('.search-container');
+      if (searchDiv) {
+        searchDiv.style.display = enabled ? 'block' : 'none';
+      }
+      localStorage.setItem('allowSearch', enabled);
+    }
+    
+    function toggleProhibitedBtn() {
+      const enabled = document.getElementById('showProhibitedBtn').checked;
+      const btn = document.querySelector('.prohibited-items-btn');
+      if (btn) {
+        btn.style.display = enabled ? 'block' : 'none';
+      }
+      localStorage.setItem('showProhibitedBtn', enabled);
+    }
+    
+    function toggleStats() {
+      const enabled = document.getElementById('showStats').checked;
+      const stats = document.getElementById('tableStats');
+      if (stats && originalData.length > 0) {
+        stats.style.display = enabled ? 'flex' : 'none';
+      }
+      localStorage.setItem('showStats', enabled);
+    }
+    
+    function exportUserData() {
+      const data = {
+        totalUsers: JSON.parse(localStorage.getItem('allUsers') || '[]'),
+        todayUsers: JSON.parse(localStorage.getItem('todayUsers_' + new Date().toDateString()) || '[]'),
+        blockedUsers: JSON.parse(localStorage.getItem('blockedUsers') || '[]'),
+        userActivities: JSON.parse(localStorage.getItem('userActivities') || '[]'),
+        deviceTypes: JSON.parse(localStorage.getItem('deviceTypes') || '{}')
+      };
+      
+      const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'customs_users_data_' + new Date().toISOString().split('T')[0] + '.json';
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+    
+    function clearAllData() {
+      if (confirm('هل أنت متأكد من مسح جميع بيانات المستخدمين؟ هذه العملية لا يمكن التراجع عنها!')) {
+        ['allUsers', 'userActivities', 'blockedUsers', 'deviceTypes'].forEach(key => {
+          localStorage.removeItem(key);
+        });
+        updateDeveloperStats();
+        alert('تم مسح جميع البيانات بنجاح');
+      }
+    }
+    
+    function resetToDefaults() {
+      ['allowExcelUpload', 'allowSearch', 'showProhibitedBtn', 'showStats'].forEach(setting => {
+        localStorage.setItem(setting, 'true');
+      });
+      location.reload();
+    }
+    
+    function forceRefreshAllUsers() {
+      if (confirm('هذا سيجبر جميع المستخدمين على تحديث صفحاتهم. متابعة؟')) {
+        localStorage.setItem('forceRefresh', Date.now());
+        alert('تم تفعيل التحديث الإجباري');
+      }
+    }
+    
+    // تسجيل خروج جميع المستخدمين
+    function logoutAllUsers() {
+      if (confirm('هل أنت متأكد من تسجيل خروج جميع المستخدمين؟ سيتم إجبارهم على إعادة تحميل الصفحة.')) {
+        // إرسال إشارة تسجيل خروج جماعي
+        localStorage.setItem('globalLogout', Date.now());
+        localStorage.setItem('forceRefresh', Date.now());
+        
+        // مسح بيانات المستخدمين النشطين
+        localStorage.removeItem('userActivities');
+        
+        alert('تم تسجيل خروج جميع المستخدمين بنجاح');
+        updateDeveloperStats();
+        showActiveUsers();
+      }
+    }
+    
+    // طرد مستخدم معين (بدون حظر)
+    function kickUser(deviceId) {
+      if (confirm('هل تريد طرد هذا المستخدم؟ سيتم إجباره على إعادة تحميل الصفحة بدون حظر.')) {
+        // إضافة المستخدم إلى قائمة المطرودين مؤقتاً
+        const kickedUsers = JSON.parse(localStorage.getItem('kickedUsers') || '[]');
+        if (!kickedUsers.includes(deviceId)) {
+          kickedUsers.push(deviceId);
+          localStorage.setItem('kickedUsers', JSON.stringify(kickedUsers));
+        }
+        
+        // إزالة المستخدم من قائمة النشاط
+        let activities = JSON.parse(localStorage.getItem('userActivities') || '[]');
+        activities = activities.filter(activity => activity.deviceId !== deviceId);
+        localStorage.setItem('userActivities', JSON.stringify(activities));
+        
+        alert('تم طرد المستخدم بنجاح');
+        updateDeveloperStats();
+        showActiveUsers();
+      }
+    }
+    
+    // إنشاء مستخدمين تجريبيين للاختبار
+    function createDemoUsers() {
+      if (confirm('هل تريد إنشاء 5 مستخدمين تجريبيين لاختبار النظام؟')) {
+        const demoDevices = ['android', 'ios', 'android', 'ios', 'other'];
+        const demoNames = ['مستخدم أندرويد 1', 'مستخدم آيفون 1', 'مستخدم أندرويد 2', 'مستخدم آيفون 2', 'مستخدم كمبيوتر'];
+        
+        const allUsers = JSON.parse(localStorage.getItem('allUsers') || '[]');
+        const deviceTypes = JSON.parse(localStorage.getItem('deviceTypes') || '{}');
+        const activities = JSON.parse(localStorage.getItem('userActivities') || '[]');
+        const today = new Date().toDateString();
+        const todayUsers = JSON.parse(localStorage.getItem('todayUsers_' + today) || '[]');
+        
+        for (let i = 0; i < 5; i++) {
+          const deviceId = 'demo_device_' + Date.now() + '_' + (i + 1);
+          const deviceType = demoDevices[i];
+          const timestamp = new Date(Date.now() - Math.random() * 3600000).toISOString(); // آخر ساعة
+          
+          // إضافة إلى قائمة المستخدمين
+          if (!allUsers.includes(deviceId)) {
+            allUsers.push(deviceId);
+          }
+          
+          if (!todayUsers.includes(deviceId)) {
+            todayUsers.push(deviceId);
+          }
+          
+          // تحديد نوع الجهاز
+          deviceTypes[deviceId] = deviceType;
+          
+          // إضافة نشاط
+          activities.push({
+            deviceId: deviceId,
+            timestamp: timestamp,
+            browser: deviceType === 'android' ? 'Android Chrome' : deviceType === 'ios' ? 'iOS Safari' : 'Desktop Chrome',
+            lastActivity: Date.now() - Math.random() * 1800000 // آخر 30 دقيقة
+          });
+        }
+        
+        // حفظ البيانات
+        localStorage.setItem('allUsers', JSON.stringify(allUsers));
+        localStorage.setItem('deviceTypes', JSON.stringify(deviceTypes));
+        localStorage.setItem('userActivities', JSON.stringify(activities));
+        localStorage.setItem('todayUsers_' + today, JSON.stringify(todayUsers));
+        
+        alert('تم إنشاء 5 مستخدمين تجريبيين بنجاح!');
+        updateDeveloperStats();
+        showActiveUsers();
+      }
+    }
+    
+    function showActiveUsers() {
+      if (!document.getElementById('activeTab')) return;
+      
+      document.getElementById('activeTab').style.background = '#03a9f4';
+      document.getElementById('devicesTab').style.background = '#607d8b';
+      document.getElementById('activitiesTab').style.background = '#607d8b';
+      
+      const activities = JSON.parse(localStorage.getItem('userActivities') || '[]');
+      const deviceTypes = JSON.parse(localStorage.getItem('deviceTypes') || '{}');
+      const blockedUsers = JSON.parse(localStorage.getItem('blockedUsers') || '[]');
+      const allUsers = JSON.parse(localStorage.getItem('allUsers') || '[]');
+      
+      // إنشاء قائمة فريدة للمستخدمين النشطين
+      const uniqueUsers = {};
+      
+      // إضافة جميع المستخدمين المسجلين
+      allUsers.forEach(userId => {
+        if (!blockedUsers.includes(userId)) {
+          // البحث عن آخر نشاط لهذا المستخدم
+          const lastActivity = activities.find(activity => activity.deviceId === userId);
+          uniqueUsers[userId] = {
+            deviceId: userId,
+            timestamp: lastActivity ? lastActivity.timestamp : new Date().toISOString(),
+            deviceType: deviceTypes[userId] || 'other'
+          };
+        }
+      });
+      
+      // إضافة المستخدمين من الأنشطة الذين ليسوا في القائمة الرئيسية
+      activities.forEach(activity => {
+        if (!blockedUsers.includes(activity.deviceId) && !uniqueUsers[activity.deviceId]) {
+          uniqueUsers[activity.deviceId] = {
+            ...activity,
+            deviceType: deviceTypes[activity.deviceId] || 'other'
+          };
+        }
+      });
+      
+      const activeUsers = Object.values(uniqueUsers);
+      const content = document.getElementById('tabContent');
+      
+      if (activeUsers.length === 0) {
+        content.innerHTML = `
+          <div style="color: #666; text-align: center; font-size: 14px; padding: 20px;">
+            <div style="margin-bottom: 15px;">لا يوجد مستخدمون نشطون حالياً</div>
+            <button onclick="createDemoUsers()" style="background: #28a745; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; font-family: 'Cairo', sans-serif;">📊 إنشاء مستخدمين تجريبيين</button>
+          </div>
+        `;
+      } else {
+        const usersHtml = activeUsers.map(user => {
+          const date = new Date(user.timestamp).toLocaleDateString('en-GB') + ' ' + new Date(user.timestamp).toLocaleTimeString('en-GB');
+          const deviceIcon = user.deviceType === 'android' ? '📱' : user.deviceType === 'ios' ? '🍎' : '💻';
+          
+          return `
+            <div style="padding: 10px; border-bottom: 1px solid #eee; font-size: 11px; background: #f9f9f9; margin-bottom: 5px; border-radius: 5px;">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div style="flex-grow: 1;">
+                  <div style="color: #333; font-weight: bold; margin-bottom: 3px;">${deviceIcon} ${user.deviceId.substring(0, 30)}...</div>
+                  <div style="color: #666; font-size: 10px;">⏰ آخر نشاط: ${date}</div>
+                </div>
+                <div style="display: flex; gap: 5px;">
+                  <button onclick="kickUser('${user.deviceId}')" style="background: #ff9800; color: white; border: none; padding: 4px 8px; border-radius: 3px; cursor: pointer; font-size: 9px;">🙅 طرد</button>
+                  <button onclick="blockUser('${user.deviceId}')" style="background: #f44336; color: white; border: none; padding: 4px 8px; border-radius: 3px; cursor: pointer; font-size: 9px;">🚫 حظر</button>
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('');
+        
+        content.innerHTML = `
+          <div style="margin-bottom: 15px; text-align: center;">
+            <button onclick="logoutAllUsers()" style="background: linear-gradient(45deg, #dc3545, #c82333); color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-family: 'Cairo', sans-serif; font-weight: bold; font-size: 12px;">🚀 تسجيل خروج جميع المستخدمين</button>
+            <div style="font-size: 10px; color: #666; margin-top: 5px;">عدد المستخدمين النشطين: ${activeUsers.length}</div>
+          </div>
+          <div style="max-height: 180px; overflow-y: auto;">
+            ${usersHtml}
+          </div>
+        `;
+      }
+    }
+    
+    function showUserDevices() {
+      if (!document.getElementById('devicesTab')) return;
+      
+      document.getElementById('activeTab').style.background = '#607d8b';
+      document.getElementById('devicesTab').style.background = '#03a9f4';
+      document.getElementById('activitiesTab').style.background = '#607d8b';
+      
+      const deviceTypes = JSON.parse(localStorage.getItem('deviceTypes') || '{}');
+      const allUsers = JSON.parse(localStorage.getItem('allUsers') || '[]');
+      const content = document.getElementById('tabContent');
+      
+      const stats = { android: 0, ios: 0, other: 0 };
+      allUsers.forEach(userId => {
+        const type = deviceTypes[userId] || 'other';
+        stats[type]++;
+      });
+      
+      content.innerHTML = `
+        <div style="text-align: center;">
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 15px;">
+            <div style="background: #4caf50; color: white; padding: 15px; border-radius: 8px;">
+              <div style="font-size: 24px;">📱</div>
+              <div style="font-size: 18px; font-weight: bold;">${stats.android}</div>
+              <div style="font-size: 10px;">أندرويد</div>
+            </div>
+            <div style="background: #2196f3; color: white; padding: 15px; border-radius: 8px;">
+              <div style="font-size: 24px;">🍎</div>
+              <div style="font-size: 18px; font-weight: bold;">${stats.ios}</div>
+              <div style="font-size: 10px;">آيفون</div>
+            </div>
+            <div style="background: #ff9800; color: white; padding: 15px; border-radius: 8px;">
+              <div style="font-size: 24px;">💻</div>
+              <div style="font-size: 18px; font-weight: bold;">${stats.other}</div>
+              <div style="font-size: 10px;">أخرى</div>
+            </div>
+          </div>
+          <div style="font-size: 12px; color: #666;">
+            الإجمالي: ${allUsers.length} جهاز
+          </div>
+        </div>
+      `;
+    }
+    
+    function showUserActivities() {
+      if (!document.getElementById('activitiesTab')) return;
+      
+      document.getElementById('activeTab').style.background = '#607d8b';
+      document.getElementById('devicesTab').style.background = '#607d8b';
+      document.getElementById('activitiesTab').style.background = '#03a9f4';
+      
+      const activities = JSON.parse(localStorage.getItem('userActivities') || '[]');
+      const today = new Date().toDateString();
+      const todayActivities = activities.filter(a => new Date(a.timestamp).toDateString() === today);
+      
+      const hourlyStats = {};
+      todayActivities.forEach(activity => {
+        const hour = new Date(activity.timestamp).getHours();
+        hourlyStats[hour] = (hourlyStats[hour] || 0) + 1;
+      });
+      
+      const content = document.getElementById('tabContent');
+      content.innerHTML = `
+        <div>
+          <h4 style="margin: 0 0 10px 0; text-align: center; color: #03a9f4;">نشاط اليوم بالساعات</h4>
+          <div style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 5px; margin-bottom: 15px; font-size: 10px;">
+            ${Object.keys(Array.from({length: 24}, (_, i) => i)).map(hour => {
+              const count = hourlyStats[hour] || 0;
+              const intensity = Math.min(count * 20, 100);
+              return `
+                <div style="background: rgba(3, 169, 244, ${intensity/100}); padding: 5px; border-radius: 3px; text-align: center; border: 1px solid #03a9f4;">
+                  <div>${hour}:00</div>
+                  <div style="font-weight: bold;">${count}</div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+          <div style="text-align: center; font-size: 12px; color: #666;">
+            مجموع نشاط اليوم: ${todayActivities.length} عملية
+          </div>
+        </div>
+      `;
+    }
+    
+    // تطبيق الإعدادات المحفوظة
+    function applySettings() {
+      // تطبيق إعدادات المطور
+      const allowExcelUpload = localStorage.getItem('allowExcelUpload') !== 'false';
+      const allowSearch = localStorage.getItem('allowSearch') !== 'false';
+      const showProhibitedBtn = localStorage.getItem('showProhibitedBtn') !== 'false';
+      const showStats = localStorage.getItem('showStats') !== 'false';
+      
+      // إخفاء/إظهار عنصر تحميل Excel
+      const uploadDiv = document.querySelector('.file-input-wrapper');
+      if (uploadDiv) {
+        uploadDiv.style.display = allowExcelUpload ? 'block' : 'none';
+      }
+      
+      // إخفاء/إظهار البحث
+      const searchDiv = document.querySelector('.search-container');
+      if (searchDiv) {
+        searchDiv.style.display = allowSearch ? 'block' : 'none';
+      }
+      
+      // إخفاء/إظهار زر المواد المممنوعة
+      const prohibitedBtn = document.querySelector('.prohibited-items-btn');
+      if (prohibitedBtn) {
+        prohibitedBtn.style.display = showProhibitedBtn ? 'block' : 'none';
+      }
+      
+      // إخفاء/إظهار الإحصائيات
+      const statsDiv = document.getElementById('tableStats');
+      if (statsDiv && originalData.length > 0) {
+        statsDiv.style.display = showStats ? 'flex' : 'none';
+      }
+    }
+    
     // فحص حالة التفعيل عند بدء التشغيل
     function checkActivation() {
+      // أولاً فحص وتسجيل المستخدم
+      if (!initializeUserTracking()) {
+        return; // المستخدم محظور
+      }
       // تحقق من كود التفعيل المحفوظ
       const savedCode = localStorage.getItem('activationCode');
       if (savedCode && validCodes.includes(savedCode)) {
@@ -1790,6 +2493,8 @@
     // بدء التشغيل
     document.addEventListener('DOMContentLoaded', function() {
       checkActivation();
+      // تطبيق الإعدادات المحفوظة بعد تحميل الصفحة
+      setTimeout(applySettings, 100);
     });
   </script>
 </body>
