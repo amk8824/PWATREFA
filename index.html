@@ -722,6 +722,139 @@
       border-radius: 5px;
     }
 
+    /* زر المواد الممنوعة */
+    .prohibited-items-btn {
+      width: 100%;
+      padding: 15px;
+      margin: 20px 15px;
+      background: linear-gradient(135deg, #dc3545, #c82333);
+      color: white;
+      border: none;
+      border-radius: 15px;
+      font-size: 16px;
+      font-weight: 700;
+      font-family: 'Cairo', sans-serif;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);
+      transition: transform 0.2s ease;
+    }
+
+    .prohibited-items-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(220, 53, 69, 0.4);
+    }
+
+    /* نافذة المواد الممنوعة */
+    .prohibited-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 10000;
+      padding: 20px;
+    }
+
+    .prohibited-content {
+      background: white;
+      max-width: 800px;
+      width: 100%;
+      max-height: 90%;
+      overflow-y: auto;
+      border-radius: 15px;
+      padding: 25px;
+      position: relative;
+    }
+
+    .prohibited-header {
+      text-align: center;
+      margin-bottom: 25px;
+      padding-bottom: 15px;
+      border-bottom: 2px solid var(--primary);
+    }
+
+    .prohibited-title {
+      color: var(--primary);
+      font-size: 20px;
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+
+    .prohibited-subtitle {
+      color: #666;
+      font-size: 14px;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: #dc3545;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 35px;
+      height: 35px;
+      font-size: 18px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .prohibited-section {
+      margin-bottom: 25px;
+    }
+
+    .section-title {
+      background: linear-gradient(135deg, var(--primary), #001a33);
+      color: white;
+      padding: 12px 15px;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+
+    .items-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 10px;
+      padding: 0 10px;
+    }
+
+    .item {
+      background: #f8f9fa;
+      padding: 8px 12px;
+      border-radius: 8px;
+      border-right: 4px solid #dc3545;
+      font-size: 14px;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .section-title.protection {
+      background: linear-gradient(135deg, #28a745, #1e7e34);
+    }
+
+    .protection .item {
+      border-right-color: #28a745;
+    }
+
+    .section-title.restricted {
+      background: linear-gradient(135deg, #ffc107, #e0a800);
+      color: #000;
+    }
+
+    .restricted .item {
+      border-right-color: #ffc107;
+    }
+
     /* تحسينات الموبايل */
     @media (max-width: 480px) {
       .styled-table th,
@@ -913,6 +1046,11 @@
       </div>
     </div>
 
+    <!-- زر المواد الممنوعة -->
+    <button class="prohibited-items-btn" onclick="showProhibitedItems()">
+      <i class="fas fa-ban"></i> اضغط هنا لمعرفة المواد الممنوعة من الاستيراد وحماية المنتج الوطني
+    </button>
+
     <!-- إحصائيات -->
     <div class="table-stats" id="tableStats" style="display: none;">
       <div class="stat-card">
@@ -944,6 +1082,122 @@
           <thead id="tableHead"></thead>
           <tbody id="tableBody"></tbody>
         </table>
+      </div>
+    </div>
+
+    <!-- نافذة المواد الممنوعة -->
+    <div class="prohibited-modal" id="prohibitedModal">
+      <div class="prohibited-content">
+        <button class="close-btn" onclick="closeProhibitedItems()">&times;</button>
+        
+        <div class="prohibited-header">
+          <div class="prohibited-title">المواد الممنوعة والمقيدة من الاستيراد</div>
+          <div class="prohibited-subtitle">وفقاً لتعليمات الهيئة العامة للكمارك العراقية</div>
+        </div>
+
+        <!-- المواد الممنوعة من الاستيراد -->
+        <div class="prohibited-section">
+          <div class="section-title">المواد الممنوعة من الاستيراد</div>
+          <div class="items-list">
+            <div class="item">الكيك</div>
+            <div class="item">المعجنات</div>
+            <div class="item">المرطبات</div>
+            <div class="item">دراجات نارية تكتك ستوتة دراجات</div>
+            <div class="item">المشروبات الكحولية</div>
+            <div class="item">العصائر</div>
+            <div class="item">المشروبات الغازية وغير الغازية</div>
+            <div class="item">الدجاج الحي</div>
+            <div class="item">مياه معدنية</div>
+            <div class="item">بلوك</div>
+            <div class="item">طابوق</div>
+            <div class="item">كاشي عراقي موزائيك</div>
+            <div class="item">مقاييس كهربائية</div>
+            <div class="item">قابلو ضوئي</div>
+            <div class="item">قطن طبي</div>
+            <div class="item">مشروبات طاقة</div>
+            <div class="item">اسلحة عتاد اجزاء</div>
+            <div class="item">متفجرات (موافقات خاصة)</div>
+            <div class="item">ملابس عسكرية</div>
+            <div class="item">العاب نارية</div>
+            <div class="item">سكائر اكنرونية</div>
+            <div class="item">افلام اباحية اعضاء تناسلية صناعية</div>
+            <div class="item">ادوية خارج الضوابط</div>
+            <div class="item">سيارات تحت الموديل المسموح</div>
+            <div class="item">التبوغ غير المعبأ</div>
+            <div class="item">المخدرات بكافة اشكالها</div>
+            <div class="item">مواد التعبئة والتغليف الموسومة بعلامة اجنبية</div>
+            <div class="item">المواد المستعملة</div>
+            <div class="item">العملات بكافة انواعها</div>
+            <div class="item">براميل ملونة اتفاقية بازل</div>
+            <div class="item">المنتجات الاسرائيلية كافة</div>
+            <div class="item">كافة ادوات التصوير والتسجيل المموهة</div>
+            <div class="item">لحم الخنزير</div>
+            <div class="item">مواد منتهية الصلاحية</div>
+            <div class="item">حلويات اطفال على شكل سكائر</div>
+            <div class="item">مواد بلاستك معاد تدويرها</div>
+            <div class="item">ادوات جارحة</div>
+            <div class="item">عسل</div>
+            <div class="item">مواد زراعية مشمولة بالمنع في الحجر الزراعي</div>
+            <div class="item">والممنوعة بالنسبة للموقف الوبائي لانفلونزا الطيور</div>
+          </div>
+        </div>
+
+        <!-- المنتجات الخاضعة لحماية المنتج الوطني -->
+        <div class="prohibited-section protection">
+          <div class="section-title protection">المنتجات الخاضعة لحماية المنتج الوطني من الحكومة المركزية</div>
+          <div class="items-list">
+            <div class="item">اصباغ حرارية للمركبات والايبوكسيات والاصباغ الحرارية</div>
+            <div class="item">معطر ملابس</div>
+            <div class="item">شامبو غسل ملابس</div>
+            <div class="item">جل وسائل تنضيف متعدد الاستعمال</div>
+            <div class="item">معجون تنضيف الاواني</div>
+            <div class="item">معطر ارضيات</div>
+            <div class="item">حديد تلسيح قياس 10/22 ملم</div>
+            <div class="item">منضف اقمشة ومناشف</div>
+            <div class="item">منعم ملابس</div>
+            <div class="item">انابيب PPR</div>
+            <div class="item">ادوات وتركيبات الانابيب عكس صامول</div>
+            <div class="item">علاقة التسوق</div>
+            <div class="item">كارتون صناديق على شكل طبق</div>
+            <div class="item">علب وصناديق محضرة من ورق ابيض</div>
+            <div class="item">صندوق كارتون</div>
+            <div class="item">كارتون صناديق على شكل علب</div>
+            <div class="item">كمبار وموكت ايراني عربي</div>
+            <div class="item">كمبار موكيت اجنبي</div>
+            <div class="item">بوري صصناعة على شكل مستطيل ومربع ودائرة انابيب معدنية مغلونة وغير مغلونة</div>
+            <div class="item">بيض مائدة</div>
+            <div class="item">سكائر</div>
+            <div class="item">كارتون معرج</div>
+            <div class="item">كارتون سادة</div>
+            <div class="item">رول نايلون اغطية زراعية</div>
+            <div class="item">اكياس ورقية لتعبئة الاسمنت</div>
+            <div class="item">امبولات لدائنية</div>
+            <div class="item">علب المنيوم للمشروبات الغازية والعصائر</div>
+            <div class="item">طحين</div>
+            <div class="item">طحين عبوات صغيرة</div>
+            <div class="item">شعرية</div>
+            <div class="item">مقطعات دجاج</div>
+            <div class="item">مصنعات الدجاج</div>
+          </div>
+        </div>
+
+        <!-- مواد مقيدة باجازة استيراد -->
+        <div class="prohibited-section restricted">
+          <div class="section-title restricted">مواد مقيدة باجازة استيراد من الحكومة المركزية</div>
+          <div class="items-list">
+            <div class="item">منتجات نفطية</div>
+            <div class="item">كل المواد المستعملة ملابس باله صوبات ادوات معامل</div>
+            <div class="item">مواد كيمياوية كافة الانواع</div>
+            <div class="item">حيوانات حية</div>
+            <div class="item">اجهزة مستلزمات ذات طابع امني واستخباراتي</div>
+            <div class="item">ادوية مستلزمات طبية</div>
+            <div class="item">ادوية بيطرية مبيدات</div>
+            <div class="item">ملابس عسكرية اسلحة</div>
+            <div class="item">غاز الفريون</div>
+            <div class="item">اجهزة الهاتف النقال</div>
+            <div class="item">حليب اطفال طبي</div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -1406,6 +1660,24 @@
           });
       });
     }
+
+    // إظهار نافذة المواد الممنوعة
+    function showProhibitedItems() {
+      document.getElementById('prohibitedModal').style.display = 'flex';
+    }
+
+    // إخفاء نافذة المواد الممنوعة
+    function closeProhibitedItems() {
+      document.getElementById('prohibitedModal').style.display = 'none';
+    }
+
+    // إغلاق النافذة عند النقر خارجها
+    document.addEventListener('click', function(e) {
+      const modal = document.getElementById('prohibitedModal');
+      if (e.target === modal) {
+        closeProhibitedItems();
+      }
+    });
 
     // بدء التشغيل
     document.addEventListener('DOMContentLoaded', function() {
