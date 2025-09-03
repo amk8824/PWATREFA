@@ -566,12 +566,12 @@
       border-right: none;
     }
 
-    /* توزيع عرض الأعمدة بناءً على المحتوى */
+    /* توزيع عرض الأعمدة - مرن للأرقام الطويلة */
     .styled-table th:nth-child(1),
-    .styled-table td:nth-child(1) { width: 13%; } /* رقم التعريفة الأول */
+    .styled-table td:nth-child(1) { width: auto; min-width: 13%; } /* رقم التعريفة الأول */
     
     .styled-table th:nth-child(2),
-    .styled-table td:nth-child(2) { width: 13%; } /* رقم التعريفة الثاني */
+    .styled-table td:nth-child(2) { width: auto; min-width: 13%; } /* رقم التعريفة الثاني */
     
     .styled-table th:nth-child(3),
     .styled-table td:nth-child(3) { width: 18%; } /* اسم البلد */
@@ -583,10 +583,10 @@
     .styled-table td:nth-child(5) { width: 16%; } /* العلامة التجارية */
     
     .styled-table th:nth-child(6),
-    .styled-table td:nth-child(6) { width: 6%; } /* الحد الأدنى */
+    .styled-table td:nth-child(6) { width: auto; min-width: 6%; } /* الحد الأدنى */
     
     .styled-table th:nth-child(7),
-    .styled-table td:nth-child(7) { width: 6%; } /* الحد الأقصى */
+    .styled-table td:nth-child(7) { width: auto; min-width: 6%; } /* الحد الأقصى */
 
     .styled-table td {
       padding: 8px 4px;
@@ -617,7 +617,7 @@
       padding-right: 6px;
     }
 
-    /* الأرقام - عرض طبيعي بدون ضغط مع خط أصغر */
+    /* الأرقام - عرض كامل للأرقام الطويلة */
     .styled-table td:nth-child(1),
     .styled-table td:nth-child(2),
     .styled-table td:nth-child(6),
@@ -625,11 +625,14 @@
       font-family: 'Cairo', sans-serif;
       font-weight: 700;
       text-align: center;
-      white-space: nowrap;
-      overflow: visible;
-      text-overflow: initial;
-      word-break: keep-all;
+      white-space: nowrap !important;
+      overflow: visible !important;
+      text-overflow: initial !important;
+      word-break: keep-all !important;
       font-size: 8px !important;
+      min-width: fit-content !important;
+      width: auto !important;
+      max-width: none !important;
     }
 
     .styled-table tbody tr:nth-child(even) {
@@ -727,12 +730,15 @@
         font-size: 8px;
       }
       
-      /* الأرقام في الموبايل أصغر قليلاً */
+      /* الأرقام في الموبايل - عرض كامل */
       .styled-table td:nth-child(1),
       .styled-table td:nth-child(2),
       .styled-table td:nth-child(6),
       .styled-table td:nth-child(7) {
         font-size: 7px !important;
+        min-width: fit-content !important;
+        width: auto !important;
+        max-width: none !important;
       }
       
       .table-stats {
