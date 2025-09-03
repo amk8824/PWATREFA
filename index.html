@@ -472,54 +472,81 @@
 
     .stat-card {
       flex: 1;
-      min-width: 100px;
+      min-width: 120px;
       background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
-      padding: 12px 8px;
-      border-radius: 10px;
+      padding: 20px 12px;
+      border-radius: 16px;
       text-align: center;
-      box-shadow: var(--shadow);
-      border-left: 4px solid var(--primary);
-      transition: transform 0.2s ease;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08), 0 2px 12px rgba(0, 0, 0, 0.05);
+      border: none;
+      position: relative;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      overflow: hidden;
+    }
+    
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      border-radius: 16px 16px 0 0;
     }
 
     .stat-card:hover {
-      transform: translateY(-2px);
+      transform: translateY(-6px) scale(1.02);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12), 0 5px 18px rgba(0, 0, 0, 0.08);
     }
 
-    .stat-card:nth-child(1) {
-      border-left-color: #007bff;
+    .stat-card:nth-child(1)::before {
+      background: linear-gradient(90deg, #007bff, #0056b3);
     }
 
-    .stat-card:nth-child(2) {
-      border-left-color: #28a745;
+    .stat-card:nth-child(2)::before {
+      background: linear-gradient(90deg, #28a745, #1e7e34);
     }
 
-    .stat-card:nth-child(3) {
-      border-left-color: #ffc107;
+    .stat-card:nth-child(3)::before {
+      background: linear-gradient(90deg, #ffc107, #e0a800);
     }
 
     .stat-card .number {
-      font-size: 18px;
+      font-size: 26px;
       font-weight: 800;
       display: block;
+      line-height: 1.2;
+      margin-bottom: 8px;
     }
 
     .stat-card:nth-child(1) .number {
-      color: #007bff;
+      background: linear-gradient(135deg, #007bff, #0056b3);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
     .stat-card:nth-child(2) .number {
-      color: #28a745;
+      background: linear-gradient(135deg, #28a745, #1e7e34);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
     .stat-card:nth-child(3) .number {
-      color: #ffc107;
+      background: linear-gradient(135deg, #ffc107, #e0a800);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
     .stat-card .label {
-      font-size: 10px;
-      color: #666;
-      margin-top: 3px;
+      font-size: 12px;
+      color: #6c757d;
+      margin-top: 5px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
 
     /* الجدول المحسن للعرض بدون تحريك أفقي */
@@ -825,19 +852,44 @@
 
     .items-list {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 10px;
-      padding: 0 10px;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 15px;
+      padding: 0 15px;
     }
 
     .item {
-      background: #f8f9fa;
-      padding: 8px 12px;
-      border-radius: 8px;
-      border-right: 4px solid #dc3545;
+      background: linear-gradient(145deg, #ffffff, #f8f9fa);
+      padding: 12px 16px;
+      border-radius: 12px;
+      border-right: 5px solid #dc3545;
       font-size: 14px;
       font-weight: 600;
-      color: #333;
+      color: #2c3e50;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .item:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
+      transform: translateX(-100%);
+      transition: transform 0.6s;
+    }
+
+    .item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    }
+
+    .item:hover:before {
+      transform: translateX(100%);
     }
 
     .section-title.protection {
@@ -846,6 +898,7 @@
 
     .protection .item {
       border-right-color: #28a745;
+      background: linear-gradient(145deg, #f8fff9, #e8f5e8);
     }
 
     .section-title.restricted {
@@ -855,6 +908,21 @@
 
     .restricted .item {
       border-right-color: #ffc107;
+      background: linear-gradient(145deg, #fffef8, #fef9e8);
+    }
+
+    /* تحسين الاستجابة للموبايل */
+    @media (max-width: 768px) {
+      .items-list {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        padding: 0 10px;
+      }
+      
+      .item {
+        padding: 10px 14px;
+        font-size: 13px;
+      }
     }
 
     /* تحسينات الموبايل */
@@ -882,17 +950,17 @@
       }
       
       .stat-card {
-        min-width: 80px;
+        min-width: 90px;
         flex: 1;
-        transition: none;
+        padding: 15px 8px;
       }
       
       .stat-card .number {
-        font-size: 14px;
+        font-size: 20px;
       }
       
       .stat-card .label {
-        font-size: 8px;
+        font-size: 10px;
       }
       
       .header-logo {
@@ -920,7 +988,8 @@
       }
 
       .stat-card:hover {
-        transform: none;
+        transform: translateY(-4px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
       }
     }
 
@@ -1101,46 +1170,40 @@
         <div class="prohibited-section">
           <div class="section-title">المواد الممنوعة من الاستيراد</div>
           <div class="items-list">
-            <div class="item">الكيك</div>
-            <div class="item">المعجنات</div>
-            <div class="item">المرطبات</div>
-            <div class="item">دراجات نارية تكتك ستوتة دراجات</div>
-            <div class="item">المشروبات الكحولية</div>
-            <div class="item">العصائر</div>
-            <div class="item">المشروبات الغازية وغير الغازية</div>
-            <div class="item">الدجاج الحي</div>
-            <div class="item">مياه معدنية</div>
-            <div class="item">بلوك</div>
-            <div class="item">طابوق</div>
-            <div class="item">كاشي عراقي موزائيك</div>
-            <div class="item">مقاييس كهربائية</div>
-            <div class="item">قابلو ضوئي</div>
-            <div class="item">قطن طبي</div>
-            <div class="item">مشروبات طاقة</div>
-            <div class="item">اسلحة عتاد اجزاء</div>
-            <div class="item">متفجرات (موافقات خاصة)</div>
-            <div class="item">ملابس عسكرية</div>
-            <div class="item">العاب نارية</div>
-            <div class="item">سكائر اكنرونية</div>
-            <div class="item">افلام اباحية اعضاء تناسلية صناعية</div>
-            <div class="item">ادوية خارج الضوابط</div>
-            <div class="item">سيارات تحت الموديل المسموح</div>
-            <div class="item">التبوغ غير المعبأ</div>
-            <div class="item">المخدرات بكافة اشكالها</div>
-            <div class="item">مواد التعبئة والتغليف الموسومة بعلامة اجنبية</div>
-            <div class="item">المواد المستعملة</div>
-            <div class="item">العملات بكافة انواعها</div>
-            <div class="item">براميل ملونة اتفاقية بازل</div>
-            <div class="item">المنتجات الاسرائيلية كافة</div>
-            <div class="item">كافة ادوات التصوير والتسجيل المموهة</div>
-            <div class="item">لحم الخنزير</div>
-            <div class="item">مواد منتهية الصلاحية</div>
-            <div class="item">حلويات اطفال على شكل سكائر</div>
-            <div class="item">مواد بلاستك معاد تدويرها</div>
-            <div class="item">ادوات جارحة</div>
-            <div class="item">عسل</div>
-            <div class="item">مواد زراعية مشمولة بالمنع في الحجر الزراعي</div>
-            <div class="item">والممنوعة بالنسبة للموقف الوبائي لانفلونزا الطيور</div>
+            <div class="item">🚫 أدوات جارحة وأسلحة عتاد أجزاء</div>
+            <div class="item">💣 متفجرات (موافقات خاصة)</div>
+            <div class="item">🎖️ ملابس عسكرية</div>
+            <div class="item">🎆 ألعاب نارية</div>
+            <div class="item">💊 المخدرات بكافة أشكالها</div>
+            <div class="item">🚭 سكائر إلكترونية</div>
+            <div class="item">🍺 المشروبات الكحولية</div>
+            <div class="item">🔞 أفلام إباحية أعضاء تناسلية صناعية</div>
+            <div class="item">💊 أدوية خارج الضوابط</div>
+            <div class="item">🚗 سيارات تحت الموديل المسموح</div>
+            <div class="item">🚬 التبغ غير المعبأ</div>
+            <div class="item">💰 العملات بكافة أنواعها</div>
+            <div class="item">🏴 المنتجات الإسرائيلية كافة</div>
+            <div class="item">📹 كافة أدوات التصوير والتسجيل المموهة</div>
+            <div class="item">🐷 لحم الخنزير</div>
+            <div class="item">⏰ مواد منتهية الصلاحية</div>
+            <div class="item">🍭 حلويات أطفال على شكل سكائر</div>
+            <div class="item">♻️ مواد بلاستك معاد تدويرها</div>
+            <div class="item">🗄️ براميل ملونة اتفاقية بازل</div>
+            <div class="item">🏷️ مواد التعبئة والتغليف الموسومة بعلامة أجنبية</div>
+            <div class="item">🔄 المواد المستعملة</div>
+            <div class="item">🍰 الكيك والمعجنات والمرطبات</div>
+            <div class="item">🏍️ دراجات نارية تكتك ستوتة دراجات</div>
+            <div class="item">🥤 العصائر والمشروبات الغازية وغير الغازية</div>
+            <div class="item">⚡ مشروبات طاقة</div>
+            <div class="item">🐔 الدجاج الحي</div>
+            <div class="item">💧 مياه معدنية</div>
+            <div class="item">🧱 بلوك وطابوق</div>
+            <div class="item">🏺 كاشي عراقي موزائيك</div>
+            <div class="item">🔌 مقاييس كهربائية وقابلو ضوئي</div>
+            <div class="item">🩹 قطن طبي</div>
+            <div class="item">🍯 عسل</div>
+            <div class="item">🌾 مواد زراعية مشمولة بالمنع في الحجر الزراعي</div>
+            <div class="item">🦅 مواد ممنوعة بالنسبة للموقف الوبائي لأنفلونزا الطيور</div>
           </div>
         </div>
 
@@ -1148,38 +1211,28 @@
         <div class="prohibited-section protection">
           <div class="section-title protection">المنتجات الخاضعة لحماية المنتج الوطني من الحكومة المركزية</div>
           <div class="items-list">
-            <div class="item">اصباغ حرارية للمركبات والايبوكسيات والاصباغ الحرارية</div>
-            <div class="item">معطر ملابس</div>
-            <div class="item">شامبو غسل ملابس</div>
-            <div class="item">جل وسائل تنضيف متعدد الاستعمال</div>
-            <div class="item">معجون تنضيف الاواني</div>
-            <div class="item">معطر ارضيات</div>
-            <div class="item">حديد تلسيح قياس 10/22 ملم</div>
-            <div class="item">منضف اقمشة ومناشف</div>
-            <div class="item">منعم ملابس</div>
-            <div class="item">انابيب PPR</div>
-            <div class="item">ادوات وتركيبات الانابيب عكس صامول</div>
-            <div class="item">علاقة التسوق</div>
-            <div class="item">كارتون صناديق على شكل طبق</div>
-            <div class="item">علب وصناديق محضرة من ورق ابيض</div>
-            <div class="item">صندوق كارتون</div>
-            <div class="item">كارتون صناديق على شكل علب</div>
-            <div class="item">كمبار وموكت ايراني عربي</div>
-            <div class="item">كمبار موكيت اجنبي</div>
-            <div class="item">بوري صصناعة على شكل مستطيل ومربع ودائرة انابيب معدنية مغلونة وغير مغلونة</div>
-            <div class="item">بيض مائدة</div>
-            <div class="item">سكائر</div>
-            <div class="item">كارتون معرج</div>
-            <div class="item">كارتون سادة</div>
-            <div class="item">رول نايلون اغطية زراعية</div>
-            <div class="item">اكياس ورقية لتعبئة الاسمنت</div>
-            <div class="item">امبولات لدائنية</div>
-            <div class="item">علب المنيوم للمشروبات الغازية والعصائر</div>
-            <div class="item">طحين</div>
-            <div class="item">طحين عبوات صغيرة</div>
-            <div class="item">شعرية</div>
-            <div class="item">مقطعات دجاج</div>
-            <div class="item">مصنعات الدجاج</div>
+            <div class="item">🏗️ حديد تسليح قياس 10/22 ملم</div>
+            <div class="item">🎨 أصباغ حرارية للمركبات والإيبوكسيات</div>
+            <div class="item">🏠 أنابيب PPR وأدوات تركيبات الأنابيب</div>
+            <div class="item">🛒 علاقة التسوق</div>
+            <div class="item">📦 صناديق كارتون وعلب ورق أبيض</div>
+            <div class="item">🏠 كمبار وموكيت إيراني عربي وأجنبي</div>
+            <div class="item">📦 كارتون معرج وكارتون سادة</div>
+            <div class="item">🥚 بيض مائدة</div>
+            <div class="item">🚬 سكائر</div>
+            <div class="item">🌾 طحين وطحين عبوات صغيرة</div>
+            <div class="item">🍜 شعرية</div>
+            <div class="item">🐔 مقطعات دجاج ومصنعات الدجاج</div>
+            <div class="item">🧴 معطر ملابس ومنعم ملابس</div>
+            <div class="item">🧽 شامبو غسل ملابس ومنظف أقمشة</div>
+            <div class="item">🧴 جل ووسائل تنظيف متعدد الاستعمال</div>
+            <div class="item">🍽️ معجون تنظيف الأواني</div>
+            <div class="item">🏠 معطر أرضيات</div>
+            <div class="item">🔧 بوري صناعة وأنابيب معدنية مغلونة</div>
+            <div class="item">🌾 رول نايلون أغطية زراعية</div>
+            <div class="item">🏗️ أكياس ورقية لتعبئة الأسمنت</div>
+            <div class="item">💊 أمبولات لدائنية</div>
+            <div class="item">🥤 علب ألمنيوم للمشروبات الغازية والعصائر</div>
           </div>
         </div>
 
@@ -1187,17 +1240,17 @@
         <div class="prohibited-section restricted">
           <div class="section-title restricted">مواد مقيدة باجازة استيراد من الحكومة المركزية</div>
           <div class="items-list">
-            <div class="item">منتجات نفطية</div>
-            <div class="item">كل المواد المستعملة ملابس باله صوبات ادوات معامل</div>
-            <div class="item">مواد كيمياوية كافة الانواع</div>
-            <div class="item">حيوانات حية</div>
-            <div class="item">اجهزة مستلزمات ذات طابع امني واستخباراتي</div>
-            <div class="item">ادوية مستلزمات طبية</div>
-            <div class="item">ادوية بيطرية مبيدات</div>
-            <div class="item">ملابس عسكرية اسلحة</div>
-            <div class="item">غاز الفريون</div>
-            <div class="item">اجهزة الهاتف النقال</div>
-            <div class="item">حليب اطفال طبي</div>
+            <div class="item">⛽ منتجات نفطية</div>
+            <div class="item">♻️ كل المواد المستعملة ملابس باله صوبات أدوات معامل</div>
+            <div class="item">🧪 مواد كيمياوية كافة الأنواع</div>
+            <div class="item">🐾 حيوانات حية</div>
+            <div class="item">🔒 أجهزة مستلزمات ذات طابع أمني واستخباراتي</div>
+            <div class="item">💊 أدوية مستلزمات طبية</div>
+            <div class="item">🐄 أدوية بيطرية مبيدات</div>
+            <div class="item">🎖️ ملابس عسكرية أسلحة</div>
+            <div class="item">❄️ غاز الفريون</div>
+            <div class="item">📱 أجهزة الهاتف النقال</div>
+            <div class="item">🍼 حليب أطفال طبي</div>
           </div>
         </div>
       </div>
