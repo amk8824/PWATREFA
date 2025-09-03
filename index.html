@@ -724,9 +724,10 @@
 
     /* زر المواد الممنوعة */
     .prohibited-items-btn {
-      width: 100%;
+      width: calc(100% - 30px);
       padding: 15px;
-      margin: 20px 15px;
+      margin: 20px auto;
+      display: block;
       background: linear-gradient(135deg, #dc3545, #c82333);
       color: white;
       border: none;
@@ -737,6 +738,7 @@
       cursor: pointer;
       box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);
       transition: transform 0.2s ease;
+      text-align: center;
     }
 
     .prohibited-items-btn:hover {
