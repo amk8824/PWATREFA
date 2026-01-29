@@ -4,14 +4,14 @@
 <meta charset="UTF-8">
 <title>الحاسبة الكمركية الذكية</title>
 
-<!-- Cairo Font -->
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
 *{
     box-sizing:border-box;
     font-family:'Cairo', sans-serif;
 }
+
 body{
     margin:0;
     background:#f3f5f4;
@@ -21,51 +21,57 @@ body{
 /* HEADER */
 .header{
     background:#0b5d3b;
-    padding:15px 30px;
+    padding:16px 24px;
     color:#fff;
     display:flex;
-    justify-content:space-between;
-    align-items:center;
+    justify-content:center;
+    text-align:center;
 }
 .header h1{
     margin:0;
-    font-size:20px;
+    font-size:18px;
     color:#f0c85a;
 }
-.header span{font-size:12px}
+.header span{
+    font-size:12px;
+    opacity:.9;
+}
 
 /* LAYOUT */
 .main{
-    width:95%;
-    margin:30px auto;
+    width:100%;
+    max-width:1100px;
+    margin:20px auto;
     display:grid;
-    grid-template-columns: 1fr 1.4fr;
-    gap:25px;
+    grid-template-columns:1fr 1.4fr;
+    gap:20px;
+    padding:0 16px;
 }
 
 /* CARD */
 .card{
     background:#fff;
     border-radius:14px;
-    box-shadow:0 8px 25px rgba(0,0,0,.08);
-    padding:25px;
+    box-shadow:0 6px 20px rgba(0,0,0,.08);
+    padding:20px;
 }
 .card h2{
     margin-top:0;
-    font-size:18px;
+    font-size:17px;
     color:#0b5d3b;
+    text-align:center;
 }
 
 /* FORM */
 .form{
     display:grid;
     grid-template-columns:1fr 1fr;
-    gap:15px;
+    gap:14px;
 }
 .field label{
     font-size:13px;
+    margin-bottom:6px;
     display:block;
-    margin-bottom:5px;
 }
 .field input{
     width:100%;
@@ -82,15 +88,14 @@ body{
     padding:12px;
     border-radius:10px;
     display:flex;
-    align-items:center;
     gap:10px;
+    align-items:center;
     font-size:13px;
 }
 
 /* BUTTON */
 button{
     grid-column:1/3;
-    margin-top:10px;
     padding:14px;
     border:none;
     border-radius:12px;
@@ -98,9 +103,6 @@ button{
     color:#fff;
     font-size:16px;
     cursor:pointer;
-}
-button:hover{
-    background:#094c31;
 }
 
 /* SUMMARY */
@@ -110,41 +112,71 @@ button:hover{
     border-radius:12px;
     padding:20px;
     text-align:center;
-    margin-bottom:20px;
+    margin-bottom:15px;
 }
-.summary-box small{opacity:.9}
 .summary-box h3{
     margin:10px 0;
-    font-size:26px;
+    font-size:24px;
 }
 
 .summary-list div{
     display:flex;
     justify-content:space-between;
-    padding:8px 0;
+    padding:6px 0;
     border-bottom:1px dashed #ddd;
     font-size:14px;
+}
+
+/* FOOTER */
+.footer{
+    text-align:center;
+    font-size:12px;
+    color:#555;
+    margin:30px 0;
 }
 
 /* HIDDEN */
 .hidden{display:none}
 
-/* FOOTER */
-.footer{
-    text-align:center;
-    font-size:13px;
-    color:#555;
-    margin:40px 0;
-}
-.footer strong{
-    color:#0b5d3b;
+/* ======================
+   MOBILE RESPONSIVE
+   ====================== */
+@media (max-width:768px){
+
+    .header h1{
+        font-size:16px;
+    }
+
+    .main{
+        grid-template-columns:1fr;
+        padding:0 12px;
+    }
+
+    .card{
+        padding:16px;
+    }
+
+    .form{
+        grid-template-columns:1fr;
+    }
+
+    .toggle, button{
+        grid-column:1/2;
+    }
+
+    button{
+        font-size:17px;
+    }
+
+    .summary-box h3{
+        font-size:22px;
+    }
 }
 </style>
 </head>
 
 <body>
 
-<!-- HEADER -->
 <div class="header">
     <div>
         <h1>الحاسبة الكمركية الذكية</h1>
@@ -157,13 +189,10 @@ button:hover{
     <!-- SUMMARY -->
     <div class="card">
         <h2>ملخص الاحتساب النهائي</h2>
-
         <div class="summary-box">
             <small>المبلغ النهائي المستحق</small>
             <h3 id="totalOut">0 IQD</h3>
-            <small>دينار عراقي فقط</small>
         </div>
-
         <div class="summary-list">
             <div><span>السعر الأساسي</span><span id="baseOut">0</span></div>
             <div><span>الضريبة الكمركية</span><span id="customOut">0</span></div>
@@ -214,45 +243,37 @@ button:hover{
 </div>
 
 <div class="footer">
-    <strong>تصميم وبرمجة:</strong> احمد عبد القادر العبيدي<br>
-    📞 07768525817 &nbsp; | &nbsp; ✉️ a.alobaidymo@gmail.com
+    تصميم وبرمجة: احمد عبد القادر العبيدي – 07768525817 – a.alobaidymo@gmail.com
 </div>
 
 <script>
-const protectToggle = document.getElementById("protectToggle");
-const protectBox = document.getElementById("protectBox");
+const protectToggle=document.getElementById("protectToggle");
+const protectBox=document.getElementById("protectBox");
 
-protectToggle.addEventListener("change", ()=>{
-    protectBox.classList.toggle("hidden", !protectToggle.checked);
-    if(!protectToggle.checked){
-        document.getElementById("protectInput").value="";
-    }
-});
+protectToggle.onchange=()=>{
+    protectBox.classList.toggle("hidden",!protectToggle.checked);
+};
 
-function formatIQD(num){
-    return num.toLocaleString("en-US") + " IQD";
-}
+function f(n){return n.toLocaleString("en-US")+" IQD"}
 
 function calculate(){
-    const usd = +document.getElementById("usdInput").value || 0;
-    const rate = +document.getElementById("rateInput").value || 0;
-    const customTax = +document.getElementById("customTaxInput").value || 0;
-    const generalTax = +document.getElementById("generalTaxInput").value || 0;https://github.com/amk8824/PWATREFA/blob/main/index.html
-    const protectRate = protectToggle.checked
-        ? (+document.getElementById("protectInput").value || 0)
-        : 0;
+    const usd=+usdInput.value||0;
+    const rate=+rateInput.value||0;
+    const ct=+customTaxInput.value||0;
+    const gt=+generalTaxInput.value||0;
+    const pr=protectToggle.checked?(+protectInput.value||0):0;
 
-    const base = usd * rate;
-    const customVal = base * customTax / 100;
-    const generalVal = base * generalTax / 100;
-    const protectVal = base * protectRate / 100;
-    const total = base + customVal + generalVal + protectVal;
+    const base=usd*rate;
+    const cv=base*ct/100;
+    const gv=base*gt/100;
+    const pv=base*pr/100;
+    const total=base+cv+gv+pv;
 
-    document.getElementById("baseOut").innerText = formatIQD(base);
-    document.getElementById("customOut").innerText = formatIQD(customVal);
-    document.getElementById("generalOut").innerText = formatIQD(generalVal);
-    document.getElementById("protectOut").innerText = formatIQD(protectVal);
-    document.getElementById("totalOut").innerText = formatIQD(total);
+    baseOut.innerText=f(base);
+    customOut.innerText=f(cv);
+    generalOut.innerText=f(gv);
+    protectOut.innerText=f(pv);
+    totalOut.innerText=f(total);
 }
 </script>
 
