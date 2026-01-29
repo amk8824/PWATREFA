@@ -1,14 +1,11 @@
 {
   "name": "الحاسبة الكمركية الذكية",
-  "short_name": "الحاسبة الكمركية",
-  "description": "تطبيق احتساب الرسوم والضرائب الكمركية – الهيئة العامة للكمارك العراقية",
+  "short_name": "كمرك",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#0b5d3b",
   "theme_color": "#0b5d3b",
   "orientation": "portrait",
-  "lang": "ar",
-  "dir": "rtl",
   "icons": [
     {
       "src": "icon-192.png",
