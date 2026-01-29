@@ -2,12 +2,29 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=375, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <title>الحاسبة الكمركية الذكية</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
+:root{
+    --bg:#f3f5f4;
+    --card:#ffffff;
+    --primary:#0b5d3b;
+    --text:#222;
+    --sub:#666;
+}
+
+/* DARK MODE */
+body.dark{
+    --bg:#0f1113;
+    --card:#1b1f23;
+    --primary:#1f8f5f;
+    --text:#ffffff;
+    --sub:#aaaaaa;
+}
+
 *{
     box-sizing:border-box;
     font-family:'Cairo', sans-serif;
@@ -15,27 +32,29 @@
 
 body{
     margin:0;
-    background:#f3f5f4;
-    display:flex;
-    justify-content:center;
+    background:var(--bg);
+    color:var(--text);
+    height:100vh;
+    overflow:hidden; /* لا سحب */
 }
 
 .app{
-    width:375px; /* هاتف فقط */
-    min-height:100vh;
-    background:#f3f5f4;
+    height:100vh;
+    display:flex;
+    flex-direction:column;
 }
 
 /* HEADER */
 .header{
-    background:#0b5d3b;
-    padding:14px;
-    text-align:center;
+    background:var(--primary);
     color:#fff;
+    padding:12px;
+    text-align:center;
+    position:relative;
 }
 .header h1{
     margin:0;
-    font-size:16px;
+    font-size:15px;
     color:#f0c85a;
 }
 .header span{
@@ -43,33 +62,44 @@ body{
     opacity:.9;
 }
 
+/* THEME TOGGLE */
+.theme-btn{
+    position:absolute;
+    left:10px;
+    top:10px;
+    background:none;
+    border:none;
+    color:#fff;
+    font-size:18px;
+}
+
+/* CONTENT */
+.content{
+    flex:1;
+    padding:10px;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+}
+
 /* CARD */
 .card{
-    background:#fff;
-    border-radius:14px;
-    box-shadow:0 6px 20px rgba(0,0,0,.08);
-    padding:16px;
-    margin:12px;
-}
-.card h2{
-    margin-top:0;
-    font-size:15px;
-    color:#0b5d3b;
-    text-align:center;
+    background:var(--card);
+    border-radius:12px;
+    padding:12px;
 }
 
 /* FORM */
 .field{
-    margin-bottom:12px;
+    margin-bottom:8px;
 }
 .field label{
-    font-size:12px;
-    display:block;
-    margin-bottom:4px;
+    font-size:11px;
+    color:var(--sub);
 }
 .field input{
     width:100%;
-    padding:12px;
+    padding:10px;
     border-radius:10px;
     border:1px solid #ccc;
     font-size:14px;
@@ -77,58 +107,44 @@ body{
 
 /* TOGGLE */
 .toggle{
-    background:#e9fff4;
-    padding:10px;
-    border-radius:10px;
     display:flex;
-    gap:8px;
     align-items:center;
+    gap:6px;
     font-size:12px;
-    margin-bottom:12px;
+    margin-bottom:6px;
 }
 
 /* BUTTON */
 button{
     width:100%;
-    padding:14px;
+    padding:12px;
     border:none;
     border-radius:12px;
-    background:#0b5d3b;
+    background:var(--primary);
     color:#fff;
     font-size:15px;
 }
 
-/* SUMMARY */
-.summary-box{
-    background:#0b5d3b;
+/* RESULT BAR */
+.result{
+    background:var(--primary);
     color:#fff;
-    border-radius:12px;
-    padding:16px;
-    text-align:center;
-    margin-bottom:12px;
+    border-radius:14px 14px 0 0;
+    padding:14px;
 }
-.summary-box h3{
-    margin:8px 0;
+.result h3{
+    margin:6px 0;
     font-size:22px;
+    text-align:center;
 }
-
-.summary-list div{
+.result div{
     display:flex;
     justify-content:space-between;
-    padding:6px 0;
-    border-bottom:1px dashed #ddd;
-    font-size:13px;
+    font-size:12px;
+    opacity:.95;
 }
 
 .hidden{display:none}
-
-/* FOOTER */
-.footer{
-    text-align:center;
-    font-size:11px;
-    color:#555;
-    padding:20px 10px;
-}
 </style>
 </head>
 
@@ -136,99 +152,88 @@ button{
 
 <div class="app">
 
+    <!-- HEADER -->
     <div class="header">
+        <button class="theme-btn" onclick="toggleTheme()">🌙</button>
         <h1>الحاسبة الكمركية الذكية</h1>
         <span>جمهورية العراق – الهيئة العامة للكمارك</span>
     </div>
 
-    <!-- SUMMARY -->
-    <div class="card">
-        <h2>ملخص الاحتساب النهائي</h2>
-        <div class="summary-box">
-            <small>المبلغ النهائي المستحق</small>
-            <h3 id="totalOut">0 IQD</h3>
-        </div>
-        <div class="summary-list">
-            <div><span>السعر الأساسي</span><span id="baseOut">0</span></div>
-            <div><span>الضريبة الكمركية</span><span id="customOut">0</span></div>
-            <div><span>الضريبة</span><span id="generalOut">0</span></div>
-            <div><span>رسم الحماية</span><span id="protectOut">0</span></div>
-        </div>
-    </div>
+    <!-- CONTENT -->
+    <div class="content">
 
-    <!-- FORM -->
-    <div class="card">
-        <h2>بيانات التسعير الكمركي</h2>
+        <!-- FORM -->
+        <div class="card">
+            <div class="field">
+                <label>سعر الطن (USD)</label>
+                <input id="usd" type="number" value="1000">
+            </div>
 
-        <div class="field">
-            <label>سعر الوحدة / الطن (USD)</label>
-            <input id="usdInput" type="number" value="1000">
-        </div>
+            <div class="field">
+                <label>سعر الصرف (IQD)</label>
+                <input id="rate" type="number" value="1320">
+            </div>
 
-        <div class="field">
-            <label>سعر الصرف (IQD)</label>
-            <input id="rateInput" type="number" value="1320">
-        </div>
+            <div class="field">
+                <label>الضريبة الكمركية (%)</label>
+                <input id="customTax" type="number" value="15">
+            </div>
 
-        <div class="field">
-            <label>الضريبة الكمركية (%)</label>
-            <input id="customTaxInput" type="number" value="15">
-        </div>
+            <div class="field">
+                <label>الضريبة (%)</label>
+                <input id="generalTax" type="number" value="5">
+            </div>
 
-        <div class="field">
-            <label>الضريبة (%)</label>
-            <input id="generalTaxInput" type="number" value="5">
-        </div>
+            <div class="toggle">
+                <input type="checkbox" id="protectToggle">
+                <label>رسم الحماية</label>
+            </div>
 
-        <div class="toggle">
-            <input type="checkbox" id="protectToggle">
-            <label>تفعيل رسم دعم المنتج الوطني (الحماية)</label>
+            <div class="field hidden" id="protectBox">
+                <label>نسبة الحماية (%)</label>
+                <input id="protect" type="number">
+            </div>
+
+            <button onclick="calc()">تنفيذ الحساب</button>
         </div>
 
-        <div class="field hidden" id="protectBox">
-            <label>نسبة رسم الحماية (%)</label>
-            <input id="protectInput" type="number">
+        <!-- RESULT -->
+        <div class="result">
+            <div><span>السعر الأساسي</span><span id="base">0</span></div>
+            <div><span>الضرائب</span><span id="taxes">0</span></div>
+            <h3 id="total">0 IQD</h3>
         </div>
 
-        <button onclick="calculate()">تنفيذ الحساب</button>
-    </div>
-
-    <div class="footer">
-        تصميم وبرمجة<br>
-        احمد عبد القادر العبيدي<br>
-        07768525817 – a.alobaidymo@gmail.com
     </div>
 
 </div>
 
 <script>
-const protectToggle=document.getElementById("protectToggle");
-const protectBox=document.getElementById("protectBox");
+const toggle=document.getElementById("protectToggle");
+const box=document.getElementById("protectBox");
 
-protectToggle.onchange=()=>{
-    protectBox.classList.toggle("hidden",!protectToggle.checked);
-};
+toggle.onchange=()=>box.classList.toggle("hidden",!toggle.checked);
 
 function f(n){return n.toLocaleString("en-US")+" IQD"}
 
-function calculate(){
-    const usd=+usdInput.value||0;
-    const rate=+rateInput.value||0;
-    const ct=+customTaxInput.value||0;
-    const gt=+generalTaxInput.value||0;
-    const pr=protectToggle.checked?(+protectInput.value||0):0;
+function calc(){
+    const u=+usd.value||0;
+    const r=+rate.value||0;
+    const c=+customTax.value||0;
+    const g=+generalTax.value||0;
+    const p=toggle.checked?(+protect.value||0):0;
 
-    const base=usd*rate;
-    const cv=base*ct/100;
-    const gv=base*gt/100;
-    const pv=base*pr/100;
-    const total=base+cv+gv+pv;
+    const baseVal=u*r;
+    const taxesVal=baseVal*(c+g+p)/100;
+    const totalVal=baseVal+taxesVal;
 
-    baseOut.innerText=f(base);
-    customOut.innerText=f(cv);
-    generalOut.innerText=f(gv);
-    protectOut.innerText=f(pv);
-    totalOut.innerText=f(total);
+    base.innerText=f(baseVal);
+    taxes.innerText=f(taxesVal);
+    total.innerText=f(totalVal);
+}
+
+function toggleTheme(){
+    document.body.classList.toggle("dark");
 }
 </script>
 
