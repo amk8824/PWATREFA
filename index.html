@@ -2,6 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=375, initial-scale=1">
 <title>الحاسبة الكمركية الذكية</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
@@ -15,37 +16,31 @@
 body{
     margin:0;
     background:#f3f5f4;
-    color:#222;
+    display:flex;
+    justify-content:center;
+}
+
+.app{
+    width:375px; /* هاتف فقط */
+    min-height:100vh;
+    background:#f3f5f4;
 }
 
 /* HEADER */
 .header{
     background:#0b5d3b;
-    padding:16px 24px;
-    color:#fff;
-    display:flex;
-    justify-content:center;
+    padding:14px;
     text-align:center;
+    color:#fff;
 }
 .header h1{
     margin:0;
-    font-size:18px;
+    font-size:16px;
     color:#f0c85a;
 }
 .header span{
-    font-size:12px;
+    font-size:11px;
     opacity:.9;
-}
-
-/* LAYOUT */
-.main{
-    width:100%;
-    max-width:1100px;
-    margin:20px auto;
-    display:grid;
-    grid-template-columns:1fr 1.4fr;
-    gap:20px;
-    padding:0 16px;
 }
 
 /* CARD */
@@ -53,25 +48,24 @@ body{
     background:#fff;
     border-radius:14px;
     box-shadow:0 6px 20px rgba(0,0,0,.08);
-    padding:20px;
+    padding:16px;
+    margin:12px;
 }
 .card h2{
     margin-top:0;
-    font-size:17px;
+    font-size:15px;
     color:#0b5d3b;
     text-align:center;
 }
 
 /* FORM */
-.form{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:14px;
+.field{
+    margin-bottom:12px;
 }
 .field label{
-    font-size:13px;
-    margin-bottom:6px;
+    font-size:12px;
     display:block;
+    margin-bottom:4px;
 }
 .field input{
     width:100%;
@@ -83,26 +77,25 @@ body{
 
 /* TOGGLE */
 .toggle{
-    grid-column:1/3;
     background:#e9fff4;
-    padding:12px;
+    padding:10px;
     border-radius:10px;
     display:flex;
-    gap:10px;
+    gap:8px;
     align-items:center;
-    font-size:13px;
+    font-size:12px;
+    margin-bottom:12px;
 }
 
 /* BUTTON */
 button{
-    grid-column:1/3;
+    width:100%;
     padding:14px;
     border:none;
     border-radius:12px;
     background:#0b5d3b;
     color:#fff;
-    font-size:16px;
-    cursor:pointer;
+    font-size:15px;
 }
 
 /* SUMMARY */
@@ -110,13 +103,13 @@ button{
     background:#0b5d3b;
     color:#fff;
     border-radius:12px;
-    padding:20px;
+    padding:16px;
     text-align:center;
-    margin-bottom:15px;
+    margin-bottom:12px;
 }
 .summary-box h3{
-    margin:10px 0;
-    font-size:24px;
+    margin:8px 0;
+    font-size:22px;
 }
 
 .summary-list div{
@@ -124,67 +117,29 @@ button{
     justify-content:space-between;
     padding:6px 0;
     border-bottom:1px dashed #ddd;
-    font-size:14px;
+    font-size:13px;
 }
+
+.hidden{display:none}
 
 /* FOOTER */
 .footer{
     text-align:center;
-    font-size:12px;
+    font-size:11px;
     color:#555;
-    margin:30px 0;
-}
-
-/* HIDDEN */
-.hidden{display:none}
-
-/* ======================
-   MOBILE RESPONSIVE
-   ====================== */
-@media (max-width:768px){
-
-    .header h1{
-        font-size:16px;
-    }
-
-    .main{
-        grid-template-columns:1fr;
-        padding:0 12px;
-    }
-
-    .card{
-        padding:16px;
-    }
-
-    .form{
-        grid-template-columns:1fr;
-    }
-
-    .toggle, button{
-        grid-column:1/2;
-    }
-
-    button{
-        font-size:17px;
-    }
-
-    .summary-box h3{
-        font-size:22px;
-    }
+    padding:20px 10px;
 }
 </style>
 </head>
 
 <body>
 
-<div class="header">
-    <div>
+<div class="app">
+
+    <div class="header">
         <h1>الحاسبة الكمركية الذكية</h1>
         <span>جمهورية العراق – الهيئة العامة للكمارك</span>
     </div>
-</div>
-
-<div class="main">
 
     <!-- SUMMARY -->
     <div class="card">
@@ -205,45 +160,45 @@ button{
     <div class="card">
         <h2>بيانات التسعير الكمركي</h2>
 
-        <div class="form">
-            <div class="field">
-                <label>سعر الوحدة / الطن (USD)</label>
-                <input id="usdInput" type="number" value="1000">
-            </div>
-
-            <div class="field">
-                <label>سعر الصرف (IQD)</label>
-                <input id="rateInput" type="number" value="1320">
-            </div>
-
-            <div class="field">
-                <label>الضريبة الكمركية (%)</label>
-                <input id="customTaxInput" type="number" value="15">
-            </div>
-
-            <div class="field">
-                <label>الضريبة (%)</label>
-                <input id="generalTaxInput" type="number" value="5">
-            </div>
-
-            <div class="toggle">
-                <input type="checkbox" id="protectToggle">
-                <label>تفعيل رسم دعم المنتج الوطني (الحماية)</label>
-            </div>
-
-            <div class="field hidden" id="protectBox">
-                <label>نسبة رسم الحماية (%)</label>
-                <input id="protectInput" type="number">
-            </div>
-
-            <button onclick="calculate()">تنفيذ الحساب</button>
+        <div class="field">
+            <label>سعر الوحدة / الطن (USD)</label>
+            <input id="usdInput" type="number" value="1000">
         </div>
+
+        <div class="field">
+            <label>سعر الصرف (IQD)</label>
+            <input id="rateInput" type="number" value="1320">
+        </div>
+
+        <div class="field">
+            <label>الضريبة الكمركية (%)</label>
+            <input id="customTaxInput" type="number" value="15">
+        </div>
+
+        <div class="field">
+            <label>الضريبة (%)</label>
+            <input id="generalTaxInput" type="number" value="5">
+        </div>
+
+        <div class="toggle">
+            <input type="checkbox" id="protectToggle">
+            <label>تفعيل رسم دعم المنتج الوطني (الحماية)</label>
+        </div>
+
+        <div class="field hidden" id="protectBox">
+            <label>نسبة رسم الحماية (%)</label>
+            <input id="protectInput" type="number">
+        </div>
+
+        <button onclick="calculate()">تنفيذ الحساب</button>
     </div>
 
-</div>
+    <div class="footer">
+        تصميم وبرمجة<br>
+        احمد عبد القادر العبيدي<br>
+        07768525817 – a.alobaidymo@gmail.com
+    </div>
 
-<div class="footer">
-    تصميم وبرمجة: احمد عبد القادر العبيدي – 07768525817 – a.alobaidymo@gmail.com
 </div>
 
 <script>
