@@ -1,38 +1,260 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <title>إشعار نقل البرنامج</title>
-  <style>
-    body {
-      font-family: "Cairo", Arial, sans-serif;
-      background-color: #f4f6f9;
-      text-align: center;
-      padding: 50px;
-    }
-    .message-box {
-      background: #fff;
-      border: 2px solid #007BFF;
-      border-radius: 12px;
-      box-shadow: 0px 4px 12px rgba(0,0,0,0.1);
-      display: inline-block;
-      padding: 30px 50px;
-    }
-    h1 {
-      color: #007BFF;
-      margin-bottom: 20px;
-    }
-    p {
-      font-size: 18px;
-      color: #333;
-      margin: 0;
-    }
-  </style>
+<meta charset="UTF-8">
+<title>الحاسبة الكمركية الذكية</title>
+
+<!-- Cairo Font -->
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{
+    box-sizing:border-box;
+    font-family:'Cairo', sans-serif;
+}
+body{
+    margin:0;
+    background:#f3f5f4;
+    color:#222;
+}
+
+/* HEADER */
+.header{
+    background:#0b5d3b;
+    padding:15px 30px;
+    color:#fff;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+.header h1{
+    margin:0;
+    font-size:20px;
+    color:#f0c85a;
+}
+.header span{font-size:12px}
+
+/* LAYOUT */
+.main{
+    width:95%;
+    margin:30px auto;
+    display:grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap:25px;
+}
+
+/* CARD */
+.card{
+    background:#fff;
+    border-radius:14px;
+    box-shadow:0 8px 25px rgba(0,0,0,.08);
+    padding:25px;
+}
+.card h2{
+    margin-top:0;
+    font-size:18px;
+    color:#0b5d3b;
+}
+
+/* FORM */
+.form{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:15px;
+}
+.field label{
+    font-size:13px;
+    display:block;
+    margin-bottom:5px;
+}
+.field input{
+    width:100%;
+    padding:12px;
+    border-radius:10px;
+    border:1px solid #ccc;
+    font-size:14px;
+}
+
+/* TOGGLE */
+.toggle{
+    grid-column:1/3;
+    background:#e9fff4;
+    padding:12px;
+    border-radius:10px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:13px;
+}
+
+/* BUTTON */
+button{
+    grid-column:1/3;
+    margin-top:10px;
+    padding:14px;
+    border:none;
+    border-radius:12px;
+    background:#0b5d3b;
+    color:#fff;
+    font-size:16px;
+    cursor:pointer;
+}
+button:hover{
+    background:#094c31;
+}
+
+/* SUMMARY */
+.summary-box{
+    background:#0b5d3b;
+    color:#fff;
+    border-radius:12px;
+    padding:20px;
+    text-align:center;
+    margin-bottom:20px;
+}
+.summary-box small{opacity:.9}
+.summary-box h3{
+    margin:10px 0;
+    font-size:26px;
+}
+
+.summary-list div{
+    display:flex;
+    justify-content:space-between;
+    padding:8px 0;
+    border-bottom:1px dashed #ddd;
+    font-size:14px;
+}
+
+/* HIDDEN */
+.hidden{display:none}
+
+/* FOOTER */
+.footer{
+    text-align:center;
+    font-size:13px;
+    color:#555;
+    margin:40px 0;
+}
+.footer strong{
+    color:#0b5d3b;
+}
+</style>
 </head>
+
 <body>
-  <div class="message-box">
-    <h1>إشعار</h1>
-    <p>تم نقل البرنامج إلى سيرفر آخر</p>
-  </div>
+
+<!-- HEADER -->
+<div class="header">
+    <div>
+        <h1>الحاسبة الكمركية الذكية</h1>
+        <span>جمهورية العراق – الهيئة العامة للكمارك</span>
+    </div>
+</div>
+
+<div class="main">
+
+    <!-- SUMMARY -->
+    <div class="card">
+        <h2>ملخص الاحتساب النهائي</h2>
+
+        <div class="summary-box">
+            <small>المبلغ النهائي المستحق</small>
+            <h3 id="totalOut">0 IQD</h3>
+            <small>دينار عراقي فقط</small>
+        </div>
+
+        <div class="summary-list">
+            <div><span>السعر الأساسي</span><span id="baseOut">0</span></div>
+            <div><span>الضريبة الكمركية</span><span id="customOut">0</span></div>
+            <div><span>الضريبة</span><span id="generalOut">0</span></div>
+            <div><span>رسم الحماية</span><span id="protectOut">0</span></div>
+        </div>
+    </div>
+
+    <!-- FORM -->
+    <div class="card">
+        <h2>بيانات التسعير الكمركي</h2>
+
+        <div class="form">
+            <div class="field">
+                <label>سعر الوحدة / الطن (USD)</label>
+                <input id="usdInput" type="number" value="1000">
+            </div>
+
+            <div class="field">
+                <label>سعر الصرف (IQD)</label>
+                <input id="rateInput" type="number" value="1320">
+            </div>
+
+            <div class="field">
+                <label>الضريبة الكمركية (%)</label>
+                <input id="customTaxInput" type="number" value="15">
+            </div>
+
+            <div class="field">
+                <label>الضريبة (%)</label>
+                <input id="generalTaxInput" type="number" value="5">
+            </div>
+
+            <div class="toggle">
+                <input type="checkbox" id="protectToggle">
+                <label>تفعيل رسم دعم المنتج الوطني (الحماية)</label>
+            </div>
+
+            <div class="field hidden" id="protectBox">
+                <label>نسبة رسم الحماية (%)</label>
+                <input id="protectInput" type="number">
+            </div>
+
+            <button onclick="calculate()">تنفيذ الحساب</button>
+        </div>
+    </div>
+
+</div>
+
+<div class="footer">
+    <strong>تصميم وبرمجة:</strong> احمد عبد القادر العبيدي<br>
+    📞 07768525817 &nbsp; | &nbsp; ✉️ a.alobaidymo@gmail.com
+</div>
+
+<script>
+const protectToggle = document.getElementById("protectToggle");
+const protectBox = document.getElementById("protectBox");
+
+protectToggle.addEventListener("change", ()=>{
+    protectBox.classList.toggle("hidden", !protectToggle.checked);
+    if(!protectToggle.checked){
+        document.getElementById("protectInput").value="";
+    }
+});
+
+function formatIQD(num){
+    return num.toLocaleString("en-US") + " IQD";
+}
+
+function calculate(){
+    const usd = +document.getElementById("usdInput").value || 0;
+    const rate = +document.getElementById("rateInput").value || 0;
+    const customTax = +document.getElementById("customTaxInput").value || 0;
+    const generalTax = +document.getElementById("generalTaxInput").value || 0;https://github.com/amk8824/PWATREFA/blob/main/index.html
+    const protectRate = protectToggle.checked
+        ? (+document.getElementById("protectInput").value || 0)
+        : 0;
+
+    const base = usd * rate;
+    const customVal = base * customTax / 100;
+    const generalVal = base * generalTax / 100;
+    const protectVal = base * protectRate / 100;
+    const total = base + customVal + generalVal + protectVal;
+
+    document.getElementById("baseOut").innerText = formatIQD(base);
+    document.getElementById("customOut").innerText = formatIQD(customVal);
+    document.getElementById("generalOut").innerText = formatIQD(generalVal);
+    document.getElementById("protectOut").innerText = formatIQD(protectVal);
+    document.getElementById("totalOut").innerText = formatIQD(total);
+}
+</script>
+
 </body>
 </html>
