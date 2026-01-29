@@ -1,21 +1,24 @@
 {
-  "name": "سجل التعريفة الجمركية",
-  "short_name": "التعريفة",
-  "start_url": "index.html",
+  "name": "الحاسبة الكمركية الذكية",
+  "short_name": "الحاسبة الكمركية",
+  "description": "تطبيق احتساب الرسوم والضرائب الكمركية – الهيئة العامة للكمارك العراقية",
+  "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#002147",
-  "theme_color": "#002147",
+  "background_color": "#0b5d3b",
+  "theme_color": "#0b5d3b",
   "orientation": "portrait",
+  "lang": "ar",
+  "dir": "rtl",
   "icons": [
     {
-      "src": "icon.png",
-      "type": "image/png",
-      "sizes": "192x192"
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
     },
     {
-      "src": "icon512.png",
-      "type": "image/png",
-      "sizes": "512x512"
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
     }
   ]
 }
