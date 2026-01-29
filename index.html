@@ -6,6 +6,7 @@
 <title>الحاسبة الكمركية الذكية</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700;800;900&display=swap" rel="stylesheet">
+<link rel="manifest" href="manifest.json">
 
 <style>
 /* ===== DESIGN SYSTEM ===== */
@@ -17,8 +18,8 @@
   --accent:#f3c969;
   --text:#1f2933;
   --muted:#6b7280;
-  --border:#e5e7eb;
-  --shadow:0 10px 30px rgba(0,0,0,.1);
+  --border:#5f6368;   /* غامق */
+  --shadow:0 10px 30px rgba(0,0,0,.12);
 }
 
 body.dark{
@@ -29,7 +30,7 @@ body.dark{
   --accent:#f3c969;
   --text:#ffffff;
   --muted:#9ca3af;
-  --border:#2d3748;
+  --border:#9ca3af;  /* أوضح بالليلي */
   --shadow:0 10px 30px rgba(0,0,0,.35);
 }
 
@@ -63,7 +64,7 @@ body{
 }
 .header h1{
   margin:0;
-  font-size:20px; /* أكبر */
+  font-size:20px;
 }
 .header span{
   font-size:13px;
@@ -73,7 +74,7 @@ body{
   position:absolute;
   left:14px;
   top:14px;
-  background:rgba(255,255,255,.18);
+  background:rgba(255,255,255,.2);
   border:none;
   color:#fff;
   width:40px;
@@ -88,55 +89,67 @@ body{
   padding:16px;
   display:flex;
   flex-direction:column;
-  gap:16px;
+  gap:18px;
 }
 
 /* ===== CARD ===== */
 .card{
   background:var(--card);
-  border-radius:20px;
+  border-radius:22px;
   padding:18px;
   box-shadow:var(--shadow);
 }
 
-/* ===== FORM ===== */
-.field{
-  margin-bottom:14px;
+/* ===== GRID FORM ===== */
+.form-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
 }
+
+/* ===== FIELD ===== */
 .field label{
-  font-size:14px; /* أكبر */
+  display:block;
+  font-size:14px;
   color:var(--muted);
   margin-bottom:6px;
-  display:block;
 }
+
 .field input{
   width:100%;
-  padding:16px; /* أكبر */
+  padding:16px;
   border-radius:16px;
-  border:1px solid var(--border);
+  border:2px solid var(--border); /* حد غامق */
   background:transparent;
   color:var(--text);
-  font-size:17px; /* أكبر */
+  font-size:17px;
+}
+
+/* عند الضغط */
+.field input:focus{
+  outline:none;
+  border-color:var(--primary);
+  box-shadow:0 0 0 2px rgba(11,93,59,.2);
 }
 
 /* ===== TOGGLE ===== */
 .toggle{
+  grid-column:1/3;
   display:flex;
   align-items:center;
   gap:10px;
   font-size:15px;
-  margin-bottom:12px;
 }
 
 /* ===== BUTTON ===== */
 button.calc{
-  width:100%;
+  grid-column:1/3;
   padding:18px;
   border:none;
   border-radius:18px;
   background:linear-gradient(135deg,var(--primary),var(--secondary));
   color:#fff;
-  font-size:18px; /* كبير وواضح */
+  font-size:18px;
   font-weight:900;
 }
 
@@ -144,36 +157,36 @@ button.calc{
 .result{
   background:linear-gradient(135deg,var(--primary),#063a25);
   color:#fff;
-  border-radius:24px;
-  padding:18px;
+  border-radius:26px;
+  padding:20px;
 }
 .result-row{
   display:flex;
   justify-content:space-between;
-  font-size:15px;
-  margin-bottom:8px;
+  font-size:16px;
+  margin-bottom:10px;
 }
 .result h2{
-  margin:10px 0 0;
+  margin:12px 0 0;
   text-align:center;
-  font-size:28px; /* كبير */
+  font-size:30px;
   color:var(--accent);
 }
 
 /* ===== DESIGNER ===== */
 .designer{
-  margin-top:20px;
+  margin-top:25px;
   text-align:center;
-  font-size:13px;
+  font-size:14px;
   color:var(--muted);
-  line-height:1.7;
-  padding-bottom:20px;
+  line-height:1.8;
+  padding-bottom:25px;
 }
 .designer strong{
   color:var(--primary);
-  font-weight:900;
 }
 
+/* ===== HIDDEN ===== */
 .hidden{display:none}
 </style>
 </head>
@@ -194,42 +207,46 @@ button.calc{
 
     <!-- FORM -->
     <div class="card">
-      <div class="field">
-        <label>سعر الطن (USD)</label>
-        <input id="pricePerTon" type="number" value="1000">
-      </div>
+      <div class="form-grid">
 
-      <div class="field">
-        <label>عدد الأطنان</label>
-        <input id="tons" type="number" value="1">
-      </div>
+        <div class="field">
+          <label>سعر الطن (USD)</label>
+          <input id="pricePerTon" type="number" value="1000">
+        </div>
 
-      <div class="field">
-        <label>سعر الصرف (IQD)</label>
-        <input id="rate" type="number" value="1320">
-      </div>
+        <div class="field">
+          <label>عدد الأطنان</label>
+          <input id="tons" type="number" value="1">
+        </div>
 
-      <div class="field">
-        <label>الضريبة الكمركية (%)</label>
-        <input id="customTax" type="number" value="15">
-      </div>
+        <div class="field">
+          <label>سعر الصرف (IQD)</label>
+          <input id="rate" type="number" value="1320">
+        </div>
 
-      <div class="field">
-        <label>الضريبة (%)</label>
-        <input id="generalTax" type="number" value="5">
-      </div>
+        <div class="field">
+          <label>الضريبة الكمركية (%)</label>
+          <input id="customTax" type="number" value="15">
+        </div>
 
-      <div class="toggle">
-        <input type="checkbox" id="protectToggle">
-        <label>رسم الحماية</label>
-      </div>
+        <div class="field">
+          <label>الضريبة (%)</label>
+          <input id="generalTax" type="number" value="5">
+        </div>
 
-      <div class="field hidden" id="protectBox">
-        <label>نسبة الحماية (%)</label>
-        <input id="protectTax" type="number">
-      </div>
+        <div class="field hidden" id="protectBox">
+          <label>نسبة الحماية (%)</label>
+          <input id="protectTax" type="number">
+        </div>
 
-      <button class="calc" onclick="calculate()">تنفيذ الحساب</button>
+        <div class="toggle">
+          <input type="checkbox" id="protectToggle">
+          <label>تفعيل رسم الحماية</label>
+        </div>
+
+        <button class="calc" onclick="calculate()">تنفيذ الحساب</button>
+
+      </div>
     </div>
 
     <!-- RESULT -->
@@ -245,7 +262,7 @@ button.calc{
       <h2 id="totalOut">0 IQD</h2>
     </div>
 
-    <!-- DESIGNER (في النهاية) -->
+    <!-- DESIGNER -->
     <div class="designer">
       تم تصميم وبرمجة البرنامج بواسطة:<br>
       <strong>احمد عبد القادر مشحن العبيدي</strong><br>
@@ -257,11 +274,11 @@ button.calc{
 </div>
 
 <script>
-const protectToggle=document.getElementById("protectToggle");
-const protectBox=document.getElementById("protectBox");
+const protectToggle = document.getElementById("protectToggle");
+const protectBox = document.getElementById("protectBox");
 
-protectToggle.onchange=()=>{
-  protectBox.classList.toggle("hidden",!protectToggle.checked);
+protectToggle.onchange = ()=>{
+  protectBox.classList.toggle("hidden", !protectToggle.checked);
 };
 
 function formatIQD(n){
@@ -269,28 +286,26 @@ function formatIQD(n){
 }
 
 function vibrate(){
-  if(navigator.vibrate){
-    navigator.vibrate(60); // اهتزاز خفيف
-  }
+  if(navigator.vibrate) navigator.vibrate(70);
 }
 
 function calculate(){
-  vibrate(); // اهتزاز عند الضغط
+  vibrate();
 
-  const price=+pricePerTon.value||0;
-  const tonsVal=+tons.value||0;
-  const rateVal=+rate.value||0;
-  const custom=+customTax.value||0;
-  const general=+generalTax.value||0;
-  const protect=protectToggle.checked?(+protectTax.value||0):0;
+  const price = +pricePerTon.value || 0;
+  const tonsVal = +tons.value || 0;
+  const rateVal = +rate.value || 0;
+  const custom = +customTax.value || 0;
+  const general = +generalTax.value || 0;
+  const protect = protectToggle.checked ? (+protectTax.value || 0) : 0;
 
-  const base=price*tonsVal*rateVal;
-  const taxes=base*(custom+general+protect)/100;
-  const total=base+taxes;
+  const base = price * tonsVal * rateVal;
+  const taxes = base * (custom + general + protect) / 100;
+  const total = base + taxes;
 
-  baseOut.innerText=formatIQD(base);
-  taxOut.innerText=formatIQD(taxes);
-  totalOut.innerText=formatIQD(total);
+  baseOut.innerText = formatIQD(base);
+  taxOut.innerText = formatIQD(taxes);
+  totalOut.innerText = formatIQD(total);
 }
 
 function toggleTheme(){
