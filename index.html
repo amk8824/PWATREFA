@@ -40,7 +40,6 @@ input[type=number]::-webkit-outer-spin-button{
   margin:0;
 }
 input[type=number]{
-  -moz-appearance:textfield;
   appearance:textfield;
 }
 
@@ -96,7 +95,6 @@ body::after{
   height:42px;
   width:auto;
   object-fit:contain;
-  flex-shrink:0;
 }
 
 .hero-center{
@@ -120,6 +118,7 @@ body::after{
 .content{
   flex:1;
   padding:16px;
+  padding-bottom:140px; /* ⭐ مهم لظهور اللوغو */
   display:flex;
   flex-direction:column;
   gap:16px;
@@ -168,7 +167,6 @@ body::after{
 /* ACTION */
 .action{
   margin-top:auto;
-  padding-bottom:env(safe-area-inset-bottom);
 }
 button{
   width:100%;
@@ -181,13 +179,13 @@ button{
   color:#062019;
 }
 
-/* ===== DESIGNER LOGO (كبير وواضح) ===== */
+/* ===== DESIGNER LOGO ===== */
 .designer-logo{
   text-align:center;
-  margin-top:16px;
+  margin-top:18px;
 }
 .designer-logo img{
-  height:72px; /* حجم كبير لتوضيح الملامح */
+  height:72px;
   width:auto;
   filter:drop-shadow(0 6px 14px rgba(0,0,0,.45));
 }
@@ -248,6 +246,7 @@ button{
 
   <!-- CONTENT -->
   <div class="content">
+
     <div class="panel">
       <div class="input"><label>سعر الطن</label><input id="a" type="number"></div>
       <div class="input"><label>عدد الأطنان</label><input id="b" type="number"></div>
@@ -271,16 +270,9 @@ button{
 </div>
 
 <div class="result" id="r">
-  <div class="result-row">
-    <span>السعر الأساسي</span>
-    <span id="rb"></span>
-  </div>
-  <div class="result-row">
-    <span>إجمالي الضرائب</span>
-    <span id="rt"></span>
-  </div>
+  <div class="result-row"><span>السعر الأساسي</span><span id="rb"></span></div>
+  <div class="result-row"><span>إجمالي الضرائب</span><span id="rt"></span></div>
   <h2 id="rf"></h2>
-
   <div class="recalc">
     <button onclick="resetCalc()">حساب جديد</button>
   </div>
@@ -290,25 +282,19 @@ button{
 function f(n){
   return n.toLocaleString("en-US") + " IQD";
 }
-
 function calc(){
   const base=(+a.value||0)*(+b.value||0)*1320;
   const tax=base*((+d.value||0)+(+e.value||0)+(+np.value||0))/100;
-
   rb.textContent=f(base);
   rt.textContent=f(tax);
   rf.textContent=f(base+tax);
-
   r.style.display="block";
 }
-
 function resetCalc(){
   r.style.display="none";
   a.value=b.value=d.value=e.value=np.value="";
   a.focus();
 }
-
-/* Service Worker */
 if("serviceWorker" in navigator){
   navigator.serviceWorker.register("service-worker.js");
 }
