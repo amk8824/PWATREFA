@@ -39,15 +39,22 @@ html,body{
   margin:0;height:100%;
   background:#0a0f1c;color:#fff;
 }
+
+/* ✅ الإصلاح الأساسي */
 body{
   min-height:100vh;
   min-height:100dvh;
-  overflow:hidden;
+  overflow:auto;
+  -webkit-overflow-scrolling:touch;
 }
+
 body::after{
-  content:"";position:fixed;left:0;right:0;bottom:0;
+  content:"";
+  position:fixed;
+  left:0;right:0;bottom:0;
   height:env(safe-area-inset-bottom);
-  background:#0a0f1c;z-index:-1;
+  background:#0a0f1c;
+  z-index:-1;
 }
 
 .app{
@@ -80,7 +87,7 @@ body::after{
 .content{
   flex:1;
   padding:16px;
-  padding-bottom:140px;
+  padding-bottom:180px; /* ✅ إصلاح ظهور كل المحتوى */
   display:flex;
   flex-direction:column;
   gap:16px;
@@ -180,7 +187,7 @@ button.protect-btn{
   color:#fff;
 }
 
-/* ===== نافذة المواد (مستقلة) ===== */
+/* ===== نافذة المواد ===== */
 .protection-modal{
   position:fixed;
   inset:0;
@@ -197,7 +204,6 @@ button.protect-btn{
   max-height:85vh;
   border-radius:26px;
   overflow:hidden;
-  box-shadow:0 20px 50px rgba(0,0,0,.6);
 }
 .protection-header{
   display:flex;
@@ -205,17 +211,9 @@ button.protect-btn{
   align-items:center;
   padding:16px 20px;
   background:linear-gradient(135deg,#22d39a,#18bfa0);
-  color:#062019;
 }
-.protection-header h2{
-  margin:0;
-  font-size:18px;
-  font-weight:900;
-}
-.protection-header span{
-  font-size:22px;
-  cursor:pointer;
-}
+.protection-header h2{margin:0;font-size:18px;}
+.protection-header span{cursor:pointer;font-size:22px;}
 .protection-table{
   padding:14px;
   overflow:auto;
@@ -229,7 +227,6 @@ button.protect-btn{
   padding:10px 14px;
   border-radius:14px;
   margin-bottom:8px;
-  font-size:14px;
 }
 .protection-row span:first-child{
   font-weight:900;
@@ -273,9 +270,7 @@ button.protect-btn{
     </div>
 
     <div class="action">
-      <button class="protect-btn" onclick="openProtectionModal()">
-        المواد المشمولة بحماية المنتج
-      </button>
+      <button class="protect-btn" onclick="openProtectionModal()">المواد المشمولة بحماية المنتج</button>
     </div>
 
     <div class="designer-logo">
@@ -294,15 +289,14 @@ button.protect-btn{
   </div>
 </div>
 
-<!-- نافذة المواد -->
 <div class="protection-modal" id="protectionModal">
   <div class="protection-box">
     <div class="protection-header">
       <h2>المواد المشمولة بحماية المنتج</h2>
       <span onclick="closeProtectionModal()">✕</span>
     </div>
-
     <div class="protection-table">
+
   <div class="protection-row head">
     <span>النسبة</span>
     <span>المادة</span>
@@ -330,7 +324,7 @@ button.protect-btn{
   <div class="protection-row"><span>100%</span><span>كارتون علب وصناديق من ورق أبيض</span></div>
   <div class="protection-row"><span>100%</span><span>كارتون صناديق على شكل علب</span></div>
   <div class="protection-row"><span>100%</span><span>كارتون صناديق طبق</span></div>
-  <div class="protection-row"><span>100%</span><span>كارتون صناديق على شكل فواصل مطبوعة وغير مطبوعة</span></div>
+  <div class="protection-row"><span>100%</span><span>كارتون صناديق فواصل مطبوعة وغير مطبوعة</span></div>
 
   <!-- 15% -->
   <div class="protection-row"><span>15%</span><span>أنابيب معدنية مغلونة وغير مغلونة</span></div>
@@ -345,7 +339,7 @@ button.protect-btn{
   <div class="protection-row"><span>50%</span><span>علب الألمنيوم للمشروبات الغازية والعصائر والطاقة</span></div>
   <div class="protection-row"><span>50%</span><span>ثرمستون</span></div>
   <div class="protection-row"><span>50%</span><span>صابون سائل</span></div>
-  <div class="protection-row"><span>50%</span><span>محاليل وريدية (ملحي) 100 مل و500 مل</span></div>
+  <div class="protection-row"><span>50%</span><span>محاليل وريدية (100 مل و500 مل)</span></div>
 
   <!-- 30% -->
   <div class="protection-row"><span>30%</span><span>حديد التسليح (8–32 ملم)</span></div>
@@ -370,6 +364,7 @@ button.protect-btn{
   <!-- 40% -->
   <div class="protection-row"><span>40%</span><span>رول مصنوع من حبيبات بولي إيثلين BET</span></div>
   <div class="protection-row"><span>40%</span><span>المواد اللاصقة للبلاط والسيراميك</span></div>
+
 </div>
 
     </div>
@@ -391,8 +386,6 @@ function resetCalc(){
   a.value=b.value=d.value=e.value=np.value="";
   a.focus();
 }
-
-/* نافذة المواد */
 function openProtectionModal(){
   document.getElementById("protectionModal").style.display="flex";
 }
