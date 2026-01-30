@@ -1,7 +1,9 @@
 {
-  "name": "Autonomous Customs",
+  "name": "Autonomous Customs System",
   "short_name": "Customs",
+  "description": "Government Smart Customs Calculator",
   "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#0a0d12",
   "theme_color": "#0a0d12",
