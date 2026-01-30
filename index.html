@@ -9,31 +9,32 @@ content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,vie
 
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700;800;900&display=swap" rel="stylesheet">
 
-<meta name="theme-color" content="#06090d">
+<meta name="theme-color" content="#0a0f1c">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
 <style>
 :root{
-  --bg:#0b0f14;
-  --header:#06090d;
-  --panel:#121823;
-  --card:#1b2330;
-  --primary:#1fd18b;
-  --accent:#f5c86a;
+  --bg:#0a0f1c;
+  --glass:rgba(255,255,255,0.06);
+  --panel:#121a2a;
+  --card:#182338;
+  --primary:#22d39a;
+  --accent:#f7d774;
   --text:#ffffff;
-  --muted:#9aa3b2;
+  --muted:#9aa6c3;
+  --border:rgba(255,255,255,0.12);
 }
 
+/* RESET */
 *{
   box-sizing:border-box;
   font-family:'Cairo',sans-serif;
 }
-
 html,body{
   margin:0;
   height:100%;
-  background:var(--bg);
+  background:radial-gradient(circle at top,#111a33,#070b14);
   overflow:hidden;
   color:var(--text);
 }
@@ -52,42 +53,69 @@ input[type=number]{ -moz-appearance:textfield; }
   flex-direction:column;
 }
 
-/* HEADER */
-.header{
-  background:var(--header);
-  padding:14px 16px;
+/* ===== HERO HEADER ===== */
+.hero{
+  padding:22px 18px 18px;
+  background:
+    linear-gradient(135deg,rgba(34,211,154,0.25),transparent 40%),
+    linear-gradient(225deg,rgba(247,215,116,0.18),transparent 45%);
+  border-bottom:1px solid var(--border);
+}
+.hero-top{
   display:flex;
   align-items:center;
   justify-content:space-between;
 }
-.header img{height:52px;}
-.header-center{
-  flex:1;
+.hero img{height:46px;}
+.hero-center{
   text-align:center;
+  flex:1;
 }
-.header-center h1{
+.hero-center h1{
   margin:0;
-  font-size:20px;
+  font-size:22px;
   font-weight:900;
 }
-.header-center span{
+.hero-center p{
+  margin:4px 0 0;
   font-size:12px;
   color:var(--muted);
 }
+.designer-top{
+  margin-top:12px;
+  text-align:center;
+  font-size:12px;
+  color:var(--muted);
+}
+.designer-top strong{
+  color:var(--primary);
+  font-weight:900;
+}
 
-/* PANEL */
-.panel{
+/* ===== CONTENT ===== */
+.content{
   flex:1;
-  background:var(--panel);
+  padding:16px;
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+}
+
+/* ===== PANEL ===== */
+.panel{
+  background:var(--glass);
+  backdrop-filter:blur(14px);
+  border:1px solid var(--border);
+  border-radius:24px;
   padding:18px;
   display:grid;
   grid-template-columns:1fr 1fr;
   gap:16px;
 }
 
-/* INPUT CARD */
+/* INPUT */
 .input{
-  background:var(--card);
+  background:linear-gradient(180deg,var(--card),#131c2e);
   border-radius:20px;
   padding:16px;
 }
@@ -102,9 +130,9 @@ input[type=number]{ -moz-appearance:textfield; }
   width:100%;
   background:none;
   border:none;
-  border-bottom:2px solid #2a3444;
+  border-bottom:2px solid #2b3754;
   color:#fff;
-  font-size:17px;
+  font-size:18px;
   padding:8px 0;
 }
 .input input[readonly]{
@@ -115,49 +143,67 @@ input[type=number]{ -moz-appearance:textfield; }
 
 /* ACTION */
 .action{
-  background:var(--header);
-  padding:14px;
+  margin-top:auto;
 }
-button{
+button.calc{
   width:100%;
-  padding:18px;
-  font-size:18px;
+  padding:20px;
+  font-size:19px;
   font-weight:900;
   border:none;
-  border-radius:20px;
-  background:linear-gradient(135deg,var(--primary),#18b87c);
-  color:#062016;
+  border-radius:24px;
+  background:linear-gradient(135deg,var(--primary),#18bfa0);
+  color:#062019;
 }
 
-/* RESULT */
+/* ===== RESULT ===== */
 .result{
-  background:linear-gradient(160deg,#0e3f2a,#062718);
-  padding:18px;
+  position:fixed;
+  left:0;
+  right:0;
+  bottom:0;
+  background:linear-gradient(160deg,#0f3f31,#07261e);
+  padding:22px 18px 18px;
   display:none;
+  z-index:20;
+  border-top-left-radius:26px;
+  border-top-right-radius:26px;
+}
+.result .close{
+  position:absolute;
+  top:10px;
+  left:14px;
+  background:none;
+  border:none;
+  color:#fff;
+  font-size:24px;
+  font-weight:900;
 }
 .result-row{
   display:flex;
   justify-content:space-between;
-  font-size:16px;
-  margin-bottom:6px;
+  font-size:17px;
+  margin-bottom:8px;
 }
 .result h2{
   text-align:center;
-  font-size:26px;
+  font-size:30px;
   color:var(--accent);
-  margin-top:12px;
+  margin-top:14px;
 }
 
-/* FOOTER (ثابت + مضمون) */
-.footer{
-  text-align:center;
-  font-size:11px;
-  color:var(--muted);
-  padding:10px 0;
+/* 🔁 إعادة احتساب */
+.recalc{
+  margin-top:16px;
 }
-.footer .designer-name{
-  display:block;
-  color:var(--primary);
+.recalc button{
+  width:100%;
+  padding:16px;
+  border:none;
+  border-radius:20px;
+  background:rgba(255,255,255,0.12);
+  color:#fff;
+  font-size:16px;
   font-weight:900;
 }
 </style>
@@ -168,84 +214,77 @@ button{
 <div class="app">
 
   <!-- HEADER -->
-  <div class="header">
-    <img src="https://www2.0zz0.com/2025/05/19/22/510831948.png" alt="logo right">
-    <div class="header-center">
-      <h1>الحاسبة الكمركية الذكية</h1>
-      <span>الهيئة العامة للكمارك</span>
+  <div class="hero">
+    <div class="hero-top">
+      <img src="https://www2.0zz0.com/2025/05/19/22/510831948.png">
+      <div class="hero-center">
+        <h1>الحاسبة الكمركية الذكية</h1>
+        <p>جمهورية العراق – الهيئة العامة للكمارك</p>
+      </div>
+      <img src="https://www2.0zz0.com/2025/05/19/22/823371779.png">
     </div>
-    <img src="https://www2.0zz0.com/2025/05/19/22/823371779.png" alt="logo left">
-  </div>
-
-  <!-- PANEL -->
-  <div class="panel">
-    <div class="input">
-      <label>سعر الطن</label>
-      <input id="a" type="number">
-    </div>
-
-    <div class="input">
-      <label>عدد الأطنان</label>
-      <input id="b" type="number">
-    </div>
-
-    <div class="input">
-      <label>سعر الصرف (مثبت)</label>
-      <input id="c" type="number" value="1320" readonly>
-    </div>
-
-    <div class="input">
-      <label>الضريبة الكمركية %</label>
-      <input id="d" type="number">
-    </div>
-
-    <div class="input">
-      <label>الضريبة %</label>
-      <input id="e" type="number">
+    <div class="designer-top">
+      تم التصميم والبرمجة بواسطة
+      <strong>احمد عبد القادر مشحن العبيدي</strong>
     </div>
   </div>
 
-  <!-- ACTION -->
-  <div class="action">
-    <button onclick="calc()">احسب الآن</button>
-  </div>
+  <!-- CONTENT -->
+  <div class="content">
 
-  <!-- RESULT -->
-  <div class="result" id="r">
-    <div class="result-row">
-      <span>السعر الأساسي</span>
-      <span id="rb"></span>
+    <div class="panel">
+      <div class="input"><label>سعر الطن</label><input id="a" type="number"></div>
+      <div class="input"><label>عدد الأطنان</label><input id="b" type="number"></div>
+      <div class="input"><label>سعر الصرف (مثبت)</label><input type="number" value="1320" readonly></div>
+      <div class="input"><label>الضريبة الكمركية %</label><input id="d" type="number"></div>
+      <div class="input"><label>الضريبة %</label><input id="e" type="number"></div>
     </div>
-    <div class="result-row">
-      <span>إجمالي الضرائب</span>
-      <span id="rt"></span>
+
+    <div class="action">
+      <button class="calc" onclick="calc()">احتساب</button>
     </div>
-    <h2 id="rf"></h2>
-  </div>
 
-  <!-- FOOTER -->
-  <div class="footer">
-    <span>تم التصميم والبرمجة بواسطة</span>
-    <span class="designer-name">احمد عبد القادر مشحن العبيدي</span>
   </div>
+</div>
 
+<!-- RESULT -->
+<div class="result" id="r">
+  <button class="close" onclick="closeResult()">×</button>
+
+  <div class="result-row"><span>السعر الأساسي</span><span id="rb"></span></div>
+  <div class="result-row"><span>إجمالي الضرائب</span><span id="rt"></span></div>
+  <h2 id="rf"></h2>
+
+  <!-- 🔁 إعادة احتساب -->
+  <div class="recalc">
+    <button onclick="reCalc()">إعادة احتساب جديد</button>
+  </div>
 </div>
 
 <script>
-function f(n){
+function format(n){
   return n.toLocaleString("en-US")+" IQD";
 }
 
 function calc(){
-  if(navigator.vibrate) navigator.vibrate(70);
+  if(navigator.vibrate) navigator.vibrate(80);
 
   const base=(+a.value||0)*(+b.value||0)*1320;
   const tax=base*((+d.value||0)+(+e.value||0))/100;
 
+  rb.textContent=format(base);
+  rt.textContent=format(tax);
+  rf.textContent=format(base+tax);
+
   r.style.display="block";
-  rb.textContent=f(base);
-  rt.textContent=f(tax);
-  rf.textContent=f(base+tax);
+}
+
+function closeResult(){
+  r.style.display="none";
+}
+
+function reCalc(){
+  r.style.display="none";
 }
 </script>
 
