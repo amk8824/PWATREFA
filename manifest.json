@@ -1,7 +1,7 @@
 {
   "name": "الحاسبة الكمركية الذكية",
   "short_name": "الكمارك",
-  "description": "نظام احتساب كمركي ذكي – الهيئة العامة للكمارك",
+  "description": "الحاسبة الكمركية الذكية – الهيئة العامة للكمارك",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
