@@ -1,12 +1,12 @@
 {
-  "name": "Autonomous Customs System",
-  "short_name": "Customs",
-  "description": "Government Smart Customs Calculator",
+  "name": "الحاسبة الكمركية الذكية",
+  "short_name": "الكمارك",
+  "description": "نظام احتساب كمركي ذكي – الهيئة العامة للكمارك",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#0a0d12",
-  "theme_color": "#0a0d12",
+  "background_color": "#0a0f1c",
+  "theme_color": "#0a0f1c",
   "icons": [
     {
       "src": "icon-192.png",
