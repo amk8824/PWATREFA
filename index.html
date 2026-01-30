@@ -15,7 +15,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700;800;900&display=swap" rel="stylesheet">
 
 <style>
-/* ===== كودك الأصلي بدون أي تغيير ===== */
 :root{
   --bg:#0a0f1c;
   --glass:rgba(255,255,255,0.06);
@@ -27,56 +26,194 @@
   --muted:#9aa6c3;
   --border:rgba(255,255,255,0.12);
 }
+
 *{box-sizing:border-box;font-family:'Cairo',sans-serif;}
+
 input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0;}
-input[type=number]{appearance:textfield;}
-html,body{margin:0;height:100%;background:#0a0f1c;color:var(--text);}
-body{min-height:100vh;min-height:100dvh;overflow:hidden;}
-body::after{
-  content:"";position:fixed;left:0;right:0;bottom:0;
-  height:env(safe-area-inset-bottom);background:#0a0f1c;z-index:-1;
+input[type=number]::-webkit-outer-spin-button{
+  -webkit-appearance:none;
+  margin:0;
 }
-.app{min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;}
-.hero{padding:20px 18px 16px;
-  background:linear-gradient(135deg,rgba(34,211,154,0.25),transparent 40%),
-             linear-gradient(225deg,rgba(247,215,116,0.18),transparent 45%);
-  border-bottom:1px solid var(--border);}
-.hero-top{display:flex;align-items:center;justify-content:space-between;gap:12px;}
+input[type=number]{appearance:textfield;}
+
+html,body{
+  margin:0;
+  height:100%;
+  background:#0a0f1c;
+  color:var(--text);
+}
+
+body{
+  min-height:100vh;
+  min-height:100dvh;
+  overflow:hidden;
+}
+
+body::after{
+  content:"";
+  position:fixed;
+  left:0;
+  right:0;
+  bottom:0;
+  height:env(safe-area-inset-bottom);
+  background:#0a0f1c;
+  z-index:-1;
+}
+
+.app{
+  min-height:100vh;
+  min-height:100dvh;
+  display:flex;
+  flex-direction:column;
+}
+
+/* ===== HEADER ===== */
+.hero{
+  padding:20px 18px 16px;
+  background:
+    linear-gradient(135deg,rgba(34,211,154,0.25),transparent 40%),
+    linear-gradient(225deg,rgba(247,215,116,0.18),transparent 45%);
+  border-bottom:1px solid var(--border);
+}
+
+.hero-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+}
+
 .logo{height:42px;}
-.hero-center{text-align:center;flex:1;}
-.hero-center h1{margin:0;font-size:21px;font-weight:900;}
-.hero-center p{margin:4px 0 0;font-size:12px;color:var(--muted);}
-.content{flex:1;padding:16px;padding-bottom:140px;display:flex;flex-direction:column;gap:16px;}
-.panel{background:var(--glass);backdrop-filter:blur(14px);
-  border:1px solid var(--border);border-radius:24px;padding:18px;
-  display:grid;grid-template-columns:1fr 1fr;gap:16px;}
-.input{background:linear-gradient(180deg,var(--card),#131c2e);
-  border-radius:20px;padding:16px;}
-.input label{font-size:14px;font-weight:900;color:var(--accent);}
-.input input{width:100%;background:none;border:none;
-  border-bottom:2px solid #2b3754;color:#fff;font-size:17px;}
+
+.hero-center{
+  flex:1;
+  text-align:center;
+}
+
+.hero-center h1{
+  margin:0;
+  font-size:21px;
+  font-weight:900;
+}
+
+.hero-center p{
+  margin:4px 0 0;
+  font-size:12px;
+  color:var(--muted);
+}
+
+/* ===== CONTENT ===== */
+.content{
+  flex:1;
+  padding:16px;
+  padding-bottom:140px;
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+}
+
+.panel{
+  background:var(--glass);
+  backdrop-filter:blur(14px);
+  border:1px solid var(--border);
+  border-radius:24px;
+  padding:18px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:16px;
+}
+
+.input{
+  background:linear-gradient(180deg,var(--card),#131c2e);
+  border-radius:20px;
+  padding:16px;
+}
+
+.input label{
+  display:block;
+  font-size:14px;
+  font-weight:900;
+  color:var(--accent);
+  margin-bottom:10px;
+}
+
+.input input{
+  width:100%;
+  background:none;
+  border:none;
+  border-bottom:2px solid #2b3754;
+  color:#fff;
+  font-size:17px;
+  padding:8px 0;
+}
+
+.input input[readonly]{
+  border-bottom-style:dashed;
+  color:var(--primary);
+}
+
 .action{margin-top:auto;}
-button{width:100%;padding:20px;font-size:19px;font-weight:900;
-  border:none;border-radius:24px;
-  background:linear-gradient(135deg,var(--primary),#18bfa0);}
-.designer-logo{text-align:center;margin-top:18px;}
-.designer-logo img{height:72px;}
-.result{position:fixed;left:0;right:0;bottom:0;
+
+button{
+  width:100%;
+  padding:20px;
+  font-size:19px;
+  font-weight:900;
+  border:none;
+  border-radius:24px;
+  background:linear-gradient(135deg,var(--primary),#18bfa0);
+  color:#062019;
+}
+
+/* ===== DESIGNER LOGO ===== */
+.designer-logo{
+  text-align:center;
+  margin-top:18px;
+}
+.designer-logo img{
+  height:72px;
+  filter:drop-shadow(0 6px 14px rgba(0,0,0,.45));
+}
+
+/* RESULT */
+.result{
+  position:fixed;
+  left:0;
+  right:0;
+  bottom:0;
   background:linear-gradient(160deg,#0f3f31,#07261e);
   padding:22px calc(18px + env(safe-area-inset-bottom));
-  display:none;z-index:20;
-  border-top-left-radius:26px;border-top-right-radius:26px;}
-.result-row{display:flex;justify-content:space-between;font-size:16px;margin-bottom:8px;}
-.result h2{text-align:center;font-size:28px;color:var(--accent);margin-top:12px;}
-.recalc{margin-top:16px;}
-.recalc button{background:rgba(255,255,255,0.15);color:#fff;}
+  display:none;
+  z-index:20;
+  border-top-left-radius:26px;
+  border-top-right-radius:26px;
+}
 
-/* ===== إضافة الحماية فقط (مستقلة تمامًا) ===== */
+.result-row{
+  display:flex;
+  justify-content:space-between;
+  font-size:16px;
+  margin-bottom:8px;
+}
+
+.result h2{
+  text-align:center;
+  font-size:28px;
+  color:var(--accent);
+  margin-top:12px;
+}
+
+.recalc{margin-top:16px;}
+.recalc button{
+  background:rgba(255,255,255,0.15);
+  color:#fff;
+}
+
+/* ===== LOCK (إضافة فقط) ===== */
 .lock-overlay{
   position:fixed;
   inset:0;
-  background:rgba(10,15,28,0.96);
+  background:rgba(10,15,28,.96);
   display:flex;
   align-items:center;
   justify-content:center;
@@ -90,15 +227,8 @@ button{width:100%;padding:20px;font-size:19px;font-weight:900;
   max-width:340px;
   text-align:center;
 }
-.lock-box h2{
-  margin:0 0 8px;
-  color:var(--accent);
-}
-.lock-box p{
-  font-size:13px;
-  color:var(--muted);
-  margin-bottom:14px;
-}
+.lock-box h2{color:var(--accent);margin-bottom:8px;}
+.lock-box p{font-size:13px;color:var(--muted);}
 .lock-box input{
   width:100%;
   padding:14px;
@@ -124,7 +254,7 @@ button{width:100%;padding:20px;font-size:19px;font-weight:900;
 
 <body>
 
-<!-- 🔒 شاشة القفل (إضافة فقط) -->
+<!-- 🔒 شاشة القفل -->
 <div class="lock-overlay" id="lock">
   <div class="lock-box">
     <h2>تفعيل التطبيق</h2>
@@ -137,8 +267,8 @@ button{width:100%;padding:20px;font-size:19px;font-weight:900;
   </div>
 </div>
 
-<!-- ===== تطبيقك الأصلي بدون أي تغيير ===== -->
 <div class="app">
+
   <div class="hero">
     <div class="hero-top">
       <img src="https://www2.0zz0.com/2025/05/19/22/510831948.png" class="logo">
@@ -151,10 +281,11 @@ button{width:100%;padding:20px;font-size:19px;font-weight:900;
   </div>
 
   <div class="content">
+
     <div class="panel">
       <div class="input"><label>سعر الطن</label><input id="a" type="number"></div>
       <div class="input"><label>عدد الأطنان</label><input id="b" type="number"></div>
-      <div class="input"><label>سعر الصرف</label><input type="number" value="1320" readonly></div>
+      <div class="input"><label>سعر الصرف</label><input value="1320" readonly></div>
       <div class="input"><label>الضريبة الكمركية %</label><input id="d" type="number"></div>
       <div class="input"><label>الضريبة %</label><input id="e" type="number"></div>
       <div class="input"><label>حماية المنتج الوطني % (اختياري)</label><input id="np" type="number"></div>
@@ -167,7 +298,9 @@ button{width:100%;padding:20px;font-size:19px;font-weight:900;
     <div class="designer-logo">
       <img src="https://up6.cc/2026/01/176978719559611.png">
     </div>
+
   </div>
+
 </div>
 
 <div class="result" id="r">
@@ -180,10 +313,15 @@ button{width:100%;padding:20px;font-size:19px;font-weight:900;
 </div>
 
 <script>
-/* ===== إضافة الحماية فقط ===== */
+/* ===== حماية مرة واحدة فقط ===== */
+if(localStorage.getItem("customs_unlocked")==="1"){
+  document.getElementById("lock").style.display="none";
+}
+
 function unlock(){
-  const v = document.getElementById("code").value.trim();
+  const v=document.getElementById("code").value.trim();
   if(v && v[0].toUpperCase()==="A"){
+    localStorage.setItem("customs_unlocked","1");
     document.getElementById("lock").style.display="none";
   }else{
     alert("الرمز غير صحيح – يجب أن يبدأ بحرف A");
