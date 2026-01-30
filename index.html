@@ -31,33 +31,23 @@
 
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button{
-  -webkit-appearance:none;
-  margin:0;
+  -webkit-appearance:none;margin:0;
 }
 input[type=number]{appearance:textfield;}
 
 html,body{
-  margin:0;
-  height:100%;
-  background:#0a0f1c;
-  color:var(--text);
+  margin:0;height:100%;
+  background:#0a0f1c;color:#fff;
 }
-
 body{
   min-height:100vh;
   min-height:100dvh;
   overflow:hidden;
 }
-
 body::after{
-  content:"";
-  position:fixed;
-  left:0;
-  right:0;
-  bottom:0;
+  content:"";position:fixed;left:0;right:0;bottom:0;
   height:env(safe-area-inset-bottom);
-  background:#0a0f1c;
-  z-index:-1;
+  background:#0a0f1c;z-index:-1;
 }
 
 .app{
@@ -75,32 +65,16 @@ body::after{
     linear-gradient(225deg,rgba(247,215,116,0.18),transparent 45%);
   border-bottom:1px solid var(--border);
 }
-
 .hero-top{
   display:flex;
   align-items:center;
   justify-content:space-between;
   gap:12px;
 }
-
 .logo{height:42px;}
-
-.hero-center{
-  flex:1;
-  text-align:center;
-}
-
-.hero-center h1{
-  margin:0;
-  font-size:21px;
-  font-weight:900;
-}
-
-.hero-center p{
-  margin:4px 0 0;
-  font-size:12px;
-  color:var(--muted);
-}
+.hero-center{flex:1;text-align:center;}
+.hero-center h1{margin:0;font-size:21px;font-weight:900;}
+.hero-center p{margin:4px 0 0;font-size:12px;color:var(--muted);}
 
 /* ===== CONTENT ===== */
 .content{
@@ -128,7 +102,6 @@ body::after{
   border-radius:20px;
   padding:16px;
 }
-
 .input label{
   display:block;
   font-size:14px;
@@ -136,7 +109,6 @@ body::after{
   color:var(--accent);
   margin-bottom:10px;
 }
-
 .input input{
   width:100%;
   background:none;
@@ -146,14 +118,12 @@ body::after{
   font-size:17px;
   padding:8px 0;
 }
-
 .input input[readonly]{
   border-bottom-style:dashed;
   color:var(--primary);
 }
 
 .action{margin-top:auto;}
-
 button{
   width:100%;
   padding:20px;
@@ -163,6 +133,12 @@ button{
   border-radius:24px;
   background:linear-gradient(135deg,var(--primary),#18bfa0);
   color:#062019;
+}
+
+/* زر المواد */
+button.protect-btn{
+  background:linear-gradient(135deg,#3a7bd5,#00d2ff);
+  color:#fff;
 }
 
 /* ===== DESIGNER LOGO ===== */
@@ -178,9 +154,7 @@ button{
 /* RESULT */
 .result{
   position:fixed;
-  left:0;
-  right:0;
-  bottom:0;
+  left:0;right:0;bottom:0;
   background:linear-gradient(160deg,#0f3f31,#07261e);
   padding:22px calc(18px + env(safe-area-inset-bottom));
   display:none;
@@ -188,84 +162,87 @@ button{
   border-top-left-radius:26px;
   border-top-right-radius:26px;
 }
-
 .result-row{
   display:flex;
   justify-content:space-between;
   font-size:16px;
   margin-bottom:8px;
 }
-
 .result h2{
   text-align:center;
   font-size:28px;
   color:var(--accent);
   margin-top:12px;
 }
-
 .recalc{margin-top:16px;}
 .recalc button{
   background:rgba(255,255,255,0.15);
   color:#fff;
 }
 
-/* ===== LOCK (إضافة فقط) ===== */
-.lock-overlay{
+/* ===== نافذة المواد (مستقلة) ===== */
+.protection-modal{
   position:fixed;
   inset:0;
-  background:rgba(10,15,28,.96);
-  display:flex;
+  background:rgba(5,10,20,.88);
+  display:none;
   align-items:center;
   justify-content:center;
-  z-index:999999;
+  z-index:99999;
 }
-.lock-box{
+.protection-box{
   background:#121a2a;
-  padding:26px;
-  border-radius:22px;
-  width:90%;
-  max-width:340px;
-  text-align:center;
+  width:92%;
+  max-width:520px;
+  max-height:85vh;
+  border-radius:26px;
+  overflow:hidden;
+  box-shadow:0 20px 50px rgba(0,0,0,.6);
 }
-.lock-box h2{color:var(--accent);margin-bottom:8px;}
-.lock-box p{font-size:13px;color:var(--muted);}
-.lock-box input{
-  width:100%;
-  padding:14px;
-  border:none;
-  border-radius:14px;
+.protection-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:16px 20px;
+  background:linear-gradient(135deg,#22d39a,#18bfa0);
+  color:#062019;
+}
+.protection-header h2{
+  margin:0;
   font-size:18px;
-  text-align:center;
-}
-.lock-box button{
-  width:100%;
-  margin-top:14px;
-  padding:14px;
-  border:none;
-  border-radius:16px;
-  background:linear-gradient(135deg,var(--primary),#18bfa0);
-  font-size:17px;
   font-weight:900;
 }
-.lock-logo{margin-top:16px;}
-.lock-logo img{height:60px;}
+.protection-header span{
+  font-size:22px;
+  cursor:pointer;
+}
+.protection-table{
+  padding:14px;
+  overflow:auto;
+  max-height:70vh;
+}
+.protection-row{
+  display:grid;
+  grid-template-columns:70px 1fr;
+  gap:10px;
+  background:#182338;
+  padding:10px 14px;
+  border-radius:14px;
+  margin-bottom:8px;
+  font-size:14px;
+}
+.protection-row span:first-child{
+  font-weight:900;
+  color:var(--accent);
+}
+.protection-row.head{
+  background:#223050;
+  font-weight:900;
+}
 </style>
 </head>
 
 <body>
-
-<!-- 🔒 شاشة القفل -->
-<div class="lock-overlay" id="lock">
-  <div class="lock-box">
-    <h2>تفعيل التطبيق</h2>
-    <p>أدخل رمز يبدأ بحرف A</p>
-    <input id="code" placeholder="A123">
-    <button onclick="unlock()">دخول</button>
-    <div class="lock-logo">
-      <img src="https://up6.cc/2026/01/176978719559611.png">
-    </div>
-  </div>
-</div>
 
 <div class="app">
 
@@ -295,12 +272,17 @@ button{
       <button onclick="calc()">احتساب</button>
     </div>
 
+    <div class="action">
+      <button class="protect-btn" onclick="openProtectionModal()">
+        المواد المشمولة بحماية المنتج
+      </button>
+    </div>
+
     <div class="designer-logo">
       <img src="https://up6.cc/2026/01/176978719559611.png">
     </div>
 
   </div>
-
 </div>
 
 <div class="result" id="r">
@@ -312,23 +294,89 @@ button{
   </div>
 </div>
 
+<!-- نافذة المواد -->
+<div class="protection-modal" id="protectionModal">
+  <div class="protection-box">
+    <div class="protection-header">
+      <h2>المواد المشمولة بحماية المنتج</h2>
+      <span onclick="closeProtectionModal()">✕</span>
+    </div>
+
+    <div class="protection-table">
+  <div class="protection-row head">
+    <span>النسبة</span>
+    <span>المادة</span>
+  </div>
+
+  <!-- 65% -->
+  <div class="protection-row"><span>65%</span><span>اصباغ للايبوكسيات</span></div>
+  <div class="protection-row"><span>65%</span><span>الاصباغ الحرارية</span></div>
+  <div class="protection-row"><span>65%</span><span>شامبو غسيل الملابس ملون أسود داكن</span></div>
+  <div class="protection-row"><span>65%</span><span>معطر أرضيات</span></div>
+  <div class="protection-row"><span>65%</span><span>معطر ملابس</span></div>
+  <div class="protection-row"><span>65%</span><span>مطري منسوجات سائل (جل)</span></div>
+  <div class="protection-row"><span>65%</span><span>جل أرضيات عام</span></div>
+  <div class="protection-row"><span>65%</span><span>معجون تنظيف الأواني</span></div>
+
+  <!-- 20% -->
+  <div class="protection-row"><span>20%</span><span>السكائر عربي وأجنبي</span></div>
+  <div class="protection-row"><span>20%</span><span>أنابيب بلاستك وملحقاتها (PPR + PP-R)</span></div>
+  <div class="protection-row"><span>20%</span><span>صابون صلب</span></div>
+  <div class="protection-row"><span>20%</span><span>حليب سائل مبستر</span></div>
+
+  <!-- 100% -->
+  <div class="protection-row"><span>100%</span><span>كارتون معرج</span></div>
+  <div class="protection-row"><span>100%</span><span>كارتون سادة</span></div>
+  <div class="protection-row"><span>100%</span><span>كارتون علب وصناديق من ورق أبيض</span></div>
+  <div class="protection-row"><span>100%</span><span>كارتون صناديق على شكل علب</span></div>
+  <div class="protection-row"><span>100%</span><span>كارتون صناديق طبق</span></div>
+  <div class="protection-row"><span>100%</span><span>كارتون صناديق على شكل فواصل مطبوعة وغير مطبوعة</span></div>
+
+  <!-- 15% -->
+  <div class="protection-row"><span>15%</span><span>أنابيب معدنية مغلونة وغير مغلونة</span></div>
+
+  <!-- 60% -->
+  <div class="protection-row"><span>60%</span><span>الكاربت + الموكيت</span></div>
+  <div class="protection-row"><span>60%</span><span>الأكياس البلاستيكية (مطبوعة وغير مطبوعة)</span></div>
+  <div class="protection-row"><span>60%</span><span>العلب الشفافة والأقداح البلاستيكية ذات الاستخدام الواحد</span></div>
+
+  <!-- 50% -->
+  <div class="protection-row"><span>50%</span><span>الأكياس الورقية لتعبئة الأسمنت</span></div>
+  <div class="protection-row"><span>50%</span><span>علب الألمنيوم للمشروبات الغازية والعصائر والطاقة</span></div>
+  <div class="protection-row"><span>50%</span><span>ثرمستون</span></div>
+  <div class="protection-row"><span>50%</span><span>صابون سائل</span></div>
+  <div class="protection-row"><span>50%</span><span>محاليل وريدية (ملحي) 100 مل و500 مل</span></div>
+
+  <!-- 30% -->
+  <div class="protection-row"><span>30%</span><span>حديد التسليح (8–32 ملم)</span></div>
+  <div class="protection-row"><span>30%</span><span>الصحون والحافظات البيضاء لحفظ الطعام</span></div>
+
+  <!-- 35% -->
+  <div class="protection-row"><span>35%</span><span>سماد اليوريا</span></div>
+
+  <!-- 45% -->
+  <div class="protection-row"><span>45%</span><span>الشعيرية</span></div>
+
+  <!-- 25% -->
+  <div class="protection-row"><span>25%</span><span>مقطعات ومصنعات الدجاج</span></div>
+  <div class="protection-row"><span>25%</span><span>علف الأسماك</span></div>
+  <div class="protection-row"><span>25%</span><span>معجون الطماطم</span></div>
+
+  <!-- 75% -->
+  <div class="protection-row"><span>75%</span><span>كاتشاب</span></div>
+  <div class="protection-row"><span>75%</span><span>مايونيز</span></div>
+  <div class="protection-row"><span>75%</span><span>المناديل الورقية (شخصي + مطبخ + حمامات)</span></div>
+
+  <!-- 40% -->
+  <div class="protection-row"><span>40%</span><span>رول مصنوع من حبيبات بولي إيثلين BET</span></div>
+  <div class="protection-row"><span>40%</span><span>المواد اللاصقة للبلاط والسيراميك</span></div>
+</div>
+
+    </div>
+  </div>
+</div>
+
 <script>
-/* ===== حماية مرة واحدة فقط ===== */
-if(localStorage.getItem("customs_unlocked")==="1"){
-  document.getElementById("lock").style.display="none";
-}
-
-function unlock(){
-  const v=document.getElementById("code").value.trim();
-  if(v && v[0].toUpperCase()==="A"){
-    localStorage.setItem("customs_unlocked","1");
-    document.getElementById("lock").style.display="none";
-  }else{
-    alert("الرمز غير صحيح – يجب أن يبدأ بحرف A");
-  }
-}
-
-/* ===== كودك الأصلي ===== */
 function f(n){return n.toLocaleString("en-US")+" IQD";}
 function calc(){
   const base=(+a.value||0)*(+b.value||0)*1320;
@@ -343,8 +391,13 @@ function resetCalc(){
   a.value=b.value=d.value=e.value=np.value="";
   a.focus();
 }
-if("serviceWorker" in navigator){
-  navigator.serviceWorker.register("service-worker.js");
+
+/* نافذة المواد */
+function openProtectionModal(){
+  document.getElementById("protectionModal").style.display="flex";
+}
+function closeProtectionModal(){
+  document.getElementById("protectionModal").style.display="none";
 }
 </script>
 
