@@ -181,6 +181,17 @@ button{
   color:#062019;
 }
 
+/* ===== DESIGNER LOGO (كبير وواضح) ===== */
+.designer-logo{
+  text-align:center;
+  margin-top:16px;
+}
+.designer-logo img{
+  height:72px; /* حجم كبير لتوضيح الملامح */
+  width:auto;
+  filter:drop-shadow(0 6px 14px rgba(0,0,0,.45));
+}
+
 /* RESULT */
 .result{
   position:fixed;
@@ -226,68 +237,35 @@ button{
   <!-- HEADER -->
   <div class="hero">
     <div class="hero-top">
-
-      <!-- شعار الهيئة -->
-      <img
-        src="https://www2.0zz0.com/2025/05/19/22/510831948.png"
-        alt="شعار الهيئة العامة للكمارك"
-        class="logo"
-      >
-
+      <img src="https://www2.0zz0.com/2025/05/19/22/510831948.png" class="logo">
       <div class="hero-center">
         <h1>الحاسبة الكمركية الذكية</h1>
         <p>الهيئة العامة للكمارك</p>
       </div>
-
-      <!-- شعار الدولة -->
-      <img
-        src="https://www2.0zz0.com/2025/05/19/22/823371779.png"
-        alt="شعار جمهورية العراق"
-        class="logo"
-      >
-
+      <img src="https://www2.0zz0.com/2025/05/19/22/823371779.png" class="logo">
     </div>
   </div>
 
   <!-- CONTENT -->
   <div class="content">
     <div class="panel">
-
-      <div class="input">
-        <label>سعر الطن</label>
-        <input id="a" type="number">
-      </div>
-
-      <div class="input">
-        <label>عدد الأطنان</label>
-        <input id="b" type="number">
-      </div>
-
-      <div class="input">
-        <label>سعر الصرف</label>
-        <input type="number" value="1320" readonly>
-      </div>
-
-      <div class="input">
-        <label>الضريبة الكمركية %</label>
-        <input id="d" type="number">
-      </div>
-
-      <div class="input">
-        <label>الضريبة %</label>
-        <input id="e" type="number">
-      </div>
-
-      <div class="input">
-        <label>حماية المنتج الوطني % (اختياري)</label>
-        <input id="np" type="number" placeholder="مثال: 2.5">
-      </div>
-
+      <div class="input"><label>سعر الطن</label><input id="a" type="number"></div>
+      <div class="input"><label>عدد الأطنان</label><input id="b" type="number"></div>
+      <div class="input"><label>سعر الصرف</label><input type="number" value="1320" readonly></div>
+      <div class="input"><label>الضريبة الكمركية %</label><input id="d" type="number"></div>
+      <div class="input"><label>الضريبة %</label><input id="e" type="number"></div>
+      <div class="input"><label>حماية المنتج الوطني % (اختياري)</label><input id="np" type="number"></div>
     </div>
 
     <div class="action">
       <button onclick="calc()">احتساب</button>
     </div>
+
+    <!-- لوغو المصمم -->
+    <div class="designer-logo">
+      <img src="https://up6.cc/2026/01/176978719559611.png" alt="Designer Logo">
+    </div>
+
   </div>
 
 </div>
