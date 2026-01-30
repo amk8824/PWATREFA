@@ -28,7 +28,6 @@
   --border:rgba(255,255,255,0.12);
 }
 
-/* RESET */
 *{
   box-sizing:border-box;
   font-family:'Cairo',sans-serif;
@@ -58,7 +57,7 @@ body{
   overflow:hidden;
 }
 
-/* منع ظهور شريط أبيض */
+/* منع الشريط الأبيض */
 body::after{
   content:"";
   position:fixed;
@@ -315,32 +314,19 @@ function f(n){
 }
 
 function calc(){
-  const base =
-    (+a.value || 0) *
-    (+b.value || 0) *
-    1320;
+  const base=(+a.value||0)*(+b.value||0)*1320;
+  const tax=base*((+d.value||0)+(+e.value||0)+(+np.value||0))/100;
 
-  const totalPercent =
-    (+d.value || 0) +
-    (+e.value || 0) +
-    (+np.value || 0);
+  rb.textContent=f(base);
+  rt.textContent=f(tax);
+  rf.textContent=f(base+tax);
 
-  const tax = base * totalPercent / 100;
-
-  rb.textContent = f(base);
-  rt.textContent = f(tax);
-  rf.textContent = f(base + tax);
-
-  r.style.display = "block";
+  r.style.display="block";
 }
 
 function resetCalc(){
-  r.style.display = "none";
-  a.value = "";
-  b.value = "";
-  d.value = "";
-  e.value = "";
-  np.value = "";
+  r.style.display="none";
+  a.value=b.value=d.value=e.value=np.value="";
   a.focus();
 }
 
