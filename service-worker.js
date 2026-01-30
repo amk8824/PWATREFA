@@ -1,39 +1,354 @@
-const CACHE_NAME = "customs-app-v1";
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
-const ASSETS = [
-  "./",
-  "./index.html",
-  "./manifest.json",
-  "./icon-192.png",
-  "./icon-512.png"
-];
+<title>الحاسبة الكمركية الذكية</title>
 
-self.addEventListener("install", event => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => cache.addAll(ASSETS))
-  );
-  self.skipWaiting();
-});
+<!-- PWA -->
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="theme-color" content="#0a0f1c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
 
-self.addEventListener("activate", event => {
-  event.waitUntil(
-    caches.keys().then(keys =>
-      Promise.all(
-        keys.map(key => {
-          if (key !== CACHE_NAME) {
-            return caches.delete(key);
-          }
-        })
-      )
-    )
-  );
-  self.clients.claim();
-});
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700;800;900&display=swap" rel="stylesheet">
 
-self.addEventListener("fetch", event => {
-  event.respondWith(
-    caches.match(event.request).then(response => {
-      return response || fetch(event.request);
-    })
-  );
-});
+<style>
+:root{
+  --bg:#0a0f1c;
+  --glass:rgba(255,255,255,0.06);
+  --panel:#121a2a;
+  --card:#182338;
+  --primary:#22d39a;
+  --accent:#f7d774;
+  --text:#ffffff;
+  --muted:#9aa6c3;
+  --border:rgba(255,255,255,0.12);
+}
+
+/* RESET */
+*{
+  box-sizing:border-box;
+  font-family:'Cairo',sans-serif;
+}
+
+/* إلغاء أسهم الأرقام */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button{
+  -webkit-appearance:none;
+  margin:0;
+}
+input[type=number]{
+  -moz-appearance:textfield;
+  appearance:textfield;
+}
+
+html,body{
+  margin:0;
+  height:100%;
+  background:#0a0f1c;
+  color:var(--text);
+}
+
+body{
+  min-height:100vh;
+  min-height:100dvh;
+  overflow:hidden;
+}
+
+/* منع ظهور شريط أبيض */
+body::after{
+  content:"";
+  position:fixed;
+  left:0;
+  right:0;
+  bottom:0;
+  height:env(safe-area-inset-bottom);
+  background:#0a0f1c;
+  z-index:-1;
+}
+
+.app{
+  min-height:100vh;
+  min-height:100dvh;
+  display:flex;
+  flex-direction:column;
+}
+
+/* ===== HEADER ===== */
+.hero{
+  padding:20px 18px 16px;
+  background:
+    linear-gradient(135deg,rgba(34,211,154,0.25),transparent 40%),
+    linear-gradient(225deg,rgba(247,215,116,0.18),transparent 45%);
+  border-bottom:1px solid var(--border);
+}
+
+.hero-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+}
+
+.logo{
+  height:42px;
+  width:auto;
+  object-fit:contain;
+  flex-shrink:0;
+}
+
+.hero-center{
+  flex:1;
+  text-align:center;
+}
+
+.hero-center h1{
+  margin:0;
+  font-size:21px;
+  font-weight:900;
+}
+
+.hero-center p{
+  margin:4px 0 0;
+  font-size:12px;
+  color:var(--muted);
+}
+
+/* ===== CONTENT ===== */
+.content{
+  flex:1;
+  padding:16px;
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+}
+
+.panel{
+  background:var(--glass);
+  backdrop-filter:blur(14px);
+  border:1px solid var(--border);
+  border-radius:24px;
+  padding:18px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:16px;
+}
+
+.input{
+  background:linear-gradient(180deg,var(--card),#131c2e);
+  border-radius:20px;
+  padding:16px;
+}
+
+.input label{
+  display:block;
+  font-size:14px;
+  font-weight:900;
+  color:var(--accent);
+  margin-bottom:10px;
+}
+
+.input input{
+  width:100%;
+  background:none;
+  border:none;
+  border-bottom:2px solid #2b3754;
+  color:#fff;
+  font-size:17px;
+  padding:8px 0;
+}
+
+.input input[readonly]{
+  border-bottom-style:dashed;
+  color:var(--primary);
+}
+
+/* ACTION */
+.action{
+  margin-top:auto;
+  padding-bottom:env(safe-area-inset-bottom);
+}
+button{
+  width:100%;
+  padding:20px;
+  font-size:19px;
+  font-weight:900;
+  border:none;
+  border-radius:24px;
+  background:linear-gradient(135deg,var(--primary),#18bfa0);
+  color:#062019;
+}
+
+/* RESULT */
+.result{
+  position:fixed;
+  left:0;
+  right:0;
+  bottom:0;
+  background:linear-gradient(160deg,#0f3f31,#07261e);
+  padding:22px calc(18px + env(safe-area-inset-bottom));
+  display:none;
+  z-index:20;
+  border-top-left-radius:26px;
+  border-top-right-radius:26px;
+}
+
+.result-row{
+  display:flex;
+  justify-content:space-between;
+  font-size:16px;
+  margin-bottom:8px;
+}
+
+.result h2{
+  text-align:center;
+  font-size:28px;
+  color:var(--accent);
+  margin-top:12px;
+}
+
+.recalc{
+  margin-top:16px;
+}
+.recalc button{
+  background:rgba(255,255,255,0.15);
+  color:#fff;
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+  <!-- HEADER -->
+  <div class="hero">
+    <div class="hero-top">
+
+      <!-- شعار الهيئة -->
+      <img
+        src="https://www2.0zz0.com/2025/05/19/22/510831948.png"
+        alt="شعار الهيئة العامة للكمارك"
+        class="logo"
+      >
+
+      <div class="hero-center">
+        <h1>الحاسبة الكمركية الذكية</h1>
+        <p>الهيئة العامة للكمارك</p>
+      </div>
+
+      <!-- شعار الدولة -->
+      <img
+        src="https://www2.0zz0.com/2025/05/19/22/823371779.png"
+        alt="شعار جمهورية العراق"
+        class="logo"
+      >
+
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+    <div class="panel">
+
+      <div class="input">
+        <label>سعر الطن</label>
+        <input id="a" type="number">
+      </div>
+
+      <div class="input">
+        <label>عدد الأطنان</label>
+        <input id="b" type="number">
+      </div>
+
+      <div class="input">
+        <label>سعر الصرف</label>
+        <input type="number" value="1320" readonly>
+      </div>
+
+      <div class="input">
+        <label>الضريبة الكمركية %</label>
+        <input id="d" type="number">
+      </div>
+
+      <div class="input">
+        <label>الضريبة %</label>
+        <input id="e" type="number">
+      </div>
+
+      <div class="input">
+        <label>حماية المنتج الوطني % (اختياري)</label>
+        <input id="np" type="number" placeholder="مثال: 2.5">
+      </div>
+
+    </div>
+
+    <div class="action">
+      <button onclick="calc()">احتساب</button>
+    </div>
+  </div>
+
+</div>
+
+<div class="result" id="r">
+  <div class="result-row">
+    <span>السعر الأساسي</span>
+    <span id="rb"></span>
+  </div>
+  <div class="result-row">
+    <span>إجمالي الضرائب</span>
+    <span id="rt"></span>
+  </div>
+  <h2 id="rf"></h2>
+
+  <div class="recalc">
+    <button onclick="resetCalc()">حساب جديد</button>
+  </div>
+</div>
+
+<script>
+function f(n){
+  return n.toLocaleString("en-US") + " IQD";
+}
+
+function calc(){
+  const base =
+    (+a.value || 0) *
+    (+b.value || 0) *
+    1320;
+
+  const totalPercent =
+    (+d.value || 0) +
+    (+e.value || 0) +
+    (+np.value || 0);
+
+  const tax = base * totalPercent / 100;
+
+  rb.textContent = f(base);
+  rt.textContent = f(tax);
+  rf.textContent = f(base + tax);
+
+  r.style.display = "block";
+}
+
+function resetCalc(){
+  r.style.display = "none";
+  a.value = "";
+  b.value = "";
+  d.value = "";
+  e.value = "";
+  np.value = "";
+  a.focus();
+}
+
+/* Service Worker */
+if("serviceWorker" in navigator){
+  navigator.serviceWorker.register("service-worker.js");
+}
+</script>
+
+</body>
+</html>
