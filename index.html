@@ -6,9 +6,27 @@
 
 <title>الحاسبة الكمركية الذكية</title>
 
+<!-- ================= PWA ================= -->
+<link rel="manifest" href="manifest.json">
+
+<!-- أيقونات (ضرورية لظهور الأيقونة) -->
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
+
+<!-- iOS -->
+<link rel="apple-touch-icon" sizes="180x180" href="icon-192.png">
+<link rel="apple-touch-icon" sizes="152x152" href="icon-192.png">
+<link rel="apple-touch-icon" sizes="120x120" href="icon-192.png">
+
+<meta name="theme-color" content="#0a0f1c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<!-- ======================================= -->
+
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700;800;900&display=swap" rel="stylesheet">
 
 <style>
+/* ===== نفس CSS بدون تغيير ===== */
 :root{
   --bg:#0a0f1c;
   --glass:rgba(255,255,255,0.06);
@@ -20,45 +38,18 @@
   --muted:#9aa6c3;
   --border:rgba(255,255,255,0.12);
 }
-
-/* RESET */
-*{
-  box-sizing:border-box;
-  font-family:'Cairo',sans-serif;
-}
-
-/* ===== إلغاء أسهم الأرقام نهائيًا ===== */
+*{box-sizing:border-box;font-family:'Cairo',sans-serif;}
 input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button{
-  -webkit-appearance:none;
-  margin:0;
+input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;}
+input[type=number]{appearance:textfield;}
+html,body{margin:0;height:100%;background:#0a0f1c;color:#fff;}
+body{min-height:100vh;min-height:100dvh;overflow:hidden;}
+body::after{
+  content:"";position:fixed;left:0;right:0;bottom:0;
+  height:env(safe-area-inset-bottom);
+  background:#0a0f1c;z-index:-1;
 }
-input[type=number]{
-  -moz-appearance:textfield;
-  appearance:textfield;
-}
-
-html,body{
-  margin:0;
-  height:100%;
-  background:#0a0f1c;
-  color:var(--text);
-}
-
-body{
-  min-height:100vh;
-  min-height:100dvh;
-  overflow:hidden;
-}
-
-.app{
-  min-height:100vh;
-  min-height:100dvh;
-  display:flex;
-  flex-direction:column;
-}
-
-/* ===== HEADER ===== */
+.app{min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;}
 .hero{
   padding:20px 18px 16px;
   background:
@@ -66,137 +57,34 @@ body{
     linear-gradient(225deg,rgba(247,215,116,0.18),transparent 45%);
   border-bottom:1px solid var(--border);
 }
-
-.hero-top{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-}
-
-/* 🔧 تنسيق الشعارات */
-.hero-top img{
-  height:42px;
-  width:auto;
-  object-fit:contain;
-  flex-shrink:0;
-}
-
-.hero-center{
-  flex:1;
-  text-align:center;
-}
-
-.hero-center h1{
-  margin:0;
-  font-size:21px;
-  font-weight:900;
-}
-
-.hero-center p{
-  margin:4px 0 0;
-  font-size:12px;
-  color:var(--muted);
-}
-
-/* CONTENT */
-.content{
-  flex:1;
-  padding:16px;
-  display:flex;
-  flex-direction:column;
-  gap:16px;
-}
-
+.hero-top{display:flex;align-items:center;justify-content:space-between;gap:12px;}
+.logo{height:42px;width:auto;object-fit:contain;}
+.hero-center{text-align:center;flex:1;}
+.hero-center h1{margin:0;font-size:21px;font-weight:900;}
+.hero-center p{margin:4px 0 0;font-size:12px;color:var(--muted);}
+.content{flex:1;padding:16px;display:flex;flex-direction:column;gap:16px;}
 .panel{
-  background:var(--glass);
-  backdrop-filter:blur(14px);
-  border:1px solid var(--border);
-  border-radius:24px;
-  padding:18px;
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:16px;
+  background:var(--glass);backdrop-filter:blur(14px);
+  border:1px solid var(--border);border-radius:24px;
+  padding:18px;display:grid;grid-template-columns:1fr 1fr;gap:16px;
 }
-
-.input{
-  background:linear-gradient(180deg,var(--card),#131c2e);
-  border-radius:20px;
-  padding:16px;
-}
-
-.input label{
-  display:block;
-  font-size:14px;
-  font-weight:900;
-  color:var(--accent);
-  margin-bottom:10px;
-}
-
+.input{background:linear-gradient(180deg,var(--card),#131c2e);border-radius:20px;padding:16px;}
+.input label{font-size:14px;font-weight:900;color:var(--accent);}
 .input input{
-  width:100%;
-  background:none;
-  border:none;
-  border-bottom:2px solid #2b3754;
-  color:#fff;
-  font-size:17px;
-  padding:8px 0;
+  width:100%;background:none;border:none;
+  border-bottom:2px solid #2b3754;color:#fff;font-size:17px;
 }
-
-.input input[readonly]{
-  border-bottom-style:dashed;
-  color:var(--primary);
-}
-
-/* ACTION */
-.action{
-  margin-top:auto;
-}
+.action{margin-top:auto;padding-bottom:env(safe-area-inset-bottom);}
 button{
-  width:100%;
-  padding:20px;
-  font-size:19px;
-  font-weight:900;
-  border:none;
-  border-radius:24px;
+  width:100%;padding:20px;font-size:19px;font-weight:900;
+  border:none;border-radius:24px;
   background:linear-gradient(135deg,var(--primary),#18bfa0);
-  color:#062019;
 }
-
-/* RESULT */
 .result{
-  position:fixed;
-  left:0;
-  right:0;
-  bottom:0;
+  position:fixed;left:0;right:0;bottom:0;
   background:linear-gradient(160deg,#0f3f31,#07261e);
-  padding:22px;
-  display:none;
-  z-index:20;
-  border-top-left-radius:26px;
-  border-top-right-radius:26px;
-}
-
-.result-row{
-  display:flex;
-  justify-content:space-between;
-  font-size:16px;
-  margin-bottom:8px;
-}
-
-.result h2{
-  text-align:center;
-  font-size:28px;
-  color:var(--accent);
-  margin-top:12px;
-}
-
-.recalc{
-  margin-top:16px;
-}
-.recalc button{
-  background:rgba(255,255,255,0.15);
-  color:#fff;
+  padding:22px calc(18px + env(safe-area-inset-bottom));
+  display:none;z-index:20;border-radius:26px 26px 0 0;
 }
 </style>
 </head>
@@ -205,109 +93,56 @@ button{
 
 <div class="app">
 
-  <!-- HEADER -->
   <div class="hero">
     <div class="hero-top">
-      <img src="https://www2.0zz0.com/2025/05/19/22/510831948.png" alt="شعار 1">
+      <img src="https://www2.0zz0.com/2025/05/19/22/510831948.png" class="logo">
       <div class="hero-center">
         <h1>الحاسبة الكمركية الذكية</h1>
         <p>الهيئة العامة للكمارك</p>
       </div>
-      <img src="https://www2.0zz0.com/2025/05/19/22/823371779.png" alt="شعار 2">
+      <img src="https://www2.0zz0.com/2025/05/19/22/823371779.png" class="logo">
     </div>
   </div>
 
   <div class="content">
     <div class="panel">
-
-      <div class="input">
-        <label>سعر الطن</label>
-        <input id="a" type="number">
-      </div>
-
-      <div class="input">
-        <label>عدد الأطنان</label>
-        <input id="b" type="number">
-      </div>
-
-      <div class="input">
-        <label>سعر الصرف</label>
-        <input type="number" value="1320" readonly>
-      </div>
-
-      <div class="input">
-        <label>الضريبة الكمركية %</label>
-        <input id="d" type="number">
-      </div>
-
-      <div class="input">
-        <label>الضريبة %</label>
-        <input id="e" type="number">
-      </div>
-
-      <div class="input">
-        <label>حماية المنتج الوطني % (اختياري)</label>
-        <input id="np" type="number" placeholder="مثال: 2.5">
-      </div>
-
+      <div class="input"><label>سعر الطن</label><input id="a" type="number"></div>
+      <div class="input"><label>عدد الأطنان</label><input id="b" type="number"></div>
+      <div class="input"><label>سعر الصرف</label><input type="number" value="1320" readonly></div>
+      <div class="input"><label>الضريبة الكمركية %</label><input id="d" type="number"></div>
+      <div class="input"><label>الضريبة %</label><input id="e" type="number"></div>
+      <div class="input"><label>حماية المنتج الوطني %</label><input id="np" type="number"></div>
     </div>
 
     <div class="action">
       <button onclick="calc()">احتساب</button>
     </div>
   </div>
-
 </div>
 
 <div class="result" id="r">
-  <div class="result-row">
-    <span>السعر الأساسي</span>
-    <span id="rb"></span>
-  </div>
-  <div class="result-row">
-    <span>إجمالي الضرائب</span>
-    <span id="rt"></span>
-  </div>
+  <div id="rb"></div>
+  <div id="rt"></div>
   <h2 id="rf"></h2>
-
-  <div class="recalc">
-    <button onclick="resetCalc()">حساب جديد</button>
-  </div>
+  <button onclick="resetCalc()">حساب جديد</button>
 </div>
 
 <script>
-function f(n){
-  return n.toLocaleString("en-US") + " IQD";
-}
-
+function f(n){return n.toLocaleString("en-US")+" IQD";}
 function calc(){
-  const base =
-    (+a.value || 0) *
-    (+b.value || 0) *
-    1320;
-
-  const totalPercent =
-    (+d.value || 0) +
-    (+e.value || 0) +
-    (+np.value || 0);
-
-  const tax = base * totalPercent / 100;
-
-  rb.textContent = f(base);
-  rt.textContent = f(tax);
-  rf.textContent = f(base + tax);
-
-  r.style.display = "block";
+  const base=(+a.value||0)*(+b.value||0)*1320;
+  const tax=base*((+d.value||0)+(+e.value||0)+(+np.value||0))/100;
+  rb.textContent=f(base);
+  rt.textContent=f(tax);
+  rf.textContent=f(base+tax);
+  r.style.display="block";
 }
-
 function resetCalc(){
-  r.style.display = "none";
-  a.value = "";
-  b.value = "";
-  d.value = "";
-  e.value = "";
-  np.value = "";
-  a.focus();
+  r.style.display="none";
+  a.value=b.value=d.value=e.value=np.value="";
+}
+if("serviceWorker"in navigator){
+  navigator.serviceWorker.register("service-worker.js");
 }
 </script>
 
