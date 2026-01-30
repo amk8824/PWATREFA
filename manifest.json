@@ -1,11 +1,10 @@
 {
-  "name": "الحاسبة الكمركية الذكية",
-  "short_name": "كمرك",
+  "name": "Autonomous Customs",
+  "short_name": "Customs",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#0b5d3b",
-  "theme_color": "#0b5d3b",
-  "orientation": "portrait",
+  "background_color": "#0a0d12",
+  "theme_color": "#0a0d12",
   "icons": [
     {
       "src": "icon-192.png",
